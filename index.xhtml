@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <link rel="stylesheet" href="style.css"/>
+        <center><img src="images\Logo.jpg"/></center>
+        <div class="menu">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon=" ui-icon-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Shopping cart" icon="ui-icon-cart" outcome="shopping_cart.xhtml"/>
+                    <p:submenu label="Orders" icon="ui-icon-script">
+                        <p:menuitem value="Current orders" url="#" icon="ui-icon-clock" outcome="current_orders"/>
+                        <p:menuitem value="Orders hisroty" url="#" icon="ui-icon-script" outcome="orders_history"/>
+                    </p:submenu>
+                    <p:menuitem value="Profile" icon="ui-icon-person" outcome="profile"/>
+                    <p:menuitem value="Log out" icon="ui-icon-arrowstop-1-w"/>
+                </p:menubar>
+            </h:form>
+        </div>
+    </h:head>
+    <h:body>
+        <center><img src="images\Calathea White Fusion.jpg"/></center>
+        <center>
+            <div class="card">
+                <p:panelGrid columns="2">
+                    <f:facet name="header">
+                        Calathea White Fusion
+                    </f:facet>
+                    <h:outputText value="Description"/>
+                    <h:outputText value="Calathea are tropical species that are popular houseplant additions because of the bold markings on their abundant foliage. They are often referred to as peacock, zebra, or rattlesnake plants in reference to these decorative leaves.
+        In their native habitats, Calathea species are also known for their striking inflorescences. When grown as houseplants, however, it is all about the foliage as they rarely flower indoors."/>
+                
+                    <h:outputText value="Price:"/>
+                    <h:outputText value="110 ILS"/>
+
+                    <h:outputText value="Light"/>
+                    <h:outputText value="Bright indirect light"/>
+
+                    <h:outputText value="Water"/>
+                    <h:outputText value="Regular watering"/>
+
+                    <h:outputText value="Fertilizer"/>
+                    <h:outputText value="Once a month"/>
+                </p:panelGrid>
+            </div>
+        </center>
+    </h:body>
+</html>
