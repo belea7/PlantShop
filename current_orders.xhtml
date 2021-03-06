@@ -6,12 +6,49 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>TODO supply a title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
-        <div>TODO write content</div>
+        <div class="menu">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon=" ui-icon-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Shopping cart" icon="ui-icon-cart" outcome="shopping_cart.xhtml"/>
+                    <p:submenu label="Orders" icon="ui-icon-script">
+                        <p:menuitem value="Current orders" icon="ui-icon-clock" outcome="current_orders.xhtml"/>
+                        <p:menuitem value="Orders history" icon="ui-icon-script" outcome="orders_history.xhtml"/>
+                    </p:submenu>
+                    <p:menuitem value="Profile" icon="ui-icon-person" outcome="profile.xhtml"/>
+                    <p:menuitem value="Log out" icon="ui-icon-arrowstop-1-w"/>
+                </p:menubar>
+            </h:form>
+        </div>
+        <h:form id="form">
+            <p:treeTable id="myTree" value="#{treeBean.root}" var="node">
+                <f:facet name="Header">
+                    Orders
+                </f:facet>
+                <p:column headerText="">
+                    <h:outputText value="#{node.name}" />
+                </p:column>
+                <p:column headerText="Amount">
+                    <h:outputText value="#{node.amount}" />
+                </p:column>
+                <p:column headerText="Price">
+                    <h:outputText value="#{node.price}" />
+                </p:column>
+                <p:column headerText="Total Price">
+                    <h:outputText value="#{node.total}" />
+                </p:column>
+                <p:column headerText="Order Status">
+                    <h:outputText value="#{node.status}" />
+                </p:column>
+            </p:treeTable>
+        </h:form>
     </body>
 </html>
