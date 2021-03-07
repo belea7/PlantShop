@@ -1,10 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package PrimePackage;
-
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -40,17 +33,17 @@ public class TreeBean implements Serializable {
      */
     @PostConstruct
     public void init(){
-        root = new DefaultTreeNode(new TreeNodeInfo("root","","","",""), null);
+        root = new DefaultTreeNode(TreeNodeInfo.createRootInfo(), null);
         
         /* Some example orders */
-        TreeNode node1 = new DefaultTreeNode(new TreeNodeInfo("Order 1",null,null,"9$","Arrived"), root);
-        TreeNode node2 = new DefaultTreeNode(new TreeNodeInfo("Order 2",null,null,"0$","Not sent yet"), root);
-        TreeNode node3 = new DefaultTreeNode(new TreeNodeInfo("Order 3",null,null,"5$","On the way"), root);
+        TreeNode node1 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 1","9$","Arrived"), root);
+        TreeNode node2 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 2","0$","Not sent yet"), root);
+        TreeNode node3 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 3","5$","On the way"), root);
         
         /* Some example purchases in the above orders */
-        new DefaultTreeNode(new TreeNodeInfo("plant1","3 packages","6$",null,null), node1);
-        new DefaultTreeNode(new TreeNodeInfo("plant2","1 package","4$",null,null), node1);
-        new DefaultTreeNode(new TreeNodeInfo("plant3","1 package","5$",null,null), node3);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","3 packages","6$"), node1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), node1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), node3);
     }
     
     /**
@@ -67,7 +60,7 @@ public class TreeBean implements Serializable {
      */
     public void buttonAction(ActionEvent event){
         testVal = "Clicked!!!";
-        TreeNode node4 = new DefaultTreeNode(new TreeNodeInfo("Order 4",null,null,"9$","delivered"), root);
+        TreeNode node4 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 4","9$","Arrived"), root);
         System.out.println("before name: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getName()
                             + "\nbefore status: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getStatus());
         ((TreeNodeInfo)(root.getChildren().get(2).getData())).setStatus("TestArrived");
