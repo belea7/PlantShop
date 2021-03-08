@@ -53,6 +53,9 @@ public class TreeBean implements Serializable {
      * Called by the treeTable component to get the root of the tree.
      */
     public TreeNode getRoot() {
+        if(root == null)
+            System.err.println("getRoot called while root is null!"
+                    + "(probably forgot to initiate root for this page)");
         return root;
         /* Debug note: because of how treeTable works, this MUST always return
         the same node object. */
