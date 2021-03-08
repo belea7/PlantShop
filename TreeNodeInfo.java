@@ -130,7 +130,7 @@ public class TreeNodeInfo implements Serializable {
      * @return true if this object represents the information of an order, false
      * otherwise.
      */
-    public boolean isOrder() {
+    public boolean isOrderNode() {
         return (this.type == NodeType.ORDER);
     }
     
@@ -138,7 +138,7 @@ public class TreeNodeInfo implements Serializable {
      * @return true if this object represents the information of the purchase
      * of a specific type of item inside an order, false otherwise.
      */
-    public boolean isPurchase() {
+    public boolean isPurchaseNode() {
         return (this.type == NodeType.PURCHASE);
     }
     
