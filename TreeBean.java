@@ -16,6 +16,9 @@ import org.primefaces.model.TreeNode;
 public class TreeBean implements Serializable {
     
     private TreeNode root;
+    /**
+     * this field is for testing and debugging purposes only.
+     */
     private String testVal = "not clicked";
     
     
