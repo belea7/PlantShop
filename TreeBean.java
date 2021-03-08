@@ -59,6 +59,25 @@ public class TreeBean implements Serializable {
      */
     public void initAllOrders(){
         root = new DefaultTreeNode(TreeNodeInfo.createRootInfo(), null);
+        
+        /* Some example users */
+        TreeNode userNode1 = new DefaultTreeNode(TreeNodeInfo.createUserInfo("User 1"), root);
+        TreeNode userNode2 = new DefaultTreeNode(TreeNodeInfo.createUserInfo("User 2"), root);
+        
+        /* Some example orders */
+        TreeNode orderNode1 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 1","9$","Arrived"), userNode1);
+        TreeNode orderNode2 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 2","0$","Not sent yet"), userNode1);
+        TreeNode orderNode3 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 3","5$","On the way"), userNode1);
+        TreeNode orderNode4 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("MyOrder","7$","Arrived"), userNode2);
+        TreeNode orderNode5 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 2","0$","Arrived"), userNode2);
+        
+        /* Some example purchases in the above orders */
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","3 packages","6$"), orderNode1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), orderNode3);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), orderNode3);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","1 package","2$"), orderNode1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), orderNode1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), orderNode1);
     }
     
     /**
