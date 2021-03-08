@@ -63,12 +63,12 @@ public class TreeBean implements Serializable {
      */
     public void buttonAction(ActionEvent event){
         testVal = "Clicked!!!";
-        TreeNode node4 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 4","9$","Arrived"), root);
-        System.out.println("before name: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getName()
-                            + "\nbefore status: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getStatus());
-        ((TreeNodeInfo)(root.getChildren().get(2).getData())).setStatus("TestArrived");
-        System.out.println("after name: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getName()
-                            + "\nafter status: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getStatus());
+//        TreeNode node4 = new DefaultTreeNode(TreeNodeInfo.createOrderInfo("Order 4","9$","Arrived"), root);
+//        System.out.println("before name: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getName()
+//                            + "\nbefore status: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getStatus());
+//        ((TreeNodeInfo)(root.getChildren().get(2).getData())).setStatus("TestArrived");
+//        System.out.println("after name: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getName()
+//                            + "\nafter status: " + ((TreeNodeInfo)(root.getChildren().get(2).getData())).getStatus());
     }
     
     /**
