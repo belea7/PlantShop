@@ -27,15 +27,14 @@ public class TreeBean implements Serializable {
     }
     
     /**
-     * Called when the page is loaded. Creates the tree to be sent to the
+     * Called when the current_orders page is loaded. Creates the tree to be sent to the
      * TreeTable component.
      * Note:
-     * Each node represents either an order (in which case, it is a child of
+     * Each node other than the root represents either an order (in which case, it is a child of
      * the root node), or one type of item purchased in an order (in which case,
      * it is a child of the node representing that order).
      */
-    @PostConstruct
-    public void init(){
+    public void initCurrentOrders(){
         root = new DefaultTreeNode(TreeNodeInfo.createRootInfo(), null);
         
         /* Some example orders */
@@ -47,6 +46,19 @@ public class TreeBean implements Serializable {
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","3 packages","6$"), node1);
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), node1);
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), node3);
+    }
+    
+    /**
+     * Called when the all_orders page is loaded. Creates the tree to be sent to the
+     * TreeTable component.
+     * Note:
+     * Each node other than the root represents either a user (in which case, it
+     * is a child of the root node), or an order (in which case, it is a child
+     * of a user node), or one type of item purchased in an order (in which case,
+     * it is a child of the node representing that order).
+     */
+    public void initAllOrders(){
+        root = new DefaultTreeNode(TreeNodeInfo.createRootInfo(), null);
     }
     
     /**
