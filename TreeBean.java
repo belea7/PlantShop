@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
