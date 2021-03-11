@@ -75,9 +75,9 @@ public class TreeBean implements Serializable {
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","3 packages","6$"), orderNode1);
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), orderNode3);
         new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), orderNode3);
-        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","1 package","2$"), orderNode1);
-        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), orderNode1);
-        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), orderNode1);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant1","1 package","2$"), orderNode5);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant2","1 package","4$"), orderNode5);
+        new DefaultTreeNode(TreeNodeInfo.createPurchaseInfo("plant3","1 package","5$"), orderNode5);
     }
     
     /**
