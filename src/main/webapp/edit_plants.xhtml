@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <center><img src="images\Logo.jpg" width="350" height="350"/></center>
+        <div class="menu">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out"/>
+                </p:menubar>
+            </h:form>
+        </div>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="New" icon="pi pi-plus" actionListener="#{plantsBean.createPlant()}"
+                                         update=":form:manage-plant-content" oncomplete="PF('managePlantDialog').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":form:manage-plant-content"/>
+                            <f:setPropertyActionListener value="#{true}" target="#{plantsBean.newPlant}"/>
+                        </p:commandButton>
+                        <p:commandButton id="delete-plants-button" value="#{plantsBean.deleteButtonMessage}"
+                                         icon="pi pi-trash" actionListener="#{plantsBean.removeSelectedPlants}"
+                                         styleClass="ui-button-danger" disabled="#{!plantsBean.hasSelectedPlants()}"
+                                         update="@this" style="background-color:red">
+                            <p:confirm header="Confirmation" message="Delete the selected plants?"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-plants" widgetVar="dtPlants" var="plant" value="#{plantsBean.plants}"
+                             reflow="true" styleClass="products-table" style="text-align:center"
+                             selection="#{plantsBean.selectedPlants}" rowKey="#{plant.id}" paginator="true"
+                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">PRODUCTS</span>
+
+                            <span class="filter-container ui-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtPlants').filter()" placeholder="Search"/>
+                            </span>
+                        </div>
+                    </f:facet>
+
+                    <p:ajax event="rowSelect" update=":form:delete-plants-button"/>
+                    <p:ajax event="rowUnselect" update=":form:delete-plants-button"/>
+                    <p:ajax event="rowSelectCheckbox" update=":form:delete-plants-button"/>
+                    <p:ajax event="rowUnselectCheckbox" update=":form:delete-plants-button"/>
+                    <p:ajax event="toggleSelect" update=":form:delete-plants-button"/>
+                        
+                    <p:column selectionMode="multiple" exportable="false" width="30"></p:column>
+
+                    <p:column headerText="ID" sortBy="#{plant.id}" filterBy="#{plant.id}" width="30">
+                        <h:outputText value="#{plant.id}"/>
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{plant.name}" filterBy="#{plant.name}">
+                        <h:outputText value="#{plant.name}" style="font-weight:bold"/>
+                    </p:column>
+                    <p:column headerText="Image" exportable="false">
+                        <p:graphicImage value="images/#{plant.picture}" library="demo"
+                                        styleClass="product-image" width="180" height="180"/>
+                    </p:column>
+                    <p:column headerText="Price" sortBy="#{plant.price}" width="60">
+                        <h:outputText value="#{plant.price} ILS" style="font-weight: 700"/>
+                    </p:column>
+                    <p:column headerText="Number of Items" sortBy="#{plant.numberOfItems}" filterBy="#{plant.numberOfItems}" width="150">
+                        <h:outputText value="#{plant.numberOfItems}"/>
+                    </p:column>
+                    <p:column headerText="Status" sortBy="#{plant.numberOfItems}" width="120">
+                        <h:outputLabel value="IN STOCK" rendered="#{plant.numberOfItems > 0}" style="color:green;background-color:lightgreen;font-weight:bold"/> 
+                        <h:outputLabel value="OUT OF STOCK" rendered="#{plant.numberOfItems == 0}" style="color: red;background-color:peachpuff;font-weight:bold"/>
+                    </p:column>
+                    <p:column exportable="false" width="100">
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-plant-content"
+                                         oncomplete="PF('managePlantDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{plant}" target="#{plantsBean.selectedPlant}"/>
+                            <p:resetInput target=":form:manage-plant-content"/>
+                        </p:commandButton>
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
+                                         oncomplete="PF('deletePlantDialog').show()" style="background-color:red">
+                            <f:setPropertyActionListener value="#{plant}" target="#{plantsBean.selectedPlant}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:dialog header="Plant Details" showEffect="fade" modal="true"
+                          widgetVar="managePlantDialog" responsive="true">
+                    <p:outputPanel id="manage-plant-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty plantsBean.selectedPlant}">
+                            <p:graphicImage value="images/#{plantsBean.selectedPlant.picture}" library="demo"
+                                            styleClass="plant-image" height="200" width="200"
+                                            rendered="#{not empty plantsBean.selectedPlant.picture}"/>
+                            <div class="p-field">
+                                <p:outputLabel for="picture">Picture</p:outputLabel>
+                                <p:inputText id="picture" value="#{plantsBean.selectedPlant.picture}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="name">Name</p:outputLabel>
+                                <p:inputText id="name" value="#{plantsBean.selectedPlant.name}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="description">Description</p:outputLabel>
+                                <p:inputTextarea id="description" value="#{plantsBean.selectedPlant.description}"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="light">Light</p:outputLabel>
+                                <p:inputText id="light" value="#{plantsBean.selectedPlant.light}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="water">Water</p:outputLabel>
+                                <p:inputText id="water" value="#{plantsBean.selectedPlant.water}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="fertilize">Fertilize</p:outputLabel>
+                                <p:inputText id="fertilize" value="#{plantsBean.selectedPlant.fertilize}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="difficulty">Difficulty</p:outputLabel>
+                                <p:selectOneRadio id="difficulty" value="#{plantsBean.selectedPlant.difficulty}"
+                                                  layout="responsive" columns="2">
+                                    <f:selectItem itemLabel="Easy" itemValue="easy"/>
+                                    <f:selectItem itemLabel="Normal" itemValue="normal"/>
+                                    <f:selectItem itemLabel="Difficult" itemValue="difficult"/>
+                                </p:selectOneRadio>
+                            </div>
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="price">Price</p:outputLabel>
+                                    <p:inputNumber id="price" value="#{plantsBean.selectedPlant.price}"
+                                                   symbol=" ILS" symbolPosition="s"
+                                                   decimalSeparator="." thousandSeparator=","/>
+                                </div>
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="number_of_itmes">Number of items</p:outputLabel>
+                                    <p:spinner id="number_of_itmes" min="0" value="#{plantsBean.selectedPlant.numberOfItems}"/>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{plantsBean.save}"
+                                         update="manage-plant-content dt-plants" process="manage-plant-content @this" 
+                                         onclick="PF('managePlantDialog').hide()"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('managePlantDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog widgetVar="deletePlantDialog" showEffect="fade" width="300"
+                                 message="Delete the plant?" header="Confirm" severity="warn">
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{plantsBean.removeSelectedPlant()}"
+                                     process="@this" oncomplete="PF('deletePlantDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deletePlantDialog').hide()"/>
+                </p:confirmDialog>
+
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times"/>
+                </p:confirmDialog>
+            </div>
+        </h:form>
+    </h:body>
+</html>

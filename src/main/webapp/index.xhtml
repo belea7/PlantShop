@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <center><img src="images\Logo.jpg" width="350" height="350"/></center>
+        <div class="menu">
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out"/>
+                </p:menubar>
+            </h:form>
+        </div>
+    </h:head>
+    <h:body>
+        <div class="plants_view">
+            <h:form id="form">
+                <p:dataGrid var="plant" value="#{plantsBean.plants}" columns="4" layout="grid"
+                            rows="12" paginator="true" id="plants"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="4,12,16">
+                    
+                    <f:facet name="header">
+                        Products for Sale
+                    </f:facet>
+
+                    <div class="product-grid-item card" style="margin-bottom: 0;text-align:center;">
+                        <div class="product-grid-item-content"> 
+                            <p:graphicImage value="images/#{plant.picture}" height="200" width="200"/>
+                            <p:rating readonly="true" value="#{plant.rating}"/>
+                        </div>
+                        <div>
+                            <h:outputLabel value="IN STOCK" rendered="#{plant.numberOfItems > 0}" style="color:green;background-color:lightgreen;font-weight:bold"/> 
+                            <h:outputLabel value="OUT OF STOCK" rendered="#{plant.numberOfItems == 0}" style="color: red;background-color:peachpuff;font-weight:bold"/>
+                        </div>
+                        <div class="product-grid-item-top">
+                            <div>
+                                <span class="plant-name" style="font-weight:bold">#{plant.name}</span>
+                            </div>
+                        </div>
+                        <div class="product-grid-item-bottom">
+                            <h:outputText value="#{plant.price} ILS" styleClass="product-price"/>
+                        </div>
+                        <div>
+                            <p:commandButton update=":form:plantDetail" oncomplete="PF('plantDialog').show()"
+                                             value="Quick view"
+                                             icon="pi pi-search">
+                                <f:setPropertyActionListener value="#{plant}"
+                                                             target="#{plantsBean.selectedPlant}"/>
+                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.addedPlant}"/>
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </p:dataGrid>
+                
+                <p:dialog header="Plant Info" widgetVar="plantDialog" modal="true" showEffect="fade"
+                          hideEffect="fade" resizable="false">
+                    <p:scrollPanel id="plantDetail" style="width:auto;height:auto;text-align:center;margin-bottom: 10">
+                        <p:column rendered="#{not empty plantsBean.selectedPlant}">
+                            <div class="plant">
+                                <div class="product-grid-item card" style="margin-bottom: 0">
+                                    <div class="product-grid-item-content">
+                                        <p:graphicImage value="images/#{plantsBean.selectedPlant.picture}" height="400" width="400"/>
+                                        <p:rating readonly="true" value="#{plant.rating}"/>
+                                        <div class="product-name" style="font-weight:bold">#{plantsBean.selectedPlant.name}</div>
+                                        <div class="product-description" height="200" width="200">#{plantsBean.selectedPlant.description}</div>
+                                    </div>
+                                    <div class="product-grid-item-top">
+                                        <h:outputLabel value="IN STOCK" rendered="#{plantsBean.selectedPlant.numberOfItems > 0}" style="color:green;background-color:lightgreen;font-weight:bold"/> 
+                                        <h:outputLabel value="OUT OF STOCK" rendered="#{plantsBean.selectedPlant.numberOfItems == 0}" style="color: red;background-color:peachpuff;font-weight:bold"/>
+                                    </div>
+                                    <div class="product-grid-item-bottom">
+                                        <h:outputText value="#{plantsBean.selectedPlant.price} ILS"
+                                                      styleClass="product-price"/>
+                                    </div>
+                                    <div>
+                                        <p:commandButton value="Add To Cart" icon="pi pi-shopping-cart"
+                                                         disabled="#{plantsBean.selectedPlant.numberOfItems == 0}"
+                                                         actionListener="#{shoppingCartBean.addToCart}">
+                                        </p:commandButton>
+                                    </div>
+                                    <center>
+                                        <div class="card">
+                                            <p:panelGrid columns="2">
+                                                <h:outputText value="Light"/>
+                                                <h:outputText value="#{plantsBean.selectedPlant.light}"/>
+
+                                                <h:outputText value="Water"/>
+                                                <h:outputText value="#{plantsBean.selectedPlant.water}"/>
+
+                                                <h:outputText value="Fertilizer"/>
+                                                <h:outputText value="#{plantsBean.selectedPlant.fertilize}"/>
+                                            
+                                                <h:outputText value="Difficulty"/>
+                                                <h:outputText value="#{plantsBean.selectedPlant.difficulty}"/>
+                                            </p:panelGrid>
+                                        </div>
+                                    </center>
+                                </div>
+                            </div>
+                        </p:column>
+                        <p:commandButton value="New" icon="pi pi-plus" actionListener="#{plantsBean.createReview()}"
+                                         update=":form:reviews-list" oncomplete="PF('editReviewDialog').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":form:reviews-list"/>
+                        </p:commandButton>
+                        <p:dataScroller value="#{plantsBean.selectedPlant.reviews}" var="review" chunkSize="10" style="text-align:left" id="reviews-list">
+                            <f:facet name="header">
+                                Reviews for #{plantsBean.selectedPlant.name}
+                            </f:facet>
+
+                            <div class="reviews">
+                                <div class="product-list-item p-p-5">
+                                    <div class="product-list-detail">
+                                        <div class="user-name">#{review.userName}</div>
+                                        <p:rating readonly="true" value="#{review.rating}"/>
+                                        <div class="time-posted">#{review.timePosted}</div>
+                                        <div class="comment" style="font-weight: bold">"#{review.comment}"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:dataScroller>
+                    </p:scrollPanel>
+                </p:dialog>
+                <p:dialog header="Edit Review" showEffect="fade" modal="true"
+                          widgetVar="editReviewDialog" responsive="true">
+                    <p:outputPanel id="edit-review-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty plantsBean.selectedReview}">
+                            <div class="p-field">
+                                <p:rating readonly="true" value="#{plantsBean.selectedReview.rating}"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="comment">Comment</p:outputLabel>
+                                <p:inputTextarea id="comment" value="#{plantsBean.selectedReview.comment}"/>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{plantsBean.saveReview}"
+                                         update="edit-review-content" process="edit-review-content @this" 
+                                         onclick="PF('editReviewDialog').hide()"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editReviewDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+            </h:form>
+        </div>
+    </h:body>
+</html>
