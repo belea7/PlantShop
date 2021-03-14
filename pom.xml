@@ -38,16 +38,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.healthmarketscience.jackcess</groupId>
-            <artifactId>jackcess</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ucanaccess</groupId>
-            <artifactId>ucanaccess</artifactId>
-            <version>5.0.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyclient</artifactId>
             <version>10.15.2.0</version>
