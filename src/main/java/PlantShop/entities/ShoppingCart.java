@@ -1,45 +1,106 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Contians the ShoppingCart entity.
  */
 package PlantShop.entities;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 /**
- * Shopping cart of a user.
+ * Represents a shopping cart of a user in the store.
+ * 
  * @author leagi
  */
 public class ShoppingCart {
+    private User user;                          // The user whose cart it is
+    private ArrayList<PlantInCart> items;       // List of items in the cart
+    private int totalPrice;                     // The total price of items in the cart
     
-    private User user;
-    private int id;
-    private ArrayList<PlantInCart> plants;
-
+    /**
+     * Constructor for shopping cart entity.
+     */
+    public ShoppingCart() {
+        items = new ArrayList();
+        totalPrice = 0;
+    }
+    
+    /**
+     * Getter for user attribute.
+     * 
+     * @return user
+     */
     public User getUser() {
         return user;
     }
-
+    
+    /**
+     * Setter for user attribute.
+     * 
+     * @param user 
+     */
     public void setUser(User user) {
         this.user = user;
     }
     
-    public ArrayList<PlantInCart> getPlants() {
-        return plants;
+    /**
+     * Getter for items list attribute.
+     * 
+     * @return list of items in cart
+     */
+    public ArrayList<PlantInCart> getItems() {
+        return items;
     }
     
-    public void addPlant(Plant plant, int amount) {
-        PlantInCart newPlant = new PlantInCart(plant, amount);
-        this.plants.add(newPlant);
-    }
-
-    public void removePlant(Plant plant) {
-        for (PlantInCart p : this.plants) {
-            if (p.getPlant().equals(plant)) {
-                this.plants.remove(p);
-                return;
-            }
+    /**
+     * Setter for items list attribute.
+     * Updates the total cost of the items in the cart.
+     * 
+     * @param items 
+     */
+    public void setItems(ArrayList<PlantInCart> items) {
+        this.items = items;
+        
+        // Update the total price of the cart
+        int total = 0;
+        for (PlantInCart p: items) {
+            total += p.getPlant().getPrice();
         }
+        this.totalPrice = total;
+    }
+    
+    /**
+     * Checks if a plant is in the cart.
+     * 
+     * @param plant
+     * @return is the plant in the cart
+     */
+    public boolean isPlantInCart(Plant plant) {
+        // Loop through all items in the cart and compare to the plant
+        for (PlantInCart p: items) {
+            if (p.equals(plant))
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Add plant to user's cart.
+     * Updates the total cost of the items in the cart.
+     * 
+     * @param plant 
+     */
+    public void addToCart(PlantInCart plant) {
+        this.items.add(plant);
+        this.totalPrice += plant.getPlant().getPrice();
+    }
+    
+    /**
+     * Remove plant from user's cart.
+     * Updates the total cost of the items in the cart.
+     * 
+     * @param plant 
+     */
+    public void removeFromCart(PlantInCart plant) {
+        this.items.remove(plant);
+        this.totalPrice -= plant.getPlant().getPrice();
     }
 }

@@ -25,17 +25,17 @@
     <application />
     <managed-bean>
         <managed-bean-name>plantsBean</managed-bean-name>
-        <managed-bean-class>PlantShop.services.PlantsBean</managed-bean-class>
+        <managed-bean-class>PlantShop.beans.PlantsBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>shoppingCartBean</managed-bean-name>
-        <managed-bean-class>PlantShop.services.ShoppingCartBean</managed-bean-class>
+        <managed-bean-class>PlantShop.beans.ShoppingCartBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>reviewsBean</managed-bean-name>
-        <managed-bean-class>PlantShop.services.ReviewsBean</managed-bean-class>
+        <managed-bean-name>editPlantsBean</managed-bean-name>
+        <managed-bean-class>PlantShop.beans.EditPlantsBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 </faces-config>

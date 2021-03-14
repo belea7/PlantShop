@@ -1,12 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * DAO for plants in store.
  */
 package PlantShop.daos;
 
 import PlantShop.entities.Plant;
-import PlantShop.entities.Review;
 
 import java.util.ArrayList; 
 import java.io.Serializable;
@@ -17,28 +14,40 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.inject.Inject;
 
 /**
- *
+ * DAO for plants in the store.
+ * Contains interactions with DB concerning the plants in the store.
+ * 
  * @author leagi
  */
 @Named("plantsDao")
 public class PlantsDao implements Serializable{
-    private String url = "jdbc:derby://localhost:1527/PlantShop";
-    private String user = "root";
-    private String password = "root";
-    private ReviewsDao reviewsDao = new ReviewsDao();
+    private String url = "jdbc:derby://localhost:1527/PlantShop";   // DB URL
+    private String user = "root";                                   // DB user
+    private String password = "root";                               // DB password
+    private ReviewsDao reviewsDao = new ReviewsDao();               // Reviews DAO
     
+    /**
+     * Fetches all the plants in the DB.
+     * For each plant, it's reviews are fetched as well.
+     * 
+     * @return list of plants in store
+     */
     public ArrayList<Plant> getPlants(){
         ArrayList<Plant> plants = new ArrayList();
+        
+        // Fetch plants from DB
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             // Execute get statement for all plants
-            String sql = "SELECT * FROM plants";
+            String sql = "SELECT *"
+                       + "FROM plants";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             
+            // Fill the list of plants
             while(result.next()) {
+                // Create plant entity and set its' attributes
                 Plant plant = new Plant();
                 plant.setId(result.getObject(1, Integer.class));
                 plant.setName(result.getObject(2, String.class));
@@ -60,13 +69,22 @@ public class PlantsDao implements Serializable{
         return plants;
     }
     
+    /**
+     * Add plant to DB.
+     * 
+     * @param plant 
+     */
     public void addPlant(Plant plant) {
+        // Connecto to DB
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Execute get statement for all plants
-            String sql = "INSERT INTO plants (id, name, number_of_items, light, "
-                    + "water, fertilize, difficulty, description, picture,"
-                    + "price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // Insert the plant to the DB
+            String sql = "INSERT INTO plants"
+                    + "(id, name, number_of_items, light, water, "
+                    + "fertilize, difficulty, description, picture, price)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
+            
+            // Set statement variables
             statement.setInt(1, plant.getId());
             statement.setString(2, plant.getName());
             statement.setInt(3, plant.getNumberOfItems());
@@ -77,21 +95,32 @@ public class PlantsDao implements Serializable{
             statement.setString(8, plant.getDescription());
             statement.setString(9, plant.getPicture());
             statement.setInt(10, plant.getPrice());
+            
+            // Execute query and close conntection
             statement.executeUpdate();
             connection.close();
+            
         } catch (SQLException e) { 
             e.printStackTrace();
         }
     }
     
+    /**
+     * Update plant record in the DB.
+     * 
+     * @param plant 
+     */
      public void updatePlant(Plant plant) {
+         // Connetct to DB
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Execute get statement for all plants
-            String sql = "UPDATE plants SET "
-                    + "name = ?, number_of_items = ?, light = ?, water = ?, "
+            // Create update statement
+            String sql = "UPDATE plants "
+                    + "SET name = ?, number_of_items = ?, light = ?, water = ?, "
                     + "fertilize = ?, difficulty = ?, description = ?, "
                     + "picture = ?, price = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
+            
+            // Set statement's variables
             statement.setString(1, plant.getName());
             statement.setInt(2, plant.getNumberOfItems());
             statement.setString(3, plant.getLight());
@@ -102,30 +131,50 @@ public class PlantsDao implements Serializable{
             statement.setString(8, plant.getPicture());
             statement.setInt(9, plant.getPrice());
             statement.setInt(10, plant.getId());
+            
+            // Execute query and close connection
             statement.executeUpdate();
             connection.close();
+            
         } catch (SQLException e) { 
             e.printStackTrace();
         }
     }
     
+     /**
+      * Remove plant record from DB.
+      * 
+      * @param plant 
+      */
+    public void removePlant(Plant plant) {
+        // Connect to DB
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            // Create DELETE statement
+            String sql = "DELETE FROM plants "
+                       + "WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, plant.getId());
+            
+            // Execute query and close connection
+            statement.executeUpdate();
+            connection.close();
+            
+            // Remove the reviews on the plant
+            reviewsDao.removeReviews(plant.getReviews());
+            
+        } catch (SQLException e) { 
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Remove group of plants from DB.
+     * 
+     * @param plants 
+     */
     public void removePlants(ArrayList<Plant> plants) {
         for (Plant p : plants) {
             removePlant(p);
-        }
-    }
-    
-    public void removePlant(Plant plant) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Execute get statement for all plants
-            String sql = "DELETE FROM plants WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, plant.getId());
-            statement.executeUpdate();
-            connection.close();
-            reviewsDao.removeReviews(plant.getReviews());
-        } catch (SQLException e) { 
-            e.printStackTrace();
         }
     }
 }
