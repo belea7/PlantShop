@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * @author leagi
  */
 public class ShoppingCart {
-    private User user;                          // The user whose cart it is
     private ArrayList<PlantInCart> items;       // List of items in the cart
     private int totalPrice;                     // The total price of items in the cart
     
@@ -21,24 +20,6 @@ public class ShoppingCart {
     public ShoppingCart() {
         items = new ArrayList();
         totalPrice = 0;
-    }
-    
-    /**
-     * Getter for user attribute.
-     * 
-     * @return user
-     */
-    public User getUser() {
-        return user;
-    }
-    
-    /**
-     * Setter for user attribute.
-     * 
-     * @param user 
-     */
-    public void setUser(User user) {
-        this.user = user;
     }
     
     /**
