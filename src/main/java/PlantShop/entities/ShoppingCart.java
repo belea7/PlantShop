@@ -57,7 +57,7 @@ public class ShoppingCart {
     public boolean isPlantInCart(Plant plant) {
         // Loop through all items in the cart and compare to the plant
         for (PlantInCart p: items) {
-            if (p.equals(plant))
+            if (p.getPlant().equals(plant))
                 return true;
         }
         return false;
