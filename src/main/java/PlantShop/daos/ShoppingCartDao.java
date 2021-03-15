@@ -73,6 +73,17 @@ public class ShoppingCartDao implements Serializable{
     }
     
     /**
+     * Fetches the shopping cart of the user from DB.
+     * 
+     * @return 
+     */
+    public ShoppingCart getCart() {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setItems(this.getPlants());
+        return cart;
+    }
+    
+    /**
      * Add plant to a user's cart in the DB.
      * 
      * @param plant 
