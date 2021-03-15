@@ -5,6 +5,7 @@ package PlantShop.daos;
 
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
+import PlantShop.entities.ShoppingCart;
 
 import java.io.Serializable;
 import java.util.ArrayList; 
