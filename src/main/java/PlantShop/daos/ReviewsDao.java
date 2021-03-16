@@ -9,13 +9,24 @@ import PlantShop.entities.Review;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import javax.annotation.Resource;
+import javax.annotation.sql.DataSourceDefinition;
+import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import javax.sql.DataSource;
+
+@DataSourceDefinition(
+    name = "java:global/jdbc/plantShop",
+    className = "org.apache.derby.jdbc.ClientDataSource",
+    url = "jdbc:derby://localhost:1527/plantShop",
+    databaseName = "plantShop",
+    user = "root",
+    password = "root")
 
 /**
  * DAO for reviews on plants.
@@ -24,10 +35,12 @@ import javax.inject.Named;
  * @author leagi
  */
 @Named("reviewsDao")
+@Dependent
 public class ReviewsDao implements Serializable{
-    private String url = "jdbc:derby://localhost:1527/PlantShop";   // DB URL
-    private String user = "root";                                   // DB user
-    private String password = "root";                               // DB password
+    
+    // allow the server to inject the DataSource
+    @Resource(lookup="java:global/jdbc/plantShop")
+    DataSource dataSource;
     
     /**
      * Fetches all the reviews in the DB for a specific plant.
@@ -38,7 +51,7 @@ public class ReviewsDao implements Serializable{
     public ArrayList<Review> getReviews(Plant plant) {
         ArrayList<Review> reviews = new ArrayList();
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Execute SELECT statement
             String sql = "SELECT * "
                        + "FROM Reviews "
@@ -71,7 +84,7 @@ public class ReviewsDao implements Serializable{
      */
     public void addReview(Review review) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
             String sql = "INSERT INTO reviews "
                        + "(user_name, plant_id, time_posted, rating, comment) "
@@ -101,7 +114,7 @@ public class ReviewsDao implements Serializable{
      */
     public void updateReview(Review review) {
         // Connecto to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
             String sql = "UPDATE reviews "
                        + "SET rating = ?, comment = ? "
@@ -131,7 +144,7 @@ public class ReviewsDao implements Serializable{
      */
     public void removeReview(Review review) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create DB statement
             String sql = "DELETE FROM reviews "
                     + "WHERE user_name = ? AND plant_id = ? AND time_posted = ?";
