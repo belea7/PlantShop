@@ -87,4 +87,9 @@ public class UserBean implements Serializable {
         return (user != null);
     }
     
+    
+    public boolean isNotLoggedIn(){
+        return !this.isLoggedIn();
+    }
+    
 }
