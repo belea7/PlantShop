@@ -1,12 +1,19 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <center><img src="images\Logo.jpg" width="200" height="250"/></center>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <body>
         <div class="menu">
             <h:form>
                 <p:menubar>
@@ -19,8 +26,61 @@
                 </p:menubar>
             </h:form>
         </div>
-    </h:head>
-    <h:body>
-        <div>TODO write content</div>
-    </h:body>
+        
+        <h:form id="form">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="User Name:  " for="username"/>
+                <h:inputText id="username" value="#{registrationBean.username}"
+                             required="true" requiredMessage="User Name is required"/>
+                
+                <h:outputLabel value="Password:  " for="password"/>
+                <h:inputSecret id="password" value="#{registrationBean.password}"
+                            required="true" requiredMessage="Password is required"/>
+                
+                <h:outputLabel value="First Name:  " for="firstName"/>
+                <h:inputText id="firstName" value="#{registrationBean.firstName}"
+                             required="true" requiredMessage="First Name is required"/>
+                
+                <h:outputLabel value="Last Name:  " for="lastName"/>
+                <h:inputText id="lastName" value="#{registrationBean.lastName}"
+                             required="true" requiredMessage="Last Name is required"/>
+                
+                <h:outputLabel value="Birth Date (yyyy-mm-dd):  " for="birthdayDate"/>
+                <h:inputText id="birthdayDate" value="#{registrationBean.birthdayDate}"
+                             required="true" requiredMessage="Birth Date is required"/>
+                
+                <h:outputLabel value="Email:  " for="emailAddress"/>
+                <h:inputText id="emailAddress" value="#{registrationBean.emailAddress}"
+                             required="true" requiredMessage="Email is required"/>
+                
+                <h:outputLabel value="Phone Number:  " for="phoneNumber"/>
+                <h:inputText id="phoneNumber" value="#{registrationBean.phoneNumber}"
+                             required="true" requiredMessage="Phone Number is required"/>
+                
+                <h:outputLabel value="City:  " for="city"/>
+                <h:inputText id="city" value="#{registrationBean.city}"
+                             required="true" requiredMessage="City is required"/>
+                
+                <h:outputLabel value="Street:  " for="street"/>
+                <h:inputText id="street" value="#{registrationBean.street}"
+                             required="true" requiredMessage="Street is required"/>
+                
+                <h:outputLabel value="House Number:  " for="houseNumber"/>
+                <h:inputText id="houseNumber" value="#{registrationBean.houseNumber}"
+                             required="true" requiredMessage="House Number is required"/>
+                
+                <h:outputLabel value="Appartment:  " for="appartment"/>
+                <h:inputText id="appartment" value="#{registrationBean.appartment}"
+                             required="true" requiredMessage="Appartment is required"/>
+                
+                <h:outputLabel value="Zipcode:  " for="zipcode"/>
+                <h:inputText id="zipcode" value="#{registrationBean.zipcode}"
+                             required="true" requiredMessage="Zipcode is required"/>
+                
+                <h:commandButton value="register" action="#{registrationBean.register}">
+                    <f:ajax execute="@all" render="@all" />
+                </h:commandButton>
+            </h:panelGrid>
+        </h:form>
+    </body>
 </html>
