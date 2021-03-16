@@ -9,11 +9,22 @@ import java.util.ArrayList;
 import java.io.Serializable;
 import javax.inject.Named;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.annotation.Resource;
+import javax.annotation.sql.DataSourceDefinition;
+import javax.enterprise.context.Dependent;
+import javax.sql.DataSource;
+
+@DataSourceDefinition(
+    name = "java:global/jdbc/plantShop",
+    className = "org.apache.derby.jdbc.ClientDataSource",
+    url = "jdbc:derby://localhost:1527/plantShop",
+    databaseName = "plantShop",
+    user = "root",
+    password = "root")
 
 /**
  * DAO for plants in the store.
@@ -22,11 +33,13 @@ import java.sql.Statement;
  * @author leagi
  */
 @Named("plantsDao")
+@Dependent
 public class PlantsDao implements Serializable{
-    private String url = "jdbc:derby://localhost:1527/PlantShop";   // DB URL
-    private String user = "root";                                   // DB user
-    private String password = "root";                               // DB password
     private ReviewsDao reviewsDao = new ReviewsDao();               // Reviews DAO
+    
+    // allow the server to inject the DataSource
+    @Resource(lookup="java:global/jdbc/plantShop")
+    DataSource dataSource;
     
     /**
      * Fetches all the plants in the DB.
@@ -38,7 +51,7 @@ public class PlantsDao implements Serializable{
         ArrayList<Plant> plants = new ArrayList();
         
         // Fetch plants from DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Execute get statement for all plants
             String sql = "SELECT *"
                        + "FROM plants";
@@ -76,7 +89,7 @@ public class PlantsDao implements Serializable{
      */
     public void addPlant(Plant plant) {
         // Connecto to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Insert the plant to the DB
             String sql = "INSERT INTO plants"
                     + "(id, name, number_of_items, light, water, "
@@ -112,7 +125,7 @@ public class PlantsDao implements Serializable{
      */
      public void updatePlant(Plant plant) {
          // Connetct to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create update statement
             String sql = "UPDATE plants "
                     + "SET name = ?, number_of_items = ?, light = ?, water = ?, "
@@ -148,7 +161,7 @@ public class PlantsDao implements Serializable{
       */
     public void removePlant(Plant plant) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
             String sql = "DELETE FROM plants "
                        + "WHERE id = ?";
