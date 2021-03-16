@@ -10,12 +10,23 @@ import PlantShop.entities.ShoppingCart;
 import java.io.Serializable;
 import java.util.ArrayList; 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.annotation.Resource;
+import javax.annotation.sql.DataSourceDefinition;
+import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import javax.sql.DataSource;
+
+@DataSourceDefinition(
+    name = "java:global/jdbc/plantShop",
+    className = "org.apache.derby.jdbc.ClientDataSource",
+    url = "jdbc:derby://localhost:1527/plantShop",
+    databaseName = "plantShop",
+    user = "root",
+    password = "root")
 
 /**
  * DAO for shopping carts of users.
@@ -24,10 +35,12 @@ import javax.inject.Named;
  * @author leagi
  */
 @Named("shoppingCartDao")
+@Dependent
 public class ShoppingCartDao implements Serializable{
-    private String url = "jdbc:derby://localhost:1527/PlantShop";   // DB URL
-    private String user = "root";                                   // DB user
-    private String password = "root";                               // DB password
+    
+    // allow the server to inject the DataSource
+    @Resource(lookup="java:global/jdbc/plantShop")
+    DataSource dataSource;
     
     /**
      * Fetches all the plants in the shopping cart of the user from DB.
@@ -37,7 +50,7 @@ public class ShoppingCartDao implements Serializable{
     public ArrayList<PlantInCart> getPlants(){
         ArrayList<PlantInCart> plants = new ArrayList();
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create SELECT statement and execute it
             String sql = "SELECT * "
                        + "FROM shoppingcarts, plants "
@@ -91,7 +104,7 @@ public class ShoppingCartDao implements Serializable{
      */
     public void addPlantToCart(Plant plant) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
             String sql = "INSERT INTO ShoppingCarts "
                        + "(user_name, plant_id, amount) "
@@ -119,7 +132,7 @@ public class ShoppingCartDao implements Serializable{
      */
     public void removePlantFromCart (PlantInCart plant) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
             String sql = "DELETE FROM ShoppingCarts "
                        + "WHERE plant_id = ? AND user_name = 'admin'";
@@ -153,7 +166,7 @@ public class ShoppingCartDao implements Serializable{
      */
     public void saveAmount (PlantInCart plant) {
         // Connect to DB
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
             String sql = "UPDATE ShoppingCarts "
                        + "SET amount = ? "
