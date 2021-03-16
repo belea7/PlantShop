@@ -44,6 +44,17 @@ public class LoginBean implements Serializable {
         }
     }
     
+    
+    /**
+     * Tells UserBean to logout.
+     * @return page to navigate to after logout.
+     */
+    public String logout() {
+        
+        userBean.logOut();
+        return "logged_out";
+    }
+    
 
     public String getUsername() {
         return username;

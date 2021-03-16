@@ -63,6 +63,16 @@ public class UserBean implements Serializable {
         return true;
         
     }
+    
+    
+    /**
+     * Logs out the user.
+     */
+    public void logOut() {
+        
+        user = null;
+        
+    }
 
     
     public User getUser() {

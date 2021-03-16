@@ -19,7 +19,7 @@
                     <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
                     <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml"/>
                     <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{loginBean.logout}" ajax="false"/>
                 </p:menubar>
             </h:form>
         </div>
