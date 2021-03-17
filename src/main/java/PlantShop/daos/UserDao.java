@@ -4,6 +4,7 @@
 package PlantShop.daos;
 
 import PlantShop.entities.User;
+import PlantShop.exceptions.DaoException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,8 +46,9 @@ public class UserDao implements Serializable {
      * Searches the database for a user with the specified username.
      * @param username the target username.
      * @return the user that was found, or null if no such user was found.
+     * @throws DaoException if there was a problem with database access.
      */
-    public User getUser(String username) {
+    public User getUser(String username) throws DaoException {
         
         User user = null;
         
@@ -75,8 +77,9 @@ public class UserDao implements Serializable {
             }
             
             connection.close();
-        } catch (SQLException e) { 
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new DaoException();
         }
         return user;
     }
@@ -85,8 +88,9 @@ public class UserDao implements Serializable {
     /**
      * Adds the specified user to the database.
      * @param user the user that will be added to the database.
+     * @throws DaoException if there was a problem with database access.
      */
-    public void addUser(User user) {
+    public void addUser(User user) throws DaoException {
         
         try (Connection connection = dataSource.getConnection()) {
             // Execute get statement for user
@@ -111,8 +115,9 @@ public class UserDao implements Serializable {
             statement.execute();
             
             connection.close();
-        } catch (SQLException e) { 
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new DaoException();
         }
         
     }
