@@ -23,7 +23,6 @@ import org.primefaces.PrimeFaces;
  * 
  * @author leagi
  */
-@ManagedBean
 @Named(value = "shoppingCartBean")
 @ViewScoped
 public class ShoppingCartBean implements Serializable{
