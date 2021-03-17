@@ -38,11 +38,10 @@ and open the template in the editor.
                 <h:outputLabel value="Password:  " for="password"/>
                 <h:inputSecret id="password" value="#{loginBean.password}"
                             required="true" requiredMessage="Password is required"/>
-                
-                <h:commandButton value="login" action="#{loginBean.login}">
-                    <f:ajax execute="@all" render="@all" />
-                </h:commandButton>
             </h:panelGrid>
+            <h:commandButton value="login" action="#{loginBean.login}">
+                <f:ajax execute="@all" render="@all" />
+            </h:commandButton>
         </h:form>
     </body>
 </html>
