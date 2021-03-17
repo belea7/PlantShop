@@ -33,7 +33,6 @@ import org.primefaces.shaded.commons.io.FilenameUtils;
  * @author leagi
  */
 @Named(value = "editPlantsBean")
-@ManagedBean
 @ViewScoped
 public class EditPlantsBean implements Serializable{
     private ArrayList<Plant> plants;            // List of all plants in store
