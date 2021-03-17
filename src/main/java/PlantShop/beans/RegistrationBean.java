@@ -4,6 +4,7 @@ import PlantShop.entities.ShoppingCart;
 import PlantShop.entities.User;
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.UsernameTakenException;
+import PlantShop.view.RegistrationViewBean;
 import java.io.Serializable;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -30,6 +31,9 @@ public class RegistrationBean implements Serializable {
     private String appartment = "";
     private String zipcode = "";
     private String birthdayDate = "";
+    
+    @Inject
+    private RegistrationViewBean registrationViewBean;
     
     @Inject
     private UserBean userBean;
@@ -66,6 +70,8 @@ public class RegistrationBean implements Serializable {
             user.setZipcode(Long.parseLong(zipcode));
         } catch(NumberFormatException e){
             e.printStackTrace();
+            registrationViewBean.displayFormSubmissionErrorMessage(
+                    "Phone number and zipcode must be a number!");
             return null;
         }
         user.setShoppingCart(new ShoppingCart());
@@ -75,8 +81,12 @@ public class RegistrationBean implements Serializable {
         try{
             userBean.register(user);
         } catch(DaoException e) {
+            registrationViewBean.displayFormSubmissionErrorMessage(
+                    "Oops! Something went wrong when connecting to the database.");
             return null;
         } catch(UsernameTakenException e) {
+            registrationViewBean.displayFormSubmissionErrorMessage(
+                    "That username is already taken!");
             return null;
         }
         
