@@ -8,7 +8,6 @@ import java.io.Serializable;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import java.sql.Date;
 
 /**
  * Bean that gets the user's information from registration
