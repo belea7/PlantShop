@@ -1,5 +1,8 @@
 package PlantShop.beans;
 
+import PlantShop.exceptions.DaoException;
+import PlantShop.exceptions.IncorrectCredentialsException;
+import PlantShop.view.LoginViewBean;
 import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -35,13 +38,15 @@ public class LoginBean implements Serializable {
      */
     public String login() {
         
-        boolean loginSuccessful = userBean.login(username, password);
-        
-        if(loginSuccessful){
-            return "index";
-        } else {
+        try{
+            userBean.login(username, password);
+        } catch(DaoException e) {
+            return null;
+        } catch(IncorrectCredentialsException e) {
             return null;
         }
+        
+        return "index";
     }
     
     

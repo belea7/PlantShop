@@ -2,6 +2,8 @@ package PlantShop.beans;
 
 import PlantShop.entities.ShoppingCart;
 import PlantShop.entities.User;
+import PlantShop.exceptions.DaoException;
+import PlantShop.exceptions.UsernameTakenException;
 import java.io.Serializable;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -71,14 +73,15 @@ public class RegistrationBean implements Serializable {
         user.setAdmin(false); // TODO need to set up mechanism determining when will the user be admin
         
         
-        
-        boolean registrationSuccessful = userBean.register(user);
-        
-        if(registrationSuccessful){
-            return "registered";
-        } else {
+        try{
+            userBean.register(user);
+        } catch(DaoException e) {
+            return null;
+        } catch(UsernameTakenException e) {
             return null;
         }
+        
+        return "registered";
     }
     
     
