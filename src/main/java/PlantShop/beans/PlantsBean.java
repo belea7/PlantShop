@@ -28,7 +28,6 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "plantsBean")
 @ViewScoped
-@ManagedBean
 public class PlantsBean implements Serializable{
 
     private ArrayList<Plant> plants;    // List of all plants in store
