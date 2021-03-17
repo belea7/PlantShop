@@ -22,6 +22,9 @@ public class LoginBean implements Serializable {
     private String password = "";
     
     @Inject
+    private LoginViewBean loginViewBean;
+    
+    @Inject
     private UserBean userBean;
     
     
@@ -38,11 +41,21 @@ public class LoginBean implements Serializable {
      */
     public String login() {
         
+        if(userBean.isLoggedIn()) {
+            loginViewBean.displayFormSubmissionErrorMessage(
+                    "Cannot log in because already logged in as " + userBean.getUser().getUsername());
+            return null;
+        }
+        
         try{
             userBean.login(username, password);
         } catch(DaoException e) {
+            loginViewBean.displayFormSubmissionErrorMessage(
+                    "Oops! Something went wrong when connecting to the database.");
             return null;
         } catch(IncorrectCredentialsException e) {
+            loginViewBean.displayFormSubmissionErrorMessage(
+                    "Username or password is incorrect!");
             return null;
         }
         
