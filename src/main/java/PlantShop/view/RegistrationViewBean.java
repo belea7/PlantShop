@@ -9,7 +9,7 @@ import javax.inject.Named;
  */
 @Named(value = "registrationViewBean")
 @Dependent
-public class RegistrationViewBean {
+public class RegistrationViewBean extends AbstractFormViewBean {
 
     /**
      * Creates a new instance of RegistrationViewBean
@@ -18,3 +18,4 @@ public class RegistrationViewBean {
     }
     
 }
+
