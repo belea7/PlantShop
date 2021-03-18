@@ -78,6 +78,10 @@ and open the template in the editor.
                 <h:outputLabel value="Zipcode:  " for="zipcode"/>
                 <h:inputText id="zipcode" value="#{registrationBean.zipcode}"
                              required="true" requiredMessage="Zipcode is required"/>
+                
+                <h:outputLabel value="Admin:  " for="admin"/>
+                <h:inputText id="admin" value="#{registrationBean.admin}"
+                             required="false"/>
             </h:panelGrid>
             <h:commandButton value="register" action="#{registrationBean.register}">
                 <f:ajax execute="@all" render="@all" />
