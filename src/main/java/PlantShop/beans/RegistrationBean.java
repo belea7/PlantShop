@@ -19,6 +19,8 @@ import javax.inject.Inject;
 @ViewScoped
 public class RegistrationBean implements Serializable {
     
+    private final String ADMIN_CODE = "admin";
+    
     private String firstName = "";
     private String lastName = "";
     private String phoneNumber = "";
@@ -31,6 +33,7 @@ public class RegistrationBean implements Serializable {
     private String appartment = "";
     private String zipcode = "";
     private String birthdayDate = "";
+    private String admin = "";
     
     @Inject
     private RegistrationViewBean registrationViewBean;
@@ -75,7 +78,7 @@ public class RegistrationBean implements Serializable {
             return null;
         }
         user.setShoppingCart(new ShoppingCart());
-        user.setAdmin(false); // TODO need to set up mechanism determining when will the user be admin
+        user.setAdmin(admin.compareTo(ADMIN_CODE) == 0);
         
         
         try{
@@ -190,12 +193,12 @@ public class RegistrationBean implements Serializable {
         this.birthdayDate = birthdayDate;
     }
 
-    public UserBean getUserBean() {
-        return userBean;
+    public String getAdmin() {
+        return admin;
     }
 
-    public void setUserBean(UserBean userBean) {
-        this.userBean = userBean;
+    public void setAdmin(String admin) {
+        this.admin = admin;
     }
     
 }
