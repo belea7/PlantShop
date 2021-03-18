@@ -16,6 +16,7 @@ import java.sql.Statement;
 import javax.annotation.Resource;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @DataSourceDefinition(
@@ -35,7 +36,9 @@ import javax.sql.DataSource;
 @Named("plantsDao")
 @Dependent
 public class PlantsDao implements Serializable{
-    private ReviewsDao reviewsDao = new ReviewsDao();               // Reviews DAO
+    
+    @Inject
+    private ReviewsDao reviewsDao;               // Reviews DAO
     
     // allow the server to inject the DataSource
     @Resource(lookup="java:global/jdbc/plantShop")
