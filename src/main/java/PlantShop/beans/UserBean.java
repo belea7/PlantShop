@@ -93,8 +93,30 @@ public class UserBean implements Serializable {
     }
     
     
+    /**
+     * @return false if the user is currently logged in, true otherwise.
+     */
     public boolean isNotLoggedIn(){
         return !this.isLoggedIn();
+    }
+    
+    
+    /**
+     * @return true if the user is currently logged in on an admin account, false otherwise.
+     */
+    public boolean isAdmin(){
+        if(user == null)
+            return false;
+        
+        return user.isAdmin();
+    }
+    
+    
+    /**
+     * @return false if the user is currently logged in on an admin account, true otherwise.
+     */
+    public boolean isNotAdmin(){
+        return !this.isAdmin();
     }
     
 }
