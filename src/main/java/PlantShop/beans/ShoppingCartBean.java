@@ -6,14 +6,14 @@ package PlantShop.beans;
 import PlantShop.daos.ShoppingCartDao;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
+import PlantShop.entities.ShoppingCart;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -24,10 +24,10 @@ import org.primefaces.PrimeFaces;
  * @author leagi
  */
 @Named(value = "shoppingCartBean")
-@ViewScoped
+@SessionScoped
 public class ShoppingCartBean implements Serializable{
     
-    private ArrayList<PlantInCart> plants;              // The plants in the cart
+    private ShoppingCart cart;                          // The plants in the cart
     private ArrayList<PlantInCart> selectedPlants;      // The selected plants from cart for removal
     private PlantInCart selectedPlant;                  // The selected plant for editing
     private Plant addedPlant;                           // A plant that should be added to the cart
@@ -35,12 +35,8 @@ public class ShoppingCartBean implements Serializable{
     @Inject
     private ShoppingCartDao dao;
     
-    /**
-     * Gets all the plants in the cart.
-     */
-    @PostConstruct
-    public void init() {
-        plants = dao.getPlants();
+    public void setCart(ShoppingCart cart) {
+        this.cart = cart;
     }
     
     /**
@@ -48,8 +44,8 @@ public class ShoppingCartBean implements Serializable{
      * 
      * @return plants in cart
      */
-    public ArrayList<PlantInCart> getPlants() {
-        return this.plants;
+    public ShoppingCart getCart() {
+        return this.cart;
     }
     
     /**
@@ -110,15 +106,14 @@ public class ShoppingCartBean implements Serializable{
      * Add selected plant to cart.
      */
     public void addToCart() {
-        dao.addPlantToCart(addedPlant);
+        dao.addPlantToCart(addedPlant, cart);
     }
     
     /**
      * Remove group of selected plants from cart.
      */
     public void removeSelectedPlants() {
-        dao.removePlantsFromCart(this.selectedPlants);
-        this.plants.removeAll(this.selectedPlants);
+        dao.removePlantsFromCart(this.selectedPlants, cart);
         this.selectedPlants = null;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Plant Removed From Cart"));
         PrimeFaces.current().ajax().update("form:messages", "form:sc-plants");
@@ -138,8 +133,7 @@ public class ShoppingCartBean implements Serializable{
      * Remove selected plant from cart.
      */
     public void removeFromCart() {
-        plants.remove(selectedPlant);
-        dao.removePlantFromCart(selectedPlant);
+        dao.removePlantFromCart(selectedPlant, cart);
         selectedPlant = null;
     }
     
@@ -161,7 +155,7 @@ public class ShoppingCartBean implements Serializable{
      */
     public void increaseAmount() {
         this.selectedPlant.increaseAmount();
-        dao.saveAmount(this.selectedPlant);
+        dao.saveAmount(this.selectedPlant, cart);
     }
     
     /**
@@ -169,6 +163,6 @@ public class ShoppingCartBean implements Serializable{
      */
     public void decreaseAmount() {
         this.selectedPlant.decreaseAmount();
-        dao.saveAmount(this.selectedPlant);
+        dao.saveAmount(this.selectedPlant, cart);
     }
 }
