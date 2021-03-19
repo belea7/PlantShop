@@ -77,7 +77,7 @@ public class RegistrationBean implements Serializable {
                     "Phone number and zipcode must be a number!");
             return null;
         }
-        user.setShoppingCart(new ShoppingCart());
+        user.setShoppingCart(new ShoppingCart(user));
         user.setAdmin(admin.compareTo(ADMIN_CODE) == 0);
         
         
