@@ -31,11 +31,36 @@
     <managed-bean>
         <managed-bean-name>shoppingCartBean</managed-bean-name>
         <managed-bean-class>PlantShop.beans.ShoppingCartBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>editPlantsBean</managed-bean-name>
         <managed-bean-class>PlantShop.beans.EditPlantsBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>userBean</managed-bean-name>
+        <managed-bean-class>PlantShop.beans.UserBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>registrationBean</managed-bean-name>
+        <managed-bean-class>PlantShop.beans.RegistrationBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>loginBean</managed-bean-name>
+        <managed-bean-class>PlantShop.beans.LoginBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>loginViewBean</managed-bean-name>
+        <managed-bean-class>PlantShop.view.LoginViewBean</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>registrationViewBean</managed-bean-name>
+        <managed-bean-class>PlantShop.view.RegistrationViewBean</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
     </managed-bean>
 </faces-config>
