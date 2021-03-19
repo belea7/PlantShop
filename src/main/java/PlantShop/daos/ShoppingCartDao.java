@@ -6,6 +6,7 @@ package PlantShop.daos;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
 import PlantShop.entities.ShoppingCart;
+import PlantShop.entities.User;
 
 import java.io.Serializable;
 import java.util.ArrayList; 
@@ -21,10 +22,10 @@ import javax.inject.Named;
 import javax.sql.DataSource;
 
 @DataSourceDefinition(
-    name = "java:global/jdbc/plantShop",
+    name = "java:global/jdbc/PlantShop",
     className = "org.apache.derby.jdbc.ClientDataSource",
-    url = "jdbc:derby://localhost:1527/plantShop",
-    databaseName = "plantShop",
+    url = "jdbc:derby://localhost:1527/PlantShop",
+    databaseName = "PlantShop",
     user = "root",
     password = "root")
 
@@ -39,7 +40,7 @@ import javax.sql.DataSource;
 public class ShoppingCartDao implements Serializable{
     
     // allow the server to inject the DataSource
-    @Resource(lookup="java:global/jdbc/plantShop")
+    @Resource(lookup="java:global/jdbc/PlantShop")
     DataSource dataSource;
     
     /**
@@ -47,14 +48,15 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @return 
      */
-    public ArrayList<PlantInCart> getPlants(){
-        ArrayList<PlantInCart> plants = new ArrayList();
+    public ShoppingCart getCart(User user){
+        ShoppingCart cart = new ShoppingCart(user);
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create SELECT statement and execute it
             String sql = "SELECT * "
                        + "FROM shoppingcarts, plants "
-                       + "WHERE user_name='admin' AND shoppingcarts.plant_id = plants.id";
+                       + "WHERE user_name = '" + user.getUsername() + "'"
+                       + " AND shoppingcarts.plant_id = plants.id";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             
@@ -76,24 +78,13 @@ public class ShoppingCartDao implements Serializable{
                 // Create PlantInCart and fill it's attributes
                 int amount = result.getObject(3, Integer.class);
                 PlantInCart plantInCart = new PlantInCart(plant, amount);
-                plants.add(plantInCart);
+                cart.addToCart(plantInCart);
             }
             connection.close();
             
         } catch (SQLException e) { 
             e.printStackTrace();
         }
-        return plants;
-    }
-    
-    /**
-     * Fetches the shopping cart of the user from DB.
-     * 
-     * @return 
-     */
-    public ShoppingCart getCart() {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setItems(this.getPlants());
         return cart;
     }
     
@@ -102,7 +93,7 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      */
-    public void addPlantToCart(Plant plant) {
+    public void addPlantToCart(Plant plant, ShoppingCart cart) {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
@@ -112,13 +103,14 @@ public class ShoppingCartDao implements Serializable{
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statemtn's variables
-            statement.setString(1, "admin");
+            statement.setString(1, cart.getUser().getUsername());
             statement.setInt(2, plant.getId());
             statement.setInt(3, 1);
             
             // Execute query and close connection
             statement.executeUpdate();
             connection.close();
+            cart.addToCart(new PlantInCart(plant, 1));
             
         } catch (SQLException e) { 
             e.printStackTrace();
@@ -130,18 +122,20 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      */
-    public void removePlantFromCart (PlantInCart plant) {
+    public void removePlantFromCart (PlantInCart plant, ShoppingCart cart) {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
             String sql = "DELETE FROM ShoppingCarts "
-                       + "WHERE plant_id = ? AND user_name = 'admin'";
+                       + "WHERE plant_id = ? AND user_name = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, plant.getPlant().getId());
+            statement.setString(2, cart.getUser().getUsername());
             
             // Execute query and close connection
             statement.executeUpdate();
             connection.close();
+            cart.removeFromCart(plant);
             
         } catch (SQLException e) { 
             e.printStackTrace();
@@ -153,9 +147,9 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plants 
      */
-    public void removePlantsFromCart(ArrayList<PlantInCart> plants) {
+    public void removePlantsFromCart(ArrayList<PlantInCart> plants, ShoppingCart cart) {
         for (PlantInCart p : plants) {
-            removePlantFromCart(p);
+            removePlantFromCart(p, cart);
         }
     }
     
@@ -164,18 +158,19 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      */
-    public void saveAmount (PlantInCart plant) {
+    public void saveAmount (PlantInCart plant, ShoppingCart cart) {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
             String sql = "UPDATE ShoppingCarts "
                        + "SET amount = ? "
-                       + "WHERE plant_id = ? and user_name = 'admin'";
+                       + "WHERE plant_id = ? and user_name = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statement's variables
             statement.setInt(1, plant.getAmount());
             statement.setInt(2, plant.getPlant().getId());
+            statement.setString(3, cart.getUser().getUsername());
             
             // Execute query and close connection
             statement.executeUpdate();
