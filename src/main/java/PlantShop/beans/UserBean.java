@@ -26,6 +26,9 @@ public class UserBean implements Serializable {
     
     @Inject
     private UserDao userDao;
+    
+    @Inject
+    private ShoppingCartBean shoppingCartBean;
 
     /**
      * Creates a new instance of UserBean.
@@ -50,6 +53,8 @@ public class UserBean implements Serializable {
             throw new IncorrectCredentialsException();
         
         this.user = user;
+        shoppingCartBean.setCart(user.getShoppingCart());
+        System.out.println(this.user.getShoppingCart().getUser().getUsername() + " at login");
     }
     
     
@@ -89,6 +94,12 @@ public class UserBean implements Serializable {
      * @return true if the user is currently logged in, false otherwise.
      */
     public boolean isLoggedIn() {
+        if (user != null) {
+            System.out.println("is logged in");
+        }
+        else {
+            System.out.println("not logged in");
+        }
         return (user != null);
     }
     
