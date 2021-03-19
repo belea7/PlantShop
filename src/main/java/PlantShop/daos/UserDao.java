@@ -73,7 +73,7 @@ public class UserDao implements Serializable {
                 user.setZipcode(result.getObject("zip_code", Long.class));
                 user.setBirthdayDate(result.getObject("birthday_date", java.sql.Date.class));
                 user.setAdmin(result.getObject("admin", Boolean.class));
-                user.setShoppingCart(shoppingCartDao.getCart());
+                user.setShoppingCart(shoppingCartDao.getCart(user));
             }
             
             connection.close();
