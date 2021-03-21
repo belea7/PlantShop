@@ -36,6 +36,15 @@ public class PlantInCart {
         }
         
         /**
+         * Did the number of items in cart reach the number of items in stock.
+         * 
+         * @return reached or not
+         */
+        public boolean reachMaxAmount() {
+            return this.amount == this.plant.getNumberOfItems();
+        }
+        
+        /**
          * Decreases the amount od the plants in cart by 1.
          * The amount cannot be less than 1.
          */

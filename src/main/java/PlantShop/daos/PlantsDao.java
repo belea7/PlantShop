@@ -40,7 +40,7 @@ public class PlantsDao implements Serializable{
     @Inject
     private ReviewsDao reviewsDao;               // Reviews DAO
     
-    // allow the server to inject the DataSource
+    // Allow the server to inject the DataSource
     @Resource(lookup="java:global/jdbc/plantShop")
     DataSource dataSource;
     
@@ -56,7 +56,7 @@ public class PlantsDao implements Serializable{
         // Fetch plants from DB
         try (Connection connection = dataSource.getConnection()) {
             // Execute get statement for all plants
-            String sql = "SELECT *"
+            String sql = "SELECT * "
                        + "FROM plants";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
@@ -94,10 +94,10 @@ public class PlantsDao implements Serializable{
         // Connecto to DB
         try (Connection connection = dataSource.getConnection()) {
             // Insert the plant to the DB
-            String sql = "INSERT INTO plants"
+            String sql = "INSERT INTO plants "
                     + "(id, name, number_of_items, light, water, "
-                    + "fertilize, difficulty, description, picture, price)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "fertilize, difficulty, description, picture, price) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statement variables

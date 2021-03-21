@@ -12,15 +12,17 @@ import java.util.ArrayList;
  */
 public class ShoppingCart {
     private User user;                          // The user whose cart it is
-    private ArrayList<PlantInCart> items;       // List of items in the cart
+    private ArrayList<PlantInCart> plantsInCart;       // List of items in the cart
     private int totalPrice;                     // The total price of items in the cart
     
     /**
      * Constructor for shopping cart entity.
+     * 
+     * @param user
      */
     public ShoppingCart(User user) {
         this.user = user;
-        this.items = new ArrayList();
+        this.plantsInCart = new ArrayList();
         this.totalPrice = 0;
     }
     
@@ -41,28 +43,31 @@ public class ShoppingCart {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
     
     /**
      * Getter for items list attribute.
      * 
      * @return list of items in cart
      */
-    public ArrayList<PlantInCart> getItems() {
-        return items;
+    public ArrayList<PlantInCart> getPlantsInCart() {
+        return plantsInCart;
     }
     
     /**
-     * Setter for items list attribute.
-     * Updates the total cost of the items in the cart.
+     * Setter for items list attribute.Updates the total cost of the items in the cart.
      * 
-     * @param items 
+     * @param plantsInCart
      */
-    public void setItems(ArrayList<PlantInCart> items) {
-        this.items = items;
+    public void setItems(ArrayList<PlantInCart> plantsInCart) {
+        this.plantsInCart = plantsInCart;
         
         // Update the total price of the cart
         int total = 0;
-        for (PlantInCart p: items) {
+        for (PlantInCart p: plantsInCart) {
             total += p.getPlant().getPrice();
         }
         this.totalPrice = total;
@@ -76,8 +81,8 @@ public class ShoppingCart {
      */
     public boolean isPlantInCart(Plant plant) {
         // Loop through all items in the cart and compare to the plant
-        for (PlantInCart p: items) {
-            if (p.equals(plant))
+        for (PlantInCart p: plantsInCart) {
+            if (p.getPlant().equals(plant))
                 return true;
         }
         return false;
@@ -90,7 +95,7 @@ public class ShoppingCart {
      * @param plant 
      */
     public void addToCart(PlantInCart plant) {
-        this.items.add(plant);
+        this.plantsInCart.add(plant);
         this.totalPrice += plant.getPlant().getPrice();
     }
     
@@ -101,7 +106,7 @@ public class ShoppingCart {
      * @param plant 
      */
     public void removeFromCart(PlantInCart plant) {
-        this.items.remove(plant);
+        this.plantsInCart.remove(plant);
         this.totalPrice -= plant.getPlant().getPrice();
     }
 }

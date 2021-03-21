@@ -38,7 +38,7 @@ import javax.sql.DataSource;
 @Dependent
 public class ReviewsDao implements Serializable{
     
-    // allow the server to inject the DataSource
+    // Allow the server to inject the DataSource
     @Resource(lookup="java:global/jdbc/plantShop")
     DataSource dataSource;
     
@@ -147,7 +147,7 @@ public class ReviewsDao implements Serializable{
         try (Connection connection = dataSource.getConnection()) {
             // Create DB statement
             String sql = "DELETE FROM reviews "
-                    + "WHERE user_name = ? AND plant_id = ? AND time_posted = ?";
+                       + "WHERE user_name = ? AND plant_id = ? AND time_posted = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Fill statement's variables

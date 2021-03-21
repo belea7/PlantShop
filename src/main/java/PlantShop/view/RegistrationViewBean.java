@@ -18,4 +18,3 @@ public class RegistrationViewBean extends AbstractFormViewBean {
     }
     
 }
-

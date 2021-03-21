@@ -235,6 +235,33 @@ public class Plant{
         }
         
         // Otherwise - calculate avg. rating
+        updateRating();
+    }
+    
+    /**
+     * Adds a review on the plant and updates plant's rating.
+     * 
+     * @param review 
+     */
+    public void addReview(Review review) {
+        this.reviews.add(review);
+        updateRating();
+    }
+    
+    /**
+     * Removes a review on the plant and updates plant's rating.
+     * 
+     * @param review 
+     */
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        updateRating();
+    }
+    
+    /**
+     * Updates a review on a plant and updates plant's rating.
+     */
+    public void updateRating() {
         int total = 0;
         for (Review r: reviews) {
             total += r.getRating();
@@ -249,5 +276,50 @@ public class Plant{
      */
     public int getRating() {
         return rating;
+    }
+    
+    /**
+     * Is the plant in stock (number of items available larger than 0)
+     * 
+     * @return in stock or not
+     */
+    public boolean getInStock() {
+        return (numberOfItems > 0);
+    }
+    
+    /**
+     * Hash code function for plant object.
+     * 
+     * @return hash code of the plant object
+     */
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + this.id;
+        return hash;
+    }
+    
+    /**
+     * Compares to objects and returns it they are equal.
+     * 
+     * @param obj
+     * @return equal or not
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Plant other = (Plant) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
 }

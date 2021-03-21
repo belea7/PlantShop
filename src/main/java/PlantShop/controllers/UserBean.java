@@ -1,10 +1,11 @@
-package PlantShop.beans;
+package PlantShop.controllers;
 
 import PlantShop.daos.UserDao;
 import PlantShop.entities.User;
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.IncorrectCredentialsException;
 import PlantShop.exceptions.UsernameTakenException;
+
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -28,7 +29,7 @@ public class UserBean implements Serializable {
     private UserDao userDao;
     
     @Inject
-    private ShoppingCartBean shoppingCartBean;
+    private ShoppingCartController shoppingCartController;
 
     /**
      * Creates a new instance of UserBean.
@@ -53,8 +54,7 @@ public class UserBean implements Serializable {
             throw new IncorrectCredentialsException();
         
         this.user = user;
-        shoppingCartBean.setCart(user.getShoppingCart());
-        System.out.println(this.user.getShoppingCart().getUser().getUsername() + " at login");
+        shoppingCartController.setCart(user.getShoppingCart());
     }
     
     

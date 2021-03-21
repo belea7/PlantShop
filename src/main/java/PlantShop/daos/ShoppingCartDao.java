@@ -39,14 +39,15 @@ import javax.sql.DataSource;
 @Dependent
 public class ShoppingCartDao implements Serializable{
     
-    // allow the server to inject the DataSource
+    // Allow the server to inject the DataSource
     @Resource(lookup="java:global/jdbc/PlantShop")
     DataSource dataSource;
     
     /**
      * Fetches all the plants in the shopping cart of the user from DB.
      * 
-     * @return 
+     * @param user
+     * @return cart object
      */
     public ShoppingCart getCart(User user){
         ShoppingCart cart = new ShoppingCart(user);
@@ -93,7 +94,7 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      */
-    public void addPlantToCart(Plant plant, ShoppingCart cart) {
+    public void addPlantToCart(PlantInCart plant, ShoppingCart cart) {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
@@ -104,13 +105,12 @@ public class ShoppingCartDao implements Serializable{
             
             // Set statemtn's variables
             statement.setString(1, cart.getUser().getUsername());
-            statement.setInt(2, plant.getId());
+            statement.setInt(2, plant.getPlant().getId());
             statement.setInt(3, 1);
             
             // Execute query and close connection
             statement.executeUpdate();
             connection.close();
-            cart.addToCart(new PlantInCart(plant, 1));
             
         } catch (SQLException e) { 
             e.printStackTrace();
@@ -121,6 +121,7 @@ public class ShoppingCartDao implements Serializable{
      * Remove plant from cart in DB.
      * 
      * @param plant 
+     * @param cart 
      */
     public void removePlantFromCart (PlantInCart plant, ShoppingCart cart) {
         // Connect to DB
@@ -135,7 +136,6 @@ public class ShoppingCartDao implements Serializable{
             // Execute query and close connection
             statement.executeUpdate();
             connection.close();
-            cart.removeFromCart(plant);
             
         } catch (SQLException e) { 
             e.printStackTrace();
@@ -146,6 +146,7 @@ public class ShoppingCartDao implements Serializable{
      * Remove group of plants from cart in DB.
      * 
      * @param plants 
+     * @param cart 
      */
     public void removePlantsFromCart(ArrayList<PlantInCart> plants, ShoppingCart cart) {
         for (PlantInCart p : plants) {
@@ -157,6 +158,7 @@ public class ShoppingCartDao implements Serializable{
      * Save amount of a certain plant in the cart of users in DB.
      * 
      * @param plant 
+     * @param cart 
      */
     public void saveAmount (PlantInCart plant, ShoppingCart cart) {
         // Connect to DB
