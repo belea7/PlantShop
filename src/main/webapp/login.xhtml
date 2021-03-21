@@ -10,38 +10,39 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>TODO supply a title</title>
+        <title>Log-in</title>
+        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
+        <link rel="stylesheet" href="styles.css" media="all"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
-    <body>
-        <div class="menu">
+    <h:body>
+       <div>
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{loginBean.logout}" ajax="false"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
         
         <h:form id="form">
-            <h:panelGrid columns="2">
-                <h:outputLabel value="User Name:  " for="username"/>
-                <h:inputText id="username" value="#{loginBean.username}"
+            <p:panelGrid columns="2">
+                <p:outputLabel value="User Name:  " for="username"/>
+                <p:inputText id="username" value="#{loginBean.username}"
                              required="true" requiredMessage="User Name is required"/>
                 
-                <h:outputLabel value="Password:  " for="password"/>
-                <h:inputSecret id="password" value="#{loginBean.password}"
-                            required="true" requiredMessage="Password is required"/>
-            </h:panelGrid>
-            <h:commandButton value="login" action="#{loginBean.login}">
+                <p:outputLabel value="Password:  " for="password"/>
+                <p:password id="password" value="#{loginBean.password}" required="true" requiredMessage="Password is required"/>
+            </p:panelGrid>
+            <p:commandButton value="login" action="#{loginBean.login}">
                 <f:ajax execute="@all" render="@all" />
-            </h:commandButton>
+            </p:commandButton>
         </h:form>
-    </body>
+    </h:body>
 </html>

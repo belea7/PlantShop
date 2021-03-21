@@ -5,27 +5,29 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <title>PlantShop Catalog</title>
         <link rel="stylesheet" href="styles.css" media="all"/>
-        <center><img src="images\Logo.jpg" width="350" height="350"/></center>
+        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
     </h:head>
     <h:body>
         <div>
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{userBean.admin}"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{userBean.loggedIn}"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{userBean.loggedIn}"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{userBean.loggedIn}"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{userBean.notLoggedIn}"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{userBean.notLoggedIn}"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{loginBean.logout}" ajax="false" rendered="#{userBean.loggedIn}"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
         <div>
             <h:form id="form">
-                <p:dataGrid var="plant" value="#{plantsBean.plants}" columns="4" layout="grid"
+                <p:growl id="messages" showDetail="true"/>
+                <p:dataGrid var="plant" value="#{catalogBean.plants}" columns="4" layout="grid"
                             rows="12" paginator="true" id="plants" rowsPerPageTemplate="4,12,16"
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink}
                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
@@ -37,11 +39,11 @@
                     <div class="plant-grid-item">
                         <div> 
                             <p:graphicImage value="images/#{plant.picture}" height="200" width="200"/>
-                            <p:rating readonly="true" value="#{plant.rating}"/>
+                            <p:rating readonly="true" value="#{plant.rating}" id="plant-rating-in-table"/>
                         </div>
                         <div>
-                            <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.numberOfItems > 0}"/> 
-                            <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{plant.numberOfItems == 0}"/>
+                            <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.inStock}"/> 
+                            <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{not plant.inStock}"/>
                         </div>
                         <div>
                             <span class="plant-name">#{plant.name}</span>
@@ -52,82 +54,82 @@
                         <div>
                             <p:commandButton update=":form:plantDetails" oncomplete="PF('plantDialog').show()"
                                              value="Quick view" icon="pi pi-search">
-                                <f:setPropertyActionListener value="#{plant}" target="#{plantsBean.selectedPlant}"/>
-                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.addedPlant}"/>
+                                <f:setPropertyActionListener value="#{plant}" target="#{catalogBean.selectedPlant}"/>
                             </p:commandButton>
                         </div>
                     </div>
                 </p:dataGrid>
                 
-                <p:dialog header="Plant Info" widgetVar="plantDialog" modal="true" showEffect="fade"
-                          hideEffect="fade" resizable="false">
+                <p:dialog header="Plant Info" widgetVar="plantDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:scrollPanel id="plantDetails" class="plant-details-panel">
-                        <p:column rendered="#{not empty plantsBean.selectedPlant}">
+                        <p:column rendered="#{not empty catalogBean.selectedPlant}">
                             <div>
                                 <div>
                                     <div>
-                                        <p:graphicImage value="images/#{plantsBean.selectedPlant.picture}" height="400" width="400"/>
-                                        <p:rating readonly="true" value="#{plantsBean.selectedPlant.rating}"/>
-                                        <div class="plant-name">#{plantsBean.selectedPlant.name}</div>
-                                        <div height="200" width="200">#{plantsBean.selectedPlant.description}</div>
+                                        <p:graphicImage value="images/#{catalogBean.selectedPlant.picture}" height="400" width="400"/>
+                                        <p:rating readonly="true" value="#{catalogBean.selectedPlant.rating}" id="plant-rating-in-info"/>
+                                        <div class="plant-name">#{catalogBean.selectedPlant.name}</div>
+                                        <div height="200" width="200">#{catalogBean.selectedPlant.description}</div>
                                     </div>
                                     <div>
-                                        <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plantsBean.selectedPlant.numberOfItems > 0}"/> 
-                                        <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{plantsBean.selectedPlant.numberOfItems == 0}"/>
+                                        <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{catalogBean.selectedPlant.inStock}"/> 
+                                        <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{not catalogBean.selectedPlant.inStock}"/>
                                     </div>
                                     <div>
-                                        <h:outputText value="#{plantsBean.selectedPlant.price} ILS"/>
+                                        <h:outputText value="#{catalogBean.selectedPlant.price} ILS"/>
                                     </div>
                                     <div>
                                         <p:commandButton value="Add To Cart" icon="pi pi-shopping-cart" class="add-to-cart-button"
-                                                         actionListener="#{shoppingCartBean.addToCart}"
-                                                         disabled="#{plantsBean.selectedPlant.numberOfItems == 0}">
+                                                         actionListener="#{catalogBean.addSelectedPlantToCart()}"
+                                                         disabled="#{not catalogBean.selectedPlant.inStock}" style="margin-bottom: 10px; margin-top: 10px">
                                         </p:commandButton>
                                     </div>
                                     <center>
                                         <div>
                                             <p:panelGrid columns="2">
                                                 <h:outputText value="Light"/>
-                                                <h:outputText value="#{plantsBean.selectedPlant.light}"/>
+                                                <h:outputText value="#{catalogBean.selectedPlant.light}"/>
 
                                                 <h:outputText value="Water"/>
-                                                <h:outputText value="#{plantsBean.selectedPlant.water}"/>
+                                                <h:outputText value="#{catalogBean.selectedPlant.water}"/>
 
                                                 <h:outputText value="Fertilizer"/>
-                                                <h:outputText value="#{plantsBean.selectedPlant.fertilize}"/>
+                                                <h:outputText value="#{catalogBean.selectedPlant.fertilize}"/>
                                             
                                                 <h:outputText value="Difficulty"/>
-                                                <h:outputText value="#{plantsBean.selectedPlant.difficulty}"/>
+                                                <h:outputText value="#{catalogBean.selectedPlant.difficulty}"/>
                                             </p:panelGrid>
                                         </div>
                                     </center>
                                 </div>
                             </div>
                         </p:column>
-                        <p:commandButton value="Add review" icon="pi pi-plus" actionListener="#{plantsBean.createReview()}"
-                                         update=":form:edit-review-content" oncomplete="PF('editReviewDialog').show()">
+                        <p:commandButton value="Add review" icon="pi pi-plus" actionListener="#{catalogBean.createReview()}"
+                                         update=":form:edit-review-content" oncomplete="PF('editReviewDialog').show()"
+                                         style="margin-bottom: 10px; margin-top: 10px" rendered="#{catalogBean.canReviewBeAdded()}">
                             <p:resetInput target=":form:edit-review-content"/>
-                            <f:setPropertyActionListener value="#{true}" target="#{editPlantsBean.newPlant}"/>
+                            <f:setPropertyActionListener value="#{true}" target="#{catalogBean.newReview}"/>
                         </p:commandButton>
-                        <p:dataScroller value="#{plantsBean.selectedPlant.reviews}" var="review" 
+                        <p:dataScroller value="#{catalogBean.selectedPlant.reviews}" var="review" 
                                         chunkSize="10" class="review-scroller" id="reviews-list">
                             <f:facet name="header">
-                                Reviews for #{plantsBean.selectedPlant.name}
+                                Reviews for #{catalogBean.selectedPlant.name}
                             </f:facet>
 
-                            <div>
+                            <div style="margin-bottom: 10px; margin-top: 10px">
                                 <div>#{review.userName}</div>
                                 <p:rating readonly="true" value="#{review.rating}"/>
                                 <div>#{review.timePosted}</div>
-                                <div class="comment">"#{review.comment}"</div>
+                                <div class="comment" style="margin-bottom: 10px; margin-top: 10px">"#{review.comment}"</div>
                                 <p:commandButton icon="pi pi-pencil" update=":form:edit-review-content"
-                                                 oncomplete="PF('editReviewDialog').show()" process="@this">
-                                <f:setPropertyActionListener value="#{review}" target="#{plantsBean.selectedReview}"/>
+                                                 oncomplete="PF('editReviewDialog').show()" process="@this"
+                                                 rendered="#{catalogBean.canReviewBeEdited(review)}">
+                                <f:setPropertyActionListener value="#{review}" target="#{catalogBean.selectedReview}"/>
                                 <p:resetInput target=":form:edit-review-content"/>
                                 </p:commandButton>
                                 <p:commandButton class="remove-button" icon="pi pi-trash" process="@this"
-                                                 oncomplete="PF('deleteReviewDialog').show()">
-                                    <f:setPropertyActionListener value="#{review}" target="#{plantsBean.selectedReview}"/>
+                                                 oncomplete="PF('deleteReviewDialog').show()" rendered="#{catalogBean.canReviewBeEdited(review)}">
+                                    <f:setPropertyActionListener value="#{review}" target="#{catalogBean.selectedReview}"/>
                                 </p:commandButton>
                             </div>
                         </p:dataScroller>
@@ -135,25 +137,24 @@
                 </p:dialog>
                 <p:dialog header="Edit Review" showEffect="fade" modal="true" widgetVar="editReviewDialog" responsive="true">
                     <p:outputPanel id="edit-review-content" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty plantsBean.selectedReview}">
+                        <p:outputPanel rendered="#{not empty catalogBean.selectedReview}">
                             <div>
-                                <p:rating readonly="false" value="#{plantsBean.selectedReview.rating}" required="true"/>
+                                <p:rating readonly="false" value="#{catalogBean.selectedReview.rating}" required="true"/>
                             </div>
                             <p:outputLabel for="comment">Comment</p:outputLabel>
-                            <p:inputTextarea id="comment" value="#{plantsBean.selectedReview.comment}" rows="4" cols="50" required="true"/>
+                            <p:inputTextarea id="comment" value="#{catalogBean.selectedReview.comment}" rows="4" cols="50" required="true"/>
                         </p:outputPanel>
                     </p:outputPanel>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{plantsBean.saveReview}"
-                                         update="edit-review-content plantDetails plants" process="edit-review-content @this" 
-                                         onclick="PF('editReviewDialog').hide()"/>
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{catalogBean.saveReview}"
+                                         update="edit-review-content plantDetails plants" process="edit-review-content @this"/>
                         <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editReviewDialog').hide()"/>
                     </f:facet>
                 </p:dialog>
                 <p:confirmDialog widgetVar="deleteReviewDialog" showEffect="fade" width="300"
                                  message="Delete this review?" header="Confirm" severity="warn">
-                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{plantsBean.removeSelectedReview()}"
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{catalogBean.removeSelectedReview()}"
                                      process="@this" oncomplete="PF('deleteReviewDialog').hide()" update="reviews-list"/>
                     <p:commandButton value="No" type="button" class="add-to-cart-button" icon="pi pi-times"
                                      onclick="PF('deleteReviewDialog').hide()"/>

@@ -5,34 +5,38 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <title>Shopping cart</title>
+        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
         <link rel="stylesheet" href="styles.css" media="all"/>
-        <center><img src="images\Logo.jpg" width="350" height="350"/></center>
     </h:head>
     <h:body>
         <div>
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{loginBean.logout}" ajax="false"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
         <h:form id="form">
             <div>
+                <center>
+                    <p:outputLabel class="total-price-label" value="Total: #{shoppingCartBean.totalPrice} ILS  "/> 
+                    <p:commandButton id="check-out-button" update="@this dt-products" value="Buy items"/>
+                </center>
                 <p:growl id="messages" showDetail="true"/>
                 <p:toolbar>
-                    <p:toolbarGroup>
-                        <p:commandButton id="delete-products-button" value="#{shoppingCartBean.deleteButtonMessage}"
+                    <p:toolbarGroup align="left">
+                        <p:commandButton id="delete-products-button" value="#{shoppingCartBean.deleteButtonMessage}" update="@this dt-products"
                                          icon="pi pi-trash" actionListener="#{shoppingCartBean.removeSelectedPlants()}"
-                                         styleClass="ui-button-danger" disabled="#{!shoppingCartBean.hasSelectedPlants()}"
-                                         update="@this dt-products">
-                            <p:confirm header="Confirmation" message="Delete the selected products?"
+                                         class="remove-button" disabled="#{!shoppingCartBean.hasSelectedPlants()}">
+                            <p:confirm header="Confirmation" message="Delete the selected plants?"
                                        icon="pi pi-exclamation-triangle"/>
                         </p:commandButton>
                     </p:toolbarGroup>
@@ -47,7 +51,6 @@
                                 <i class="pi pi-search"></i>
                                 <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search"/>
                             </span>
-
                         </div>
                     </f:facet>
 
@@ -64,10 +67,9 @@
                     </p:column>
                     <p:column headerText="Details">
                         <h:outputText class="plant-name" value="#{plant.plant.name}"/>
-                        <div><p:rating value="#{plant.plant.rating}" readonly="true"/></div>
                         <div>
-                            <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.plant.numberOfItems > 0}"/> 
-                            <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{plant.plant.numberOfItems == 0}"/>
+                            <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.plant.inStock}"/> 
+                            <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{not plant.plant.inStock}"/>
                         </div>
                         <div><h:outputText value="#{plant.plant.price} ILS"/></div>
                         <div>
@@ -83,25 +85,29 @@
                                             
                                 <h:outputText value="Difficulty"/>
                                 <h:outputText value="#{plant.plant.difficulty}"/>
+                                
+                                <h:outputText value="Items in stock"/>
+                                <h:outputText value="#{plant.plant.numberOfItems}"/>
                             </p:panelGrid>
                         </div>
                     </p:column>
                     <p:column exportable="false">
                         <div>
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
-                                             oncomplete="PF('deleteProductDialog').show()" value="Remove from cart">
+                                             oncomplete="PF('deleteProductDialog').show()" value="Remove from cart"
+                                             style="margin-bottom: 10px; margin-top: 10px">
                                 <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
                             </p:commandButton>
                         </div>
                         <div>
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-plus" process="@this"
                                              action="#{shoppingCartBean.increaseAmount()}" update="dt-products"
-                                             disabled="#{plant.amount == plant.plant.numberOfItems}">
+                                             style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px">
                                 <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
                             </p:commandButton>
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-minus" process="@this"
                                              action="#{shoppingCartBean.decreaseAmount()}" update="dt-products"
-                                             disabled="#{plant.amount == 1}">
+                                             disabled="#{plant.amount == 1}" style="margin-bottom: 10px; margin-top: 10px">
                                 <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
                             </p:commandButton>
                         </div>
@@ -112,10 +118,15 @@
                 </p:dataTable>
                 <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
                                  message="Delete the product?" header="Confirm" severity="warn">
-                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{shoppingCartBean.removeFromCart()}"
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{shoppingCartBean.removeSelectedPlantFromCart()}"
                                      process="@this" oncomplete="PF('deleteProductDialog').hide()" update="dt-products"/>
                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                      onclick="PF('deleteProductDialog').hide()" update="dt-products"/>
+                </p:confirmDialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" update="dt-plants"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times" update="dt-plants"/>
                 </p:confirmDialog>
             </div>
         </h:form>

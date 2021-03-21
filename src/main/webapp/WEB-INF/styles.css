@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : leagi
 */
 .plant-grid-item {
-    margin-bottom: 1px;
+    margin-bottom: 0;
     text-align: center
 }
 
@@ -71,11 +71,4 @@ and open the template in the editor.
 
 .shopping-cart-table {
     text-align: center
-}
-
-.total-price-label {
-    text-align: center;
-    font-weight: bold;
-    font-family: Sans-serif;
-    font-size: 500px;
 }

@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <center><img src="images\Logo.jpg" width="350" height="350"/></center>
+        <title>Edit Plants</title>
+        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
         <link rel="stylesheet" href="styles.css" media="all"/>
     </h:head>
     <h:body>
@@ -13,13 +14,13 @@
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{loginBean.logout}" ajax="false"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
@@ -78,8 +79,8 @@
                         <h:outputText value="#{plant.numberOfItems}"/>
                     </p:column>
                     <p:column headerText="Status" sortBy="#{plant.numberOfItems}" width="120">
-                        <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.numberOfItems > 0}"/> 
-                        <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{plant.numberOfItems == 0}"/>
+                        <h:outputLabel class="in-stock-label" value="IN STOCK" rendered="#{plant.inStock}"/> 
+                        <h:outputLabel class="out-of-stock-label" value="OUT OF STOCK" rendered="#{not plant.inStock}"/>
                     </p:column>
                     <p:column exportable="false" width="100">
                         <p:commandButton icon="pi pi-pencil" update=":form:manage-plant-content"
@@ -102,11 +103,13 @@
                                             rendered="#{not empty editPlantsBean.selectedPlant.picture}"/>
                             <div>
                                 <p:outputLabel for="picture">Picture</p:outputLabel>
-                                <p:inputText id="picture" value="#{editPlantsBean.selectedPlant.picture}" required="true"/>
+                                <p:inputText id="picture" value="#{editPlantsBean.selectedPlant.picture}" required="true"  validatorMessage="Please supply an image">
+                                    <f:validateRequired/>
+                                </p:inputText>
                             </div>
                             <div>
                                 <p:outputLabel for="name">Name</p:outputLabel>
-                                <p:inputText id="name" value="#{editPlantsBean.selectedPlant.name}" required="true" maxlength="30"/>
+                                <p:inputText id="name" value="#{editPlantsBean.selectedPlant.name}" required="true" maxlength="30" requiredMessage="Please supply a name"/>
                             </div>
                             <div>
                                 <p:outputLabel for="description">Description</p:outputLabel>
@@ -147,11 +150,10 @@
                             </div>
                         </p:outputPanel>
                     </p:scrollPanel>
-
                     <f:facet name="footer">
                         <p:commandButton value="Save" icon="pi pi-check" actionListener="#{editPlantsBean.save}"
-                                         update="manage-plant-content dt-plants" process="manage-plant-content @this" 
-                                         onclick="PF('managePlantDialog').hide()"/>
+                                         update="manage-plant-content dt-plants" process="manage-plant-content @this">
+                        </p:commandButton>
                         <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('managePlantDialog').hide()"
                                          class="ui-button-secondary"/>
                     </f:facet>
