@@ -7,7 +7,9 @@
     <h:head>
         <title>PlantShop Catalog</title>
         <link rel="stylesheet" href="styles.css" media="all"/>
-        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
+        <div class="picture">
+            <img src="Logo.jpg" width="150" height="190"/>
+        </div>
     </h:head>
     <h:body>
         <div>
@@ -38,7 +40,7 @@
 
                     <div class="plant-grid-item">
                         <div> 
-                            <p:graphicImage value="images/#{plant.picture}" height="200" width="200"/>
+                            <p:graphicImage value="#{plant.picture}" height="200" width="200"/>
                             <p:rating readonly="true" value="#{plant.rating}" id="plant-rating-in-table"/>
                         </div>
                         <div>
@@ -60,13 +62,13 @@
                     </div>
                 </p:dataGrid>
                 
-                <p:dialog header="Plant Info" widgetVar="plantDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:dialog class="plant-dialog" header="Plant Info" widgetVar="plantDialog" modal="true" showEffect="fade" hideEffect="fade" responsive="true">
                     <p:scrollPanel id="plantDetails" class="plant-details-panel">
                         <p:column rendered="#{not empty catalogBean.selectedPlant}">
                             <div>
                                 <div>
                                     <div>
-                                        <p:graphicImage value="images/#{catalogBean.selectedPlant.picture}" height="400" width="400"/>
+                                        <p:graphicImage value="#{catalogBean.selectedPlant.picture}" height="300" width="300"/>
                                         <p:rating readonly="true" value="#{catalogBean.selectedPlant.rating}" id="plant-rating-in-info"/>
                                         <div class="plant-name">#{catalogBean.selectedPlant.name}</div>
                                         <div height="200" width="200">#{catalogBean.selectedPlant.description}</div>
@@ -110,17 +112,15 @@
                             <p:resetInput target=":form:edit-review-content"/>
                             <f:setPropertyActionListener value="#{true}" target="#{catalogBean.newReview}"/>
                         </p:commandButton>
-                        <p:dataScroller value="#{catalogBean.selectedPlant.reviews}" var="review" 
-                                        chunkSize="10" class="review-scroller" id="reviews-list">
+                        <p:dataScroller value="#{catalogBean.selectedPlant.reviews}" var="review" chunkSize="10" id="reviews-list" class="review-scroller">
                             <f:facet name="header">
                                 Reviews for #{catalogBean.selectedPlant.name}
                             </f:facet>
-
-                            <div style="margin-bottom: 10px; margin-top: 10px">
+                            <div>
                                 <div>#{review.userName}</div>
                                 <p:rating readonly="true" value="#{review.rating}"/>
                                 <div>#{review.timePosted}</div>
-                                <div class="comment" style="margin-bottom: 10px; margin-top: 10px">"#{review.comment}"</div>
+                                <div class="comment">"#{review.comment}"</div>
                                 <p:commandButton icon="pi pi-pencil" update=":form:edit-review-content"
                                                  oncomplete="PF('editReviewDialog').show()" process="@this"
                                                  rendered="#{catalogBean.canReviewBeEdited(review)}">

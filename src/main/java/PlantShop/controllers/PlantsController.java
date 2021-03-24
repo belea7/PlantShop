@@ -5,9 +5,11 @@ package PlantShop.controllers;
 
 import PlantShop.daos.PlantsDao;
 import PlantShop.entities.Plant;
+import PlantShop.exceptions.DaoException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -29,10 +31,15 @@ public class PlantsController implements Serializable{
     
     /**
      * Gets all plants in shop from DAO.
+     * 
      */
     @PostConstruct
-    public void init() {
-        plants = dao.getPlants();
+    public void init(){
+        try {
+            plants = dao.getPlants();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -57,7 +64,7 @@ public class PlantsController implements Serializable{
     public int getAvailablePlantId() {
         // Get the largest taken ID
         int size = this.plants.size();
-        int lastId = this.plants.get(size - 1).getId();
+        Integer lastId = Collections.max(this.plants).getId();
         
         // If the last ID is not equal to the number of plants - 
         // an available ID less than the largest ID exists.
@@ -85,6 +92,7 @@ public class PlantsController implements Serializable{
      * @return the created instance
      */
     public Plant createPlant() {
+        System.out.println("creating");
         Plant plant = new Plant();
         plant.setId(getAvailablePlantId());
         return plant;
@@ -94,8 +102,9 @@ public class PlantsController implements Serializable{
      * Remove plant from application.
      * 
      * @param plant
+     * @throws DaoException
      */
-    public void removePlant(Plant plant) {
+    public void removePlant(Plant plant) throws DaoException{
         this.plants.remove(plant);
         dao.removePlant(plant);
     }
@@ -103,9 +112,10 @@ public class PlantsController implements Serializable{
     /**
      * Add plant to application.
      * 
-     * @param plant 
+     * @param plant
+     * @throws DaoException
      */
-    public void addPlant(Plant plant) {
+    public void addPlant(Plant plant) throws DaoException{
         dao.addPlant(plant);
         this.plants.add(plant);
     }
@@ -114,8 +124,9 @@ public class PlantsController implements Serializable{
      * Update a plant in the shop.
      * 
      * @param plant 
+     * @throws DaoException
      */
-    public void updatePlant(Plant plant) {
+    public void updatePlant(Plant plant) throws DaoException{
         dao.updatePlant(plant);
     }
 }

@@ -6,6 +6,7 @@ package PlantShop.models;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
 import PlantShop.controllers.ShoppingCartController;
+import PlantShop.exceptions.DaoException;
 import PlantShop.view.ShoppingCartViewBean;
 
 import java.io.Serializable;
@@ -109,9 +110,14 @@ public class ShoppingCartBean implements Serializable{
      * Remove selected plant from cart and notify user.
      */
     public void removeSelectedPlantFromCart() {
-        controller.removeFromCart(selectedPlant);
+        try {
+            controller.removeFromCart(selectedPlant);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            viewBean.displayFormSubmissionErrorMessage("Failed to remove plant");
+        }
         String name = this.selectedPlant.getPlant().getName();
-        viewBean.displayObjectDeletionMessage(name + "was removed from cart");
+        viewBean.displayFormSubmissionInfoMessage(name + "was removed from cart");
         this.selectedPlant = null;
     }
     
@@ -119,10 +125,16 @@ public class ShoppingCartBean implements Serializable{
      * Remove group of selected plants from cart and notify user.
      */
     public void removeSelectedPlants() {
-        for (PlantInCart plant: this.selectedPlants)
-            controller.removeFromCart(plant);
-        viewBean.displayObjectDeletionMessage("Plants removed from cart");
-         this.selectedPlants = null;
+        for (PlantInCart plant: this.selectedPlants) {
+            try {
+                controller.removeFromCart(plant);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed to remove plants");
+            }
+        }
+        viewBean.displayFormSubmissionInfoMessage("Plants removed from cart");
+        this.selectedPlants = null;
     }
     
     /**
@@ -158,20 +170,30 @@ public class ShoppingCartBean implements Serializable{
         // If the number of items in cart reached number of items in stock
         if (selectedPlant.reachMaxAmount()) {
             // Notify user that amount of items cannot be increased
-            viewBean.displayObjectEditMessage("Not enough plants in stock");
+            viewBean.displayFormSubmissionErrorMessage("Not enough plants in stock");
             return;
         }
         
         // Otherwise - increase amount of items in cart
-        controller.increaseAmount(this.selectedPlant);
-        viewBean.displayObjectEditMessage("Changed Amount to " + this.selectedPlant.getAmount());
+        try {
+            controller.increaseAmount(this.selectedPlant);
+        } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed to Increase amount");
+        }
+        viewBean.displayFormSubmissionInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
     }
     
     /**
      * Decrease the amount of a plant in the cart.
      */
     public void decreaseAmount() {
-        controller.decreaseAmount(this.selectedPlant);
-        viewBean.displayObjectEditMessage("Changed Amount to " + this.selectedPlant.getAmount());
+        try {
+            controller.decreaseAmount(this.selectedPlant);
+        } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed to Decrease amount");
+        }
+        viewBean.displayFormSubmissionInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
     }
 }

@@ -5,6 +5,7 @@ package PlantShop.daos;
 
 import PlantShop.entities.Plant;
 import PlantShop.entities.Review;
+import PlantShop.exceptions.DaoException;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -47,8 +48,9 @@ public class ReviewsDao implements Serializable{
      * 
      * @param plant
      * @return list of reviews
+     * @throws DaoException
      */
-    public ArrayList<Review> getReviews(Plant plant) {
+    public ArrayList<Review> getReviews(Plant plant) throws DaoException {
         ArrayList<Review> reviews = new ArrayList();
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
@@ -73,6 +75,7 @@ public class ReviewsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
         return reviews;
     }
@@ -81,8 +84,9 @@ public class ReviewsDao implements Serializable{
      * Add review to the DB.
      * 
      * @param review 
+     * @throws DaoException
      */
-    public void addReview(Review review) {
+    public void addReview(Review review) throws DaoException {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
@@ -104,6 +108,7 @@ public class ReviewsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -111,8 +116,9 @@ public class ReviewsDao implements Serializable{
      * Update a review from DB.
      * 
      * @param review 
+     * @throws DaoException
      */
-    public void updateReview(Review review) {
+    public void updateReview(Review review) throws DaoException {
         // Connecto to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
@@ -134,6 +140,7 @@ public class ReviewsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -141,8 +148,9 @@ public class ReviewsDao implements Serializable{
      * Remove review from DB.
      * 
      * @param review 
+     * @throws DaoException
      */
-    public void removeReview(Review review) {
+    public void removeReview(Review review) throws DaoException {
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create DB statement
@@ -161,6 +169,7 @@ public class ReviewsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -168,8 +177,9 @@ public class ReviewsDao implements Serializable{
      * Remove group of reviews from DB.
      * 
      * @param reviews 
+     * @throws DaoException
      */
-    public void removeReviews(ArrayList<Review> reviews) {
+    public void removeReviews(ArrayList<Review> reviews) throws DaoException{
         for (Review r: reviews) {
             removeReview(r);
         }

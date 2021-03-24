@@ -6,8 +6,10 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Edit Plants</title>
-        <center><img src="images\Logo.jpg" width="150" height="190"/></center>
         <link rel="stylesheet" href="styles.css" media="all"/>
+        <div class="picture">
+            <img src="Logo.jpg" width="150" height="190"/>
+        </div>
     </h:head>
     <h:body>
         <div>
@@ -45,7 +47,7 @@
 
                 <p:dataTable id="dt-plants" widgetVar="dtPlants" var="plant" value="#{editPlantsBean.plants}"
                              reflow="true" class="plants-data-table" selection="#{editPlantsBean.selectedPlants}"
-                             rowKey="#{plant.name}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                             rowKey="#{plant.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
                     <f:facet name="header">
                         <div>
                             <span>
@@ -70,7 +72,7 @@
                         <h:outputText value="#{plant.name}" class="plant-name"/>
                     </p:column>
                     <p:column headerText="Image" exportable="false">
-                        <p:graphicImage value="images/#{plant.picture}" library="demo" width="180" height="180"/>
+                        <p:graphicImage value="#{plant.picture}" library="demo" width="180" height="180"/>
                     </p:column>
                     <p:column headerText="Price" sortBy="#{plant.price}" width="60" filterBy="#{plant.price}">
                         <h:outputText value="#{plant.price} ILS"/>
@@ -96,16 +98,17 @@
 
                 </p:dataTable>
 
-                <p:dialog header="Plant Details" showEffect="fade" modal="true" widgetVar="managePlantDialog" responsive="true">
-                    <p:scrollPanel id="manage-plant-content" class="ui-fluid">
+                <p:dialog header="Plant Details" showEffect="fade" modal="true" widgetVar="managePlantDialog" responsive="true" class="edit-plant-dialog">
+                    <p:outputPanel id="manage-plant-content" class="ui-fluid">
                         <p:outputPanel rendered="#{not empty editPlantsBean.selectedPlant}">
-                            <p:graphicImage value="images/#{editPlantsBean.selectedPlant.picture}" height="200" width="200"
-                                            rendered="#{not empty editPlantsBean.selectedPlant.picture}"/>
+                            <div class="picture">
+                                <p:graphicImage value="#{editPlantsBean.selectedPlant.picture}" height="200" width="200"
+                                                rendered="#{not empty editPlantsBean.selectedPlant.picture}"/>
+                            </div>
                             <div>
-                                <p:outputLabel for="picture">Picture</p:outputLabel>
-                                <p:inputText id="picture" value="#{editPlantsBean.selectedPlant.picture}" required="true"  validatorMessage="Please supply an image">
-                                    <f:validateRequired/>
-                                </p:inputText>
+                                <p:fileUpload listener="#{editPlantsBean.handleImageUpload}" mode="advanced" dragDropSupport="false"
+                                              update="messages" sizeLimit="1024000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                              validateContentType="false" accept=".gif,.jpg,.jpeg,.png"/>
                             </div>
                             <div>
                                 <p:outputLabel for="name">Name</p:outputLabel>
@@ -130,7 +133,7 @@
                             <div>
                                 <p:outputLabel for="difficulty">Difficulty</p:outputLabel>
                                 <p:selectOneRadio id="difficulty" value="#{editPlantsBean.selectedPlant.difficulty}"
-                                                  layout="responsive" columns="2" required="true">
+                                                  layout="responsive" columns="3" required="true">
                                     <f:selectItem itemLabel="Easy" itemValue="easy"/>
                                     <f:selectItem itemLabel="Normal" itemValue="normal"/>
                                     <f:selectItem itemLabel="Difficult" itemValue="difficult"/>
@@ -149,7 +152,7 @@
                                 </div>
                             </div>
                         </p:outputPanel>
-                    </p:scrollPanel>
+                    </p:outputPanel>
                     <f:facet name="footer">
                         <p:commandButton value="Save" icon="pi pi-check" actionListener="#{editPlantsBean.save}"
                                          update="manage-plant-content dt-plants" process="manage-plant-content @this">

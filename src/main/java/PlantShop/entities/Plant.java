@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Plant class
  * @author leagi
  */
-public class Plant{
+public class Plant implements Comparable<Plant>{
     
     private int id;                         // ID of the plant
     private String name;                    // Name of the plant
@@ -27,7 +27,7 @@ public class Plant{
     /**
      * Constructor for Plant entity.
      */
-    public Plant() {
+    public Plant(){
         reviews = new ArrayList();
         rating = 0;
     }
@@ -321,5 +321,16 @@ public class Plant{
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public int compareTo(Plant other) {
+        if (this == other) {
+            return 0;
+        }
+        if (this.id < other.id) {
+            return -1;
+        }
+        return 1;
     }
 }

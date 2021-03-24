@@ -7,8 +7,6 @@ package PlantShop.view;
 
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -18,16 +16,16 @@ import org.primefaces.PrimeFaces;
 @Named(value = "catalogViewBean")
 @Dependent
 public class CatalogViewBean extends AbstractFormViewBean{
-
-    /**
-     * Creates a new instance of CatalogViewBean
-     */
-    public CatalogViewBean() {
+    
+    @Override
+    public void displayFormSubmissionErrorMessage(String msg) {
+        super.displayFormSubmissionErrorMessage(msg);
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-plants");
     }
     
-    public void displayInforamtionMessage(String msg) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    @Override
+    public void displayFormSubmissionInfoMessage(String msg) {
+        super.displayFormSubmissionInfoMessage(msg);
         PrimeFaces.current().ajax().update("form:messages", "form:dt-plants");
     }
     

@@ -7,6 +7,7 @@ import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
 import PlantShop.entities.ShoppingCart;
 import PlantShop.entities.User;
+import PlantShop.exceptions.DaoException;
 
 import java.io.Serializable;
 import java.util.ArrayList; 
@@ -48,8 +49,9 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param user
      * @return cart object
+     * @throws DaoException
      */
-    public ShoppingCart getCart(User user){
+    public ShoppingCart getCart(User user) throws DaoException{
         ShoppingCart cart = new ShoppingCart(user);
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
@@ -85,6 +87,7 @@ public class ShoppingCartDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
         return cart;
     }
@@ -93,8 +96,9 @@ public class ShoppingCartDao implements Serializable{
      * Add plant to a user's cart in the DB.
      * 
      * @param plant 
+     * @throws DaoException
      */
-    public void addPlantToCart(PlantInCart plant, ShoppingCart cart) {
+    public void addPlantToCart(PlantInCart plant, ShoppingCart cart) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
@@ -114,6 +118,7 @@ public class ShoppingCartDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -122,8 +127,9 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      * @param cart 
+     * @throws DaoException
      */
-    public void removePlantFromCart (PlantInCart plant, ShoppingCart cart) {
+    public void removePlantFromCart (PlantInCart plant, ShoppingCart cart) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
@@ -139,6 +145,7 @@ public class ShoppingCartDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -147,8 +154,10 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plants 
      * @param cart 
+     * @throws DaoException
      */
-    public void removePlantsFromCart(ArrayList<PlantInCart> plants, ShoppingCart cart) {
+    public void removePlantsFromCart(ArrayList<PlantInCart> plants, 
+            ShoppingCart cart) throws DaoException{
         for (PlantInCart p : plants) {
             removePlantFromCart(p, cart);
         }
@@ -159,8 +168,9 @@ public class ShoppingCartDao implements Serializable{
      * 
      * @param plant 
      * @param cart 
+     * @throws DaoException
      */
-    public void saveAmount (PlantInCart plant, ShoppingCart cart) {
+    public void saveAmount (PlantInCart plant, ShoppingCart cart) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
@@ -180,6 +190,7 @@ public class ShoppingCartDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
 }

@@ -7,6 +7,7 @@ import PlantShop.daos.ShoppingCartDao;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
 import PlantShop.entities.ShoppingCart;
+import PlantShop.exceptions.DaoException;
 
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
@@ -49,8 +50,9 @@ public class ShoppingCartController implements Serializable{
      * Add plant to cart.
      * 
      * @param plant
+     * @throws DaoException
      */
-    public void addToCart(Plant plant) {
+    public void addToCart(Plant plant) throws DaoException{
         PlantInCart plantInCart = new PlantInCart(plant, 1);
         cart.addToCart(plantInCart);
         dao.addPlantToCart(plantInCart, cart);
@@ -60,8 +62,9 @@ public class ShoppingCartController implements Serializable{
      * Remove plant from cart.
      * 
      * @param plant
+     * @throws DaoException
      */
-    public void removeFromCart(PlantInCart plant) {
+    public void removeFromCart(PlantInCart plant) throws DaoException{
         cart.removeFromCart(plant);
         dao.removePlantFromCart(plant, cart);
     }
@@ -70,8 +73,9 @@ public class ShoppingCartController implements Serializable{
      * Increase the amount of a plant in the cart.
      * 
      * @param plant
+     * @throws DaoException
      */
-    public void increaseAmount(PlantInCart plant) {
+    public void increaseAmount(PlantInCart plant) throws DaoException {
         plant.increaseAmount();
         dao.saveAmount(plant, cart);
     }
@@ -80,8 +84,9 @@ public class ShoppingCartController implements Serializable{
      * Decrease the amount of a plant in the cart.
      * 
      * @param plant
+     * @throws DaoException
      */
-    public void decreaseAmount(PlantInCart plant) {
+    public void decreaseAmount(PlantInCart plant) throws DaoException {
         plant.decreaseAmount();
         dao.saveAmount(plant, cart);
     }

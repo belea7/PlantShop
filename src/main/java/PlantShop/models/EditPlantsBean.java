@@ -5,10 +5,12 @@ package PlantShop.models;
 
 import PlantShop.controllers.PlantsController;
 import PlantShop.entities.Plant;
+import PlantShop.exceptions.DaoException;
 import PlantShop.view.PlantsEditViewBean;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -114,24 +116,35 @@ public class EditPlantsBean implements Serializable{
      */
     public void createPlant() {
         this.selectedPlant = controller.createPlant();
+        System.out.println(this.selectedPlant);
     }
     
     /**
      * Remove selected plant from application.
      */
     public void removeSelectedPlant() {
-        controller.removePlant(selectedPlant);
+        try {
+            controller.removePlant(selectedPlant);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            viewBean.displayFormSubmissionErrorMessage("Failed to remove plant");
+        }
         this.selectedPlant = null;
-        viewBean.displayObjectDeletionMessage("Plant removed");
+        viewBean.displayFormSubmissionInfoMessage("Plant removed");
     }
     
     /**
      * Remove group of selected plants from application.
      */
     public void removeSelectedPlants() {
-        for (Plant plant: this.selectedPlants)
-            controller.removePlant(plant);
-        viewBean.displayObjectDeletionMessage(selectedPlants.size() + " items were removed");
+        try {
+            for (Plant plant: this.selectedPlants)
+                controller.removePlant(plant);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            viewBean.displayFormSubmissionErrorMessage("Failed to remove plants");
+        }
+        viewBean.displayFormSubmissionInfoMessage(selectedPlants.size() + " items were removed");
         this.selectedPlants = null;
     }
     
@@ -157,14 +170,24 @@ public class EditPlantsBean implements Serializable{
     public void save() {
         // Add plant to application if it's new
         if (this.newPlant) {
-            controller.addPlant(selectedPlant);
+            try {
+                controller.addPlant(selectedPlant);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed save plant");
+            }
             this.newPlant = false;
         }
         // Otherwise - update the existing plant
         else {
-            controller.updatePlant(selectedPlant);
+            try {
+                controller.updatePlant(selectedPlant);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed save plant");
+            }
         }
-        viewBean.displayObjectCreationMessage(selectedPlant.getName() + " was created");
+        viewBean.displayFormSubmissionInfoMessage(selectedPlant.getName() + " was created");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-plants", "manage-plant-content");
         PrimeFaces.current().executeScript("PF('managePlantDialog').hide()");
     }
@@ -176,24 +199,35 @@ public class EditPlantsBean implements Serializable{
      */
     public void handleImageUpload(FileUploadEvent event) {
         String fileName = event.getFile().getFileName();
+        String path = System.getProperty("user.dir") + "\\images\\";
+        File file = new File(path + fileName);
         try {
-            String path = "C:\\Users\\leagi\\OneDrive\\Documents\\NetBeansProjects\\PlantShop\\PlantShopMaven\\src\\main\\webapp\\images";
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            if (file.exists()) {
+                String msg = " already exists. Please upload different file";
+                viewBean.displayFormSubmissionErrorMessage(fileName + msg);
+                return;
+            }
             InputStream input = event.getFile().getInputStream();
-            System.out.println(path);
-            OutputStream out = new FileOutputStream(new File(path + "\\" + fileName));
+            OutputStream out = new FileOutputStream(file);
             int read = 0;
             byte[] bytes = new byte[1024];
 
             while ((read = input.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-
             input.close();
             out.flush();
             out.close();
+            selectedPlant.setPicture(file.getAbsolutePath());
+            viewBean.displayFormSubmissionInfoMessage("'" + fileName + "' was successfully uploaded");
+            PrimeFaces.current().ajax().update("form:messages", "form:manage-plant-content");
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (IOException e) {
+            viewBean.displayFormSubmissionErrorMessage("Failed to upload the image to server");
         }
 
     }

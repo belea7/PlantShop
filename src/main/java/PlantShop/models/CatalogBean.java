@@ -10,6 +10,7 @@ import PlantShop.controllers.UserBean;
 import PlantShop.entities.Plant;
 import PlantShop.entities.Review;
 import PlantShop.daos.ReviewsDao;
+import PlantShop.exceptions.DaoException;
 import PlantShop.view.CatalogViewBean;
 import PlantShop.view.ReviewsEditViewBean;
 
@@ -152,8 +153,13 @@ public class CatalogBean implements Serializable{
         }
         
         // Otherwise - add plant tp cart and notify user
-        shoppingCartController.addToCart(selectedPlant);
-        viewBean.displayInforamtionMessage("Plant was successfully added to cart");
+        try {
+            shoppingCartController.addToCart(selectedPlant);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            viewBean.displayFormSubmissionErrorMessage("Failed to add item to cart");
+        }
+        viewBean.displayFormSubmissionInfoMessage("Plant was successfully added to cart");
     }
     
     /**
@@ -183,15 +189,25 @@ public class CatalogBean implements Serializable{
         // If it is a new review - add it to the application.
         if (this.newReview) {
             this.selectedReview.setTimePosted(new Timestamp(System.currentTimeMillis()));
-            reviewsDao.addReview(selectedReview);
+            try {
+                reviewsDao.addReview(selectedReview);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed to post review");
+            }
             this.selectedPlant.addReview(selectedReview);
             this.newReview = false;
-            reviewViewBean.displayObjectCreationMessage("Review successfully added");
+            reviewViewBean.displayFormSubmissionInfoMessage("Review successfully added");
         }
         // Otherwise - update the existing review.
         else {
-            reviewsDao.updateReview(selectedReview);
-            reviewViewBean.displayObjectEditMessage("Review successfully updated");
+            try {
+                reviewsDao.updateReview(selectedReview);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                viewBean.displayFormSubmissionErrorMessage("Failed to post review");
+            }
+            reviewViewBean.displayFormSubmissionInfoMessage("Review successfully updated");
         }
         PrimeFaces.current().ajax().update("body", "edit-review-content", "plantDetails", "plants");
         PrimeFaces.current().executeScript("PF('editReviewDialog').hide()");
@@ -202,8 +218,13 @@ public class CatalogBean implements Serializable{
      */
     public void removeSelectedReview() {
         selectedPlant.removeReview(selectedReview);
-        reviewsDao.removeReview(this.selectedReview);
+        try {
+            reviewsDao.removeReview(this.selectedReview);
+        } catch (DaoException e) {
+            e.printStackTrace();
+            viewBean.displayFormSubmissionErrorMessage("Failed to remove review");
+        }
         this.selectedReview = null;
-        reviewViewBean.displayObjectCreationMessage("Review was removed");
+        reviewViewBean.displayFormSubmissionInfoMessage("Review was removed");
     }
 }

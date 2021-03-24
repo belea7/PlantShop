@@ -4,6 +4,7 @@
 package PlantShop.daos;
 
 import PlantShop.entities.Plant;
+import PlantShop.exceptions.DaoException;
 
 import java.util.ArrayList; 
 import java.io.Serializable;
@@ -49,8 +50,9 @@ public class PlantsDao implements Serializable{
      * For each plant, it's reviews are fetched as well.
      * 
      * @return list of plants in store
+     * @throws DaoException
      */
-    public ArrayList<Plant> getPlants(){
+    public ArrayList<Plant> getPlants() throws DaoException{
         ArrayList<Plant> plants = new ArrayList();
         
         // Fetch plants from DB
@@ -81,6 +83,7 @@ public class PlantsDao implements Serializable{
             connection.close();
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
         return plants;
     }
@@ -89,8 +92,9 @@ public class PlantsDao implements Serializable{
      * Add plant to DB.
      * 
      * @param plant 
+     * @throws DaoException
      */
-    public void addPlant(Plant plant) {
+    public void addPlant(Plant plant) throws DaoException{
         // Connecto to DB
         try (Connection connection = dataSource.getConnection()) {
             // Insert the plant to the DB
@@ -118,6 +122,7 @@ public class PlantsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -125,8 +130,9 @@ public class PlantsDao implements Serializable{
      * Update plant record in the DB.
      * 
      * @param plant 
+     * @throws DaoException
      */
-     public void updatePlant(Plant plant) {
+     public void updatePlant(Plant plant) throws DaoException{
          // Connetct to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create update statement
@@ -154,6 +160,7 @@ public class PlantsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -161,8 +168,9 @@ public class PlantsDao implements Serializable{
       * Remove plant record from DB.
       * 
       * @param plant 
+      * @throws DaoException
       */
-    public void removePlant(Plant plant) {
+    public void removePlant(Plant plant) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
@@ -180,6 +188,7 @@ public class PlantsDao implements Serializable{
             
         } catch (SQLException e) { 
             e.printStackTrace();
+            throw new DaoException();
         }
     }
     
@@ -187,8 +196,9 @@ public class PlantsDao implements Serializable{
      * Remove group of plants from DB.
      * 
      * @param plants 
+     * @throws DaoException
      */
-    public void removePlants(ArrayList<Plant> plants) {
+    public void removePlants (ArrayList<Plant> plants) throws DaoException{
         for (Plant p : plants) {
             removePlant(p);
         }

@@ -29,10 +29,8 @@ and open the template in the editor.
 }
 
 .plant-details-panel {
-    width: auto;
-    height: auto;
+    height: available;
     text-align: center;
-    margin-bottom: 10px
 }
 
 .add-to-cart-button {
@@ -41,11 +39,13 @@ and open the template in the editor.
 }
 
 .review-scroller {
-    text-align: left;
+    text-align: left
 }
 
 .comment {
     font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .remove-button {
@@ -78,4 +78,23 @@ and open the template in the editor.
     font-weight: bold;
     font-family: Sans-serif;
     font-size: 500px;
+}
+
+.plant-dialog {
+    margin-bottom: 50px;
+    height: available;
+}
+
+.picture {
+    text-align: center;
+}
+
+.edit-plant-dialog {
+    height: available;
+    width: available
+}
+
+.ui-fluid {
+    height: available;
+    width: 700px;
 }

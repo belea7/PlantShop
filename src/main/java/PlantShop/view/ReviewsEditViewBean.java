@@ -7,8 +7,6 @@ package PlantShop.view;
 
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -17,27 +15,17 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "reviewsEditViewBean")
 @Dependent
-public class ReviewsEditViewBean extends AbstractDataEditorBean{
+public class ReviewsEditViewBean extends AbstractFormViewBean{
 
     @Override
-    public void displayObjectDeletionMessage(String msg) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    public void displayFormSubmissionErrorMessage(String msg) {
+        super.displayFormSubmissionErrorMessage(msg);
         PrimeFaces.current().ajax().update("form:messages", "form:sc-plants");
     }
     
     @Override
-    public void displayObjectEditMessage(String msg) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    public void displayFormSubmissionInfoMessage(String msg) {
+        super.displayFormSubmissionInfoMessage(msg);
         PrimeFaces.current().ajax().update("form:messages", "form:sc-plants");
     }
-    
-    @Override
-    public void displayObjectCreationMessage(String msg) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, "");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        PrimeFaces.current().ajax().update("form:messages", "form:sc-plants");
-    }
-    
 }
