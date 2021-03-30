@@ -32,19 +32,20 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        
-        <h:form id="form">
-            <p:panelGrid columns="2">
-                <p:outputLabel value="User Name:  " for="username"/>
-                <p:inputText id="username" value="#{loginBean.username}"
-                             required="true" requiredMessage="User Name is required"/>
-                
-                <p:outputLabel value="Password:  " for="password"/>
-                <p:password id="password" value="#{loginBean.password}" required="true" requiredMessage="Password is required"/>
-            </p:panelGrid>
-            <p:commandButton value="login" action="#{loginBean.login}">
-                <f:ajax execute="@all" render="@all" />
-            </p:commandButton>
-        </h:form>
+        <div>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="User Name  " for="username"/>
+                    <p:inputText id="username" value="#{loginBean.username}"
+                                 required="true" requiredMessage="User Name is required"/>
+
+                    <p:outputLabel value="Password  " for="password"/>
+                    <p:password id="password" value="#{loginBean.password}"
+                                required="true" requiredMessage="Password is required"/>
+                </p:panelGrid>
+                <p:commandButton value="login" action="#{loginBean.login}" update="messages"/>
+            </h:form>
+        </div>
     </h:body>
 </html>
