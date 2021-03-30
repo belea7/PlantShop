@@ -56,8 +56,11 @@ public class RegistrationBean implements Serializable {
      */
     public String register(){
         
-        User user = new User();
+        boolean parseError = false; // whether there was a parsing error
         
+        User user = new User(); // user object for storing parsed registration info
+        
+        // parse inputs
         user.setUsername(username);
         user.setPassword(password);
         user.setFirstName(firstName);
@@ -67,20 +70,38 @@ public class RegistrationBean implements Serializable {
         user.setStreet(street);
         user.setHouseNumber(houseNumber);
         user.setAppartment(appartment);
-        user.setBirthdayDate(java.sql.Date.valueOf(birthdayDate));
+        try{
+            user.setBirthdayDate(java.sql.Date.valueOf(birthdayDate));
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
+            registrationViewBean.displayFormSubmissionErrorMessage(
+                    "Birth Date must be of the form 'yyyy-mm-dd'");
+            parseError = true;
+        }
         try{
             user.setPhoneNumber(Long.parseLong(phoneNumber));
+        } catch(NumberFormatException e){
+            e.printStackTrace();
+            registrationViewBean.displayFormSubmissionErrorMessage(
+                    "Phone number must be a number");
+            parseError = true;
+        }
+        try{
             user.setZipcode(Long.parseLong(zipcode));
         } catch(NumberFormatException e){
             e.printStackTrace();
             registrationViewBean.displayFormSubmissionErrorMessage(
-                    "Phone number and zipcode must be a number!");
-            return null;
+                    "Zipcode must be a number");
+            parseError = true;
         }
         user.setShoppingCart(new ShoppingCart(user));
         user.setAdmin(admin.compareTo(ADMIN_CODE) == 0);
         
+        if(parseError == true)
+            return null; // Do not try to register if there was a parsing error
         
+        
+        // register new user
         try{
             userBean.register(user);
         } catch(DaoException e) {
@@ -93,6 +114,7 @@ public class RegistrationBean implements Serializable {
             return null;
         }
         
+        // return navigation result
         return "registered";
     }
     
