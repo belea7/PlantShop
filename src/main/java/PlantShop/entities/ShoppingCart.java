@@ -3,6 +3,7 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * 
  * @author leagi
  */
-public class ShoppingCart {
+public class ShoppingCart implements Serializable {
     private User user;                          // The user whose cart it is
     private ArrayList<PlantInCart> plantsInCart;       // List of items in the cart
     private int totalPrice;                     // The total price of items in the cart
