@@ -33,35 +33,35 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        <h:form id="form">
-            <p:commandButton value="Click me" update="myText myTree"
-                             actionListener="#{treeBean.buttonAction}" style="margin-right:20px;"
-                             styleClass="ui-priority-primary" />
-            <h:outputText id="myText" value="#{treeBean.testVal}" />
-            <p:treeTable id="myTree" value="#{treeBean.root}" var="node">
-                <f:facet name="Header">
-                    Orders
-                </f:facet>
-                <p:column headerText="">
-                    <h:outputText value="#{node.name}" />
-                </p:column>
-                <p:column headerText="Amount">
-                    <h:outputText value="#{node.amount}" />
-                </p:column>
-                <p:column headerText="Price">
-                    <h:outputText value="#{node.price}" />
-                </p:column>
-                <p:column headerText="Total Price">
-                    <h:outputText value="#{node.total}" />
-                </p:column>
-                <p:column headerText="Order Status">
-                    <p:selectOneMenu value="#{node.status}" rendered="#{node.orderNode}" style="width:125px">
-                        <f:selectItem itemLabel="Not sent yet" itemValue="Not sent yet" />
-                        <f:selectItem itemLabel="On the way" itemValue="On the way" />
-                        <f:selectItem itemLabel="Arrived" itemValue="Arrived" />
-                    </p:selectOneMenu>
-                </p:column>
-            </p:treeTable>
-        </h:form>
+        <div>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <p:treeTable id="myTree" value="#{ordersViewBean.root}" var="node">
+                    <f:facet name="Header">
+                        Orders
+                    </f:facet>
+                    <p:column headerText="">
+                        <h:outputText value="#{node.name}" />
+                    </p:column>
+                    <p:column headerText="Amount">
+                        <h:outputText value="#{node.amount}" />
+                    </p:column>
+                    <p:column headerText="Price">
+                        <h:outputText value="#{node.price}" />
+                    </p:column>
+                    <p:column headerText="Total Price">
+                        <h:outputText value="#{node.total}" />
+                    </p:column>
+                    <p:column headerText="Order Status">
+                        <p:selectOneMenu value="#{node.status}" rendered="#{node.statusEditable}" style="width:125px">
+                            <f:selectItem itemLabel="Not sent yet" itemValue="Not sent yet" />
+                            <f:selectItem itemLabel="On the way" itemValue="On the way" />
+                            <f:selectItem itemLabel="Arrived" itemValue="Arrived" />
+                            <p:ajax event="change" update="@this" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:treeTable>
+            </h:form>
+        </div>
     </h:body>
 </html>
