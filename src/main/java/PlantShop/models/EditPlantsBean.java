@@ -227,6 +227,7 @@ public class EditPlantsBean implements Serializable{
             PrimeFaces.current().ajax().update("form:messages", "form:manage-plant-content");
         }
         catch (IOException e) {
+            e.printStackTrace();
             viewBean.displayFormSubmissionErrorMessage("Failed to upload the image to server");
         }
 
