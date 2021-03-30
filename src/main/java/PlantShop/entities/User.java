@@ -3,6 +3,7 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
  * 
  * @author leagi
  */
-public class User {
+public class User implements Serializable {
     private String username;
     private String firstName;
     private String lastName;
