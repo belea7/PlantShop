@@ -35,27 +35,30 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        <h:form id="form">
-            <p:treeTable id="myTree" value="#{treeBean.root}" var="node">
-                <f:facet name="Header">
-                    Orders
-                </f:facet>
-                <p:column headerText="">
-                    <h:outputText value="#{node.name}" />
-                </p:column>
-                <p:column headerText="Amount">
-                    <h:outputText value="#{node.amount}" />
-                </p:column>
-                <p:column headerText="Price">
-                    <h:outputText value="#{node.price}" />
-                </p:column>
-                <p:column headerText="Total Price">
-                    <h:outputText value="#{node.total}" />
-                </p:column>
-                <p:column headerText="Order Status">
-                    <h:outputText value="#{node.status}" />
-                </p:column>
-            </p:treeTable>
-        </h:form>
+        <div>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <p:treeTable id="myTree" value="#{ordersViewBean.root}" var="node">
+                    <f:facet name="Header">
+                        Orders
+                    </f:facet>
+                    <p:column headerText="">
+                        <h:outputText value="#{node.name}" />
+                    </p:column>
+                    <p:column headerText="Amount">
+                        <h:outputText value="#{node.amount}" />
+                    </p:column>
+                    <p:column headerText="Price">
+                        <h:outputText value="#{node.price}" />
+                    </p:column>
+                    <p:column headerText="Total Price">
+                        <h:outputText value="#{node.total}" />
+                    </p:column>
+                    <p:column headerText="Order Status">
+                        <h:outputText value="#{node.status}" />
+                    </p:column>
+                </p:treeTable>
+            </h:form>
+        </div>
     </h:body>
 </html>
