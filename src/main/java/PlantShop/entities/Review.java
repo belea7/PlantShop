@@ -3,6 +3,7 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
  
  * @author leagi
  */
-public class Review {
+public class Review implements Serializable {
     private String userName;            // User who wrote the review
     private Plant plant;                // The ID of the plant reviewd
     private Timestamp timePosted;       // When the review was posted

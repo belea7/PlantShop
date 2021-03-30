@@ -3,6 +3,8 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
+
 /**
  * A class representing a plant in a user's shopping cart.
  * 
@@ -11,7 +13,7 @@ package PlantShop.entities;
  * 
  * @author leagi
  */
-public class PlantInCart {
+public class PlantInCart implements Serializable {
         private Plant plant;    // Plant entity
         private int amount;     // number of plants from this type in cart
         

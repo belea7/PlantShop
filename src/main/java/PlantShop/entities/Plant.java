@@ -3,13 +3,14 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Plant class
  * @author leagi
  */
-public class Plant implements Comparable<Plant>{
+public class Plant implements Comparable<Plant>, Serializable {
     
     private int id;                         // ID of the plant
     private String name;                    // Name of the plant
