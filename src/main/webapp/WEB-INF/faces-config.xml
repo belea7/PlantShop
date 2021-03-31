@@ -21,47 +21,47 @@
     <application />
     <managed-bean>
         <managed-bean-name>plantsController</managed-bean-name>
-        <managed-bean-class>PlantShop.controllers.PlantsController</managed-bean-class>
+        <managed-bean-class>PlantShop.model.PlantsController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>shoppingCartController</managed-bean-name>
-        <managed-bean-class>PlantShop.controllers.ShoppingCartController</managed-bean-class>
+        <managed-bean-class>PlantShop.model.ShoppingCartController</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>shoppingCartBean</managed-bean-name>
-        <managed-bean-class>PlantShop.models.ShoppingCartBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.ShoppingCartBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>catalogBean</managed-bean-name>
-        <managed-bean-class>PlantShop.models.CatalogBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.CatalogBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>editPlantsBean</managed-bean-name>
-        <managed-bean-class>PlantShop.models.EditPlantsBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.EditPlantsBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>userBean</managed-bean-name>
-        <managed-bean-class>PlantShop.controllers.UserBean</managed-bean-class>
+        <managed-bean-class>PlantShop.model.UserBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>registrationBean</managed-bean-name>
-        <managed-bean-class>PlantShop.controllers.RegistrationBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.RegistrationBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>loginBean</managed-bean-name>
-        <managed-bean-class>PlantShop.controllers.LoginBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.LoginBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>menuBarBean</managed-bean-name>
-        <managed-bean-class>PlantShop.models.MenuBarBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.MenuBarBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
