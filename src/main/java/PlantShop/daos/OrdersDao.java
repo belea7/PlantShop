@@ -23,10 +23,10 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @DataSourceDefinition(
-    name = "java:global/jdbc/plantShop",
+    name = "java:global/jdbc/PlantShop",
     className = "org.apache.derby.jdbc.ClientDataSource",
-    url = "jdbc:derby://localhost:1527/plantShop",
-    databaseName = "plantShop",
+    url = "jdbc:derby://localhost:1527/PlantShop",
+    databaseName = "PlantShop",
     user = "root",
     password = "root")
 
@@ -39,7 +39,7 @@ import javax.sql.DataSource;
 public class OrdersDao implements Serializable {
     
     // allow the server to inject the DataSource
-    @Resource(lookup="java:global/jdbc/plantShop")
+    @Resource(lookup="java:global/jdbc/PlantShop")
     DataSource dataSource;
     
     @Inject

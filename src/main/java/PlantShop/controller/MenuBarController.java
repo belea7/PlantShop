@@ -1,5 +1,5 @@
 /*
- * Menubar Controller.
+ * Menubar bean
  */
 package PlantShop.controller;
 
@@ -11,8 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Controller for menu bar in the application.
- * 
+ *
  * @author leagi
  */
 @Named(value = "menuBarController")
@@ -20,7 +19,7 @@ import javax.inject.Named;
 public class MenuBarController implements Serializable{
     
     @Inject
-    private UserModel userModel;
+    private UserModel userBean;
     
     /**
      * Is user logged in.
@@ -28,7 +27,7 @@ public class MenuBarController implements Serializable{
      * @return logged-in or not
      */
     public boolean isLoggedIn() {
-        return userModel.isLoggedIn();
+        return userBean.isLoggedIn();
     }
     
     /**
@@ -37,17 +36,17 @@ public class MenuBarController implements Serializable{
      * @return is admin or not
      */
     public boolean isAdmin() {
-        return userModel.isAdmin();
+        return userBean.isAdmin();
     }
     
     /**
-     * Tells UserBean to logout.
+     * Tells UserModel to logout.
      * 
      * @return page to navigate to after logout.
      */
     public String logout() {
         
-        userModel.logOut();
+        userBean.logOut();
         return "logged_out";
     }
 }

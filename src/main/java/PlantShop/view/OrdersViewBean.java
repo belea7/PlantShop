@@ -5,14 +5,12 @@ import PlantShop.model.UserModel;
 import PlantShop.daos.OrdersDao;
 import PlantShop.entities.Order;
 import PlantShop.exceptions.DaoException;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -23,7 +21,7 @@ import org.primefaces.model.TreeNode;
  */
 @Named(value = "ordersViewBean")
 @ViewScoped
-public class OrdersViewBean extends AbstractFormViewBean {
+public class OrdersViewBean implements Serializable {
     
     private TreeNode root;
     
@@ -33,14 +31,11 @@ public class OrdersViewBean extends AbstractFormViewBean {
     @Inject
     private OrdersDao ordersDao;
     
+    @Inject
+    private MessagesView messagesView;
+    
     public OrdersViewBean() {
         
-    }
-    
-    @Override
-    public void displayFormSubmissionErrorMessage(String msg) {
-        super.displayFormSubmissionErrorMessage(msg);
-        PrimeFaces.current().ajax().update("form:messages");
     }
     
     /**
@@ -69,7 +64,7 @@ public class OrdersViewBean extends AbstractFormViewBean {
                 System.out.println("userModel is null at initCurrentOrders");
             orders = ordersDao.getUserOrders(userModel.getUser().getUsername());
         } catch(DaoException e) {
-            displayErrorMessage("Sorry, there was a problem with connecting to the database.");
+            messagesView.displayErrorMessage("Sorry, there was a problem with connecting to the database.");
             return;
         }
         
@@ -112,7 +107,7 @@ public class OrdersViewBean extends AbstractFormViewBean {
         try {
             userList = ordersDao.getAllUserOrders();
         } catch(DaoException e) {
-            displayErrorMessage("Sorry, there was a problem with connecting to the database.");
+            messagesView.displayErrorMessage("Sorry, there was a problem with connecting to the database.");
             return;
         }
         
@@ -175,7 +170,7 @@ public class OrdersViewBean extends AbstractFormViewBean {
         
         TreeNode orderNode = new DefaultTreeNode(new EditableOrderTreeNode(order
                 , "Order ordered on " + order.getTimeOrdered().toLocalDateTime().toString()
-                , order.getPrice().toString(), order.getStatus(), ordersDao, this), parent);
+                , order.getPrice().toString(), order.getStatus(), ordersDao, messagesView), parent);
         
         
         for(Order.PlantInOrder plant : order.getPlants()) {

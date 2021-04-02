@@ -57,8 +57,6 @@ public class EditableOrderTreeNode extends OrdersViewBean.DefaultTreeNodeInfo {
                 errorDisplay.displayErrorMessage(
                         "Sorry, we enountered a problem! Try to refresh the page.");
             }
-            errorDisplay.displayErrorMessage(
-                    "testing error display. (fun fact, you just set an order's status to '" + status + "')");
         }
         System.out.println("At end of setStatus(" + status + ") of EditableOrderTreeNode, this.status is '" + this.status + "', orderToUpdate.getStatus() is '" + orderToUpdate.getStatus() + "'."); // testing
     }

@@ -11,7 +11,8 @@ import PlantShop.entities.Order;
 import PlantShop.entities.Plant;
 import PlantShop.exceptions.DaoException;
 import PlantShop.model.UserModel;
-import PlantShop.view.AbstractFormViewBean;
+import PlantShop.view.MessagesView;
+import java.io.Serializable;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -27,7 +27,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "testingBean")
 @ViewScoped
-public class TestingBean extends AbstractFormViewBean {
+public class TestingBean implements Serializable {
     
     @Inject
     private UserModel userModel;
@@ -38,11 +38,8 @@ public class TestingBean extends AbstractFormViewBean {
     @Inject
     private OrdersDao ordersDao;
     
-    @Override
-    public void displayFormSubmissionErrorMessage(String msg) {
-        super.displayFormSubmissionErrorMessage(msg);
-        PrimeFaces.current().ajax().update("form:messages");
-    }
+    @Inject
+    private MessagesView messagesView;
     
     /**
      * Creates a new instance of TestingBean
@@ -53,7 +50,7 @@ public class TestingBean extends AbstractFormViewBean {
     
     public void addTestOrders() {
         if(!userModel.isLoggedIn()){
-            displayErrorMessage("not logged in!");
+            messagesView.displayErrorMessage("not logged in!");
             return;
         }
         
@@ -62,12 +59,12 @@ public class TestingBean extends AbstractFormViewBean {
             allPlants = plantsDao.getPlants();
         } catch(DaoException e){
             e.printStackTrace();
-            this.displayErrorMessage("failed to retrieve plants at TestingBean");
+            messagesView.displayErrorMessage("failed to retrieve plants at TestingBean");
             return;
         }
         
         if(allPlants.size() < 2) {
-            this.displayErrorMessage("too little plants in DB to build test order (need at least 2)");
+            messagesView.displayErrorMessage("too little plants in DB to build test order (need at least 2)");
             return;
         }
         
@@ -87,7 +84,7 @@ public class TestingBean extends AbstractFormViewBean {
             String message = e.getMessage();
             if(message == null)
                 message = "";
-            this.displayErrorMessage("Dao exception: " + message);
+            messagesView.displayErrorMessage("Dao exception: " + message);
         }
     }
     
