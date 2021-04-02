@@ -67,7 +67,7 @@ public class PlantsDao implements Serializable{
             while(result.next()) {
                 // Create plant entity and set its' attributes
                 Plant plant = new Plant();
-                plant.setId(result.getObject(1, Integer.class));
+                plant.setId(result.getObject(1, Long.class));
                 plant.setName(result.getObject(2, String.class));
                 plant.setNumberOfItems(result.getObject(3, Integer.class));
                 plant.setLight(result.getObject(4, String.class));
@@ -76,7 +76,7 @@ public class PlantsDao implements Serializable{
                 plant.setDifficulty(result.getObject(7, String.class));
                 plant.setDescription(result.getObject(8, String.class));
                 plant.setPicture(result.getObject(9, String.class));
-                plant.setPrice(result.getObject(10, Integer.class));
+                plant.setPrice(result.getObject(10, Double.class));
                 plant.setReviews(reviewsDao.getReviews(plant));
                 plants.add(plant);
             }
@@ -105,7 +105,7 @@ public class PlantsDao implements Serializable{
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statement variables
-            statement.setInt(1, plant.getId());
+            statement.setLong(1, plant.getId());
             statement.setString(2, plant.getName());
             statement.setInt(3, plant.getNumberOfItems());
             statement.setString(4, plant.getLight());
@@ -114,7 +114,7 @@ public class PlantsDao implements Serializable{
             statement.setString(7, plant.getDifficulty());
             statement.setString(8, plant.getDescription());
             statement.setString(9, plant.getPicture());
-            statement.setInt(10, plant.getPrice());
+            statement.setDouble(10, plant.getPrice());
             
             // Execute query and close conntection
             statement.executeUpdate();
@@ -151,8 +151,8 @@ public class PlantsDao implements Serializable{
             statement.setString(6, plant.getDifficulty());
             statement.setString(7, plant.getDescription());
             statement.setString(8, plant.getPicture());
-            statement.setInt(9, plant.getPrice());
-            statement.setInt(10, plant.getId());
+            statement.setDouble(9, plant.getPrice());
+            statement.setLong(10, plant.getId());
             
             // Execute query and close connection
             statement.executeUpdate();
@@ -173,18 +173,24 @@ public class PlantsDao implements Serializable{
     public void removePlant(Plant plant) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
-            // Create DELETE statement
-            String sql = "DELETE FROM plants "
-                       + "WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, plant.getId());
-            
-            // Execute query and close connection
-            statement.executeUpdate();
-            connection.close();
             
             // Remove the reviews on the plant
             reviewsDao.removeReviews(plant.getReviews());
+            
+            // Remove plant from all shopping carts
+            String sql = "DELETE FROM shopping_carts "
+                       + "WHERE plant_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, plant.getId());
+            statement.executeUpdate();
+            
+            // Remove plant from plants table
+            sql = "DELETE FROM plants "
+                + "WHERE id = ?";
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, plant.getId());
+            statement.executeUpdate();
+            connection.close();
             
         } catch (SQLException e) { 
             e.printStackTrace();

@@ -1,12 +1,12 @@
 /*
- * Edit plants bean.
+ * Edit plants Controller.
  */
-package PlantShop.models;
+package PlantShop.controller;
 
-import PlantShop.controllers.PlantsController;
+import PlantShop.model.PlantsModel;
 import PlantShop.entities.Plant;
 import PlantShop.exceptions.DaoException;
-import PlantShop.view.PlantsEditViewBean;
+import PlantShop.view.MessagesView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,22 +22,23 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 
 /**
- *
+ * Controller for plants in the edit plants web page.
+ * 
  * @author leagi
  */
-@Named(value = "editPlantsBean")
+@Named(value = "editPlantsController")
 @ViewScoped
-public class EditPlantsBean implements Serializable{
+public class EditPlantsController implements Serializable{
     
     private ArrayList<Plant> selectedPlants;    // Group of selected plants for deleting
     private Plant selectedPlant;                // Selected plant for editing
     private boolean newPlant;                   // Is the edited plant is a new plant
     
     @Inject
-    private PlantsController controller;        // Plants controller
+    private PlantsModel plantsModel;
     
     @Inject
-    private PlantsEditViewBean viewBean;        // Edit view bean
+    private MessagesView messagesView;
     
     /**
      * Returns plants from controller.
@@ -45,7 +46,7 @@ public class EditPlantsBean implements Serializable{
      * @return list of plants
      */
     public ArrayList<Plant> getPlants() {
-        return controller.getPlants();
+        return plantsModel.getPlants();
     }
     
     /**
@@ -115,7 +116,7 @@ public class EditPlantsBean implements Serializable{
      * Create a new instance of plant for edit.
      */
     public void createPlant() {
-        this.selectedPlant = controller.createPlant();
+        this.selectedPlant = plantsModel.createPlant();
         System.out.println(this.selectedPlant);
     }
     
@@ -124,13 +125,15 @@ public class EditPlantsBean implements Serializable{
      */
     public void removeSelectedPlant() {
         try {
-            controller.removePlant(selectedPlant);
+            plantsModel.removePlant(selectedPlant);
         } catch (DaoException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to remove plant");
+            messagesView.displayErrorMessage("Failed to remove plant");
+            return;
         }
         this.selectedPlant = null;
-        viewBean.displayFormSubmissionInfoMessage("Plant removed");
+        PrimeFaces.current().ajax().update("form:dt-plants");
+        messagesView.displayInfoMessage("Plant removed");
     }
     
     /**
@@ -139,12 +142,14 @@ public class EditPlantsBean implements Serializable{
     public void removeSelectedPlants() {
         try {
             for (Plant plant: this.selectedPlants)
-                controller.removePlant(plant);
+                plantsModel.removePlant(plant);
         } catch (DaoException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to remove plants");
+            messagesView.displayErrorMessage("Failed to remove plants");
+            return;
         }
-        viewBean.displayFormSubmissionInfoMessage(selectedPlants.size() + " items were removed");
+        PrimeFaces.current().ajax().update("form:dt-plants");
+        messagesView.displayInfoMessage(selectedPlants.size() + " items were removed");
         this.selectedPlants = null;
     }
     
@@ -171,29 +176,34 @@ public class EditPlantsBean implements Serializable{
         // Add plant to application if it's new
         if (this.newPlant) {
             try {
-                controller.addPlant(selectedPlant);
+                plantsModel.addPlant(selectedPlant);
             } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed save plant");
+                messagesView.displayErrorMessage("Failed save plant");
+                return;
             }
             this.newPlant = false;
         }
         // Otherwise - update the existing plant
         else {
             try {
-                controller.updatePlant(selectedPlant);
+                plantsModel.updatePlant(selectedPlant);
             } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed save plant");
+                messagesView.displayErrorMessage("Failed save plant");
+                return;
             }
         }
-        viewBean.displayFormSubmissionInfoMessage(selectedPlant.getName() + " was created");
+        messagesView.displayInfoMessage(selectedPlant.getName() + " was created");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-plants", "manage-plant-content");
         PrimeFaces.current().executeScript("PF('managePlantDialog').hide()");
     }
     
     /**
      * Uploads image to the application.
+     * After user uploads the picture, it is saved in an "images" directory
+     * on the web server (the directory is created if needed.
+     * If a file with the same name exists in directory already - the operation is aborted.
      * 
      * @param event
      */
@@ -201,21 +211,27 @@ public class EditPlantsBean implements Serializable{
         String fileName = event.getFile().getFileName();
         String path = System.getProperty("user.dir") + "\\images\\";
         File file = new File(path + fileName);
+        
         try {
+            // If images directory on web server doesn't exist - create it
             File dir = new File(path);
             if (!dir.exists()) {
                 dir.mkdir();
             }
+            
+            // If a file with this name exists in the directory - ask for other image
             if (file.exists()) {
-                String msg = " already exists. Please upload different file";
-                viewBean.displayFormSubmissionErrorMessage(fileName + msg);
+                String msg = " already exists. Please upload a different file";
+                messagesView.displayErrorMessage(fileName + msg);
                 return;
             }
+            
+            // Copy uploaded image to new directory
             InputStream input = event.getFile().getInputStream();
             OutputStream out = new FileOutputStream(file);
             int read = 0;
             byte[] bytes = new byte[1024];
-
+            
             while ((read = input.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
@@ -223,12 +239,12 @@ public class EditPlantsBean implements Serializable{
             out.flush();
             out.close();
             selectedPlant.setPicture(file.getAbsolutePath());
-            viewBean.displayFormSubmissionInfoMessage("'" + fileName + "' was successfully uploaded");
+            messagesView.displayInfoMessage("'" + fileName + "' was successfully uploaded");
             PrimeFaces.current().ajax().update("form:messages", "form:manage-plant-content");
         }
         catch (IOException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to upload the image to server");
+            messagesView.displayErrorMessage("Failed to upload the image to server");
         }
 
     }

@@ -1,4 +1,4 @@
-package PlantShop.controllers;
+package PlantShop.model;
 
 import PlantShop.daos.UserDao;
 import PlantShop.entities.User;
@@ -15,9 +15,9 @@ import javax.inject.Inject;
  * This bean holds all of the user's session information.
  * @author Ron Mosenzon
  */
-@Named(value = "userBean")
+@Named(value = "userModel")
 @SessionScoped
-public class UserBean implements Serializable {
+public class UserModel implements Serializable {
     
     /**
      * Information about the user that is currently logged in.
@@ -29,12 +29,12 @@ public class UserBean implements Serializable {
     private UserDao userDao;
     
     @Inject
-    private ShoppingCartController shoppingCartController;
+    private ShoppingCartModel shoppingCartModel;
 
     /**
      * Creates a new instance of UserBean.
      */
-    public UserBean() {
+    public UserModel() {
     }
     
     
@@ -54,7 +54,7 @@ public class UserBean implements Serializable {
             throw new IncorrectCredentialsException();
         
         this.user = user;
-        shoppingCartController.setCart(user.getShoppingCart());
+        shoppingCartModel.setCart(user.getShoppingCart());
     }
     
     

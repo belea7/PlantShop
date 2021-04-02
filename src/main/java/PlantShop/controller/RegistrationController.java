@@ -1,10 +1,12 @@
-package PlantShop.controllers;
+package PlantShop.controller;
 
 import PlantShop.entities.ShoppingCart;
 import PlantShop.entities.User;
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.UsernameTakenException;
+import PlantShop.model.UserModel;
 import PlantShop.view.RegistrationViewBean;
+
 import java.io.Serializable;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -15,9 +17,9 @@ import javax.inject.Inject;
  * page and puts it into the database.
  * @author Ron Mosenzon
  */
-@Named(value = "registrationBean")
+@Named(value = "registrationController")
 @ViewScoped
-public class RegistrationBean implements Serializable {
+public class RegistrationController implements Serializable {
     
     private final String ADMIN_CODE = "admin";
     
@@ -39,9 +41,9 @@ public class RegistrationBean implements Serializable {
     private RegistrationViewBean registrationViewBean;
     
     @Inject
-    private UserBean userBean;
+    private UserModel userModel;
     
-    public RegistrationBean() {
+    public RegistrationController() {
         
     }
     
@@ -103,7 +105,7 @@ public class RegistrationBean implements Serializable {
         
         // register new user
         try{
-            userBean.register(user);
+            userModel.register(user);
         } catch(DaoException e) {
             registrationViewBean.displayFormSubmissionErrorMessage(
                     "Oops! Something went wrong when connecting to the database.");

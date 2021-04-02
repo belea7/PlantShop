@@ -1,13 +1,13 @@
 /*
- * Shopping cart bean.
+ * Shopping cart controller.
  */
-package PlantShop.models;
+package PlantShop.controller;
 
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
-import PlantShop.controllers.ShoppingCartController;
 import PlantShop.exceptions.DaoException;
-import PlantShop.view.ShoppingCartViewBean;
+import PlantShop.model.ShoppingCartModel;
+import PlantShop.view.MessagesView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,23 +16,23 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 
 /**
- * Bean for managing shopping cart page.
+ * Controller for managing shopping cart page.
  * 
  * @author leagi
  */
-@Named(value = "shoppingCartBean")
+@Named(value = "shoppingCartController")
 @ViewScoped
-public class ShoppingCartBean implements Serializable{
+public class ShoppingCartController implements Serializable{
     
     private ArrayList<PlantInCart> selectedPlants;      // The selected plants from cart for removal
     private PlantInCart selectedPlant;                  // The selected plant for editing
     private Plant addedPlant;                           // A plant that should be added to the cart
     
     @Inject
-    private ShoppingCartController controller;
+    private ShoppingCartModel model;
     
     @Inject
-    private ShoppingCartViewBean viewBean;
+    private MessagesView messagesView;
 
     /**
      * Returns plants in cart from shopping cart controller.
@@ -40,7 +40,7 @@ public class ShoppingCartBean implements Serializable{
      * @return list of plants
      */
     public ArrayList<PlantInCart> getPlants() {
-        return controller.getCart().getPlantsInCart();
+        return model.getCart().getPlantsInCart();
     }
     
     /**
@@ -48,8 +48,8 @@ public class ShoppingCartBean implements Serializable{
      * 
      * @return total price
      */
-    public int getTotalPrice() {
-        return controller.getCart().getTotalPrice();
+    public double getTotalPrice() {
+        return model.getCart().getTotalPrice();
     }
     
     /**
@@ -111,13 +111,14 @@ public class ShoppingCartBean implements Serializable{
      */
     public void removeSelectedPlantFromCart() {
         try {
-            controller.removeFromCart(selectedPlant);
+            model.removeFromCart(selectedPlant);
         } catch (DaoException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to remove plant");
+            messagesView.displayErrorMessage("Failed to remove plant");
+            return;
         }
         String name = this.selectedPlant.getPlant().getName();
-        viewBean.displayFormSubmissionInfoMessage(name + "was removed from cart");
+        messagesView.displayInfoMessage(name + "was removed from cart");
         this.selectedPlant = null;
     }
     
@@ -127,13 +128,14 @@ public class ShoppingCartBean implements Serializable{
     public void removeSelectedPlants() {
         for (PlantInCart plant: this.selectedPlants) {
             try {
-                controller.removeFromCart(plant);
+                model.removeFromCart(plant);
             } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed to remove plants");
+                messagesView.displayErrorMessage("Failed to remove plants");
+                return;
             }
         }
-        viewBean.displayFormSubmissionInfoMessage("Plants removed from cart");
+        messagesView.displayInfoMessage("Plants removed from cart");
         this.selectedPlants = null;
     }
     
@@ -170,18 +172,19 @@ public class ShoppingCartBean implements Serializable{
         // If the number of items in cart reached number of items in stock
         if (selectedPlant.reachMaxAmount()) {
             // Notify user that amount of items cannot be increased
-            viewBean.displayFormSubmissionErrorMessage("Not enough plants in stock");
+            messagesView.displayErrorMessage("Not enough plants in stock");
             return;
         }
         
         // Otherwise - increase amount of items in cart
         try {
-            controller.increaseAmount(this.selectedPlant);
+            model.increaseAmount(this.selectedPlant);
         } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed to Increase amount");
+                messagesView.displayErrorMessage("Failed to Increase amount");
+                return;
         }
-        viewBean.displayFormSubmissionInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
+        messagesView.displayInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
     }
     
     /**
@@ -189,11 +192,12 @@ public class ShoppingCartBean implements Serializable{
      */
     public void decreaseAmount() {
         try {
-            controller.decreaseAmount(this.selectedPlant);
+            model.decreaseAmount(this.selectedPlant);
         } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed to Decrease amount");
+                messagesView.displayErrorMessage("Failed to Decrease amount");
+                return;
         }
-        viewBean.displayFormSubmissionInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
+        messagesView.displayInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
     }
 }

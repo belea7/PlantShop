@@ -1,7 +1,7 @@
 /**
- * Plants controller bean
+ * Plants model bean
  */
-package PlantShop.controllers;
+package PlantShop.model;
 
 import PlantShop.daos.PlantsDao;
 import PlantShop.entities.Plant;
@@ -14,15 +14,16 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 
 /**
- * Controller bean for managing plants in the store.
+ * Model bean for managing plants in the store.
  * 
  * @author leagi
  */
-@Named(value = "plantsController")
+@Named(value = "plantsModel")
 @ViewScoped
-public class PlantsController implements Serializable{
+public class PlantsModel implements Serializable{
     
     private ArrayList<Plant> plants;        // List of all plants in store
     
@@ -61,21 +62,24 @@ public class PlantsController implements Serializable{
      * 
      * @return an available ID
      */
-    public int getAvailablePlantId() {
+    public long getAvailablePlantId() {
+        if (this.plants.isEmpty())
+            return 1;
+        
         // Get the largest taken ID
-        int size = this.plants.size();
-        Integer lastId = Collections.max(this.plants).getId();
+        long size = this.plants.size();
+        long lastId = Collections.max(this.plants).getId();
         
         // If the last ID is not equal to the number of plants - 
         // an available ID less than the largest ID exists.
         if (lastId != size) {
             //Create a list of all taken ID's
-            ArrayList<Integer> indexes = new ArrayList();
+            ArrayList<Long> indexes = new ArrayList();
             for (Plant p: plants)
                 indexes.add(p.getId());
             
             // Return an available ID
-            for (int i=1; i < lastId; i++) {
+            for (long i=1; i < lastId; i++) {
                 if (!indexes.contains(i))
                     return i;
             }

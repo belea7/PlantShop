@@ -1,7 +1,7 @@
 /*
- * Shopping Cart Controller
+ * Shopping Cart Model
  */
-package PlantShop.controllers;
+package PlantShop.model;
 
 import PlantShop.daos.ShoppingCartDao;
 import PlantShop.entities.Plant;
@@ -15,13 +15,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Controller bean for managing the shopping cart.
+ * Model bean for managing the shopping cart of a user.
  * 
  * @author leagi
  */
-@Named(value = "shoppingCartController")
+@Named(value = "shoppingCartModel")
 @SessionScoped
-public class ShoppingCartController implements Serializable{
+public class ShoppingCartModel implements Serializable{
     
     private ShoppingCart cart;          // Cart entity
     

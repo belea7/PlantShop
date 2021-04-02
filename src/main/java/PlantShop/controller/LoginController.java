@@ -1,8 +1,9 @@
-package PlantShop.controllers;
+package PlantShop.controller;
 
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.IncorrectCredentialsException;
 import PlantShop.view.LoginViewBean;
+import PlantShop.model.UserModel;
 
 import java.io.Serializable;
 import javax.faces.view.ViewScoped;
@@ -15,9 +16,9 @@ import javax.inject.Named;
  * passes it on to the model.
  * @author Ron Mosenzon
  */
-@Named(value = "loginBean")
+@Named(value = "loginController")
 @ViewScoped
-public class LoginBean implements Serializable {
+public class LoginController implements Serializable {
     
     private String username = "";
     private String password = "";
@@ -26,10 +27,10 @@ public class LoginBean implements Serializable {
     private LoginViewBean loginViewBean;
     
     @Inject
-    private UserBean userBean;
+    private UserModel userModel;
     
     
-    public LoginBean() {
+    public LoginController() {
     }
     
     
@@ -42,14 +43,14 @@ public class LoginBean implements Serializable {
      */
     public String login() {
         
-        if(userBean.isLoggedIn()) {
+        if(userModel.isLoggedIn()) {
             loginViewBean.displayFormSubmissionErrorMessage(
-                    "Cannot log in because already logged in as " + userBean.getUser().getUsername());
+                    "Cannot log in because already logged in as " + userModel.getUser().getUsername());
             return null;
         }
         
         try{
-            userBean.login(username, password);
+            userModel.login(username, password);
         } catch(DaoException e) {
             loginViewBean.displayFormSubmissionErrorMessage(
                     "Oops! Something went wrong when connecting to the database.");

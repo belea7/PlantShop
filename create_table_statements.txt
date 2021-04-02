@@ -1,0 +1,64 @@
+create table "PLANTS"
+(
+	ID BIGINT default 1 not null primary key,
+	NAME VARCHAR(50) not null,
+	NUMBER_OF_ITEMS INTEGER not null,
+	LIGHT VARCHAR(50) not null,
+	WATER VARCHAR(50) not null,
+	FERTILIZE VARCHAR(50) not null,
+	DIFFICULTY VARCHAR(10) not null,
+	DESCRIPTION VARCHAR(200) not null,
+	PICTURE VARCHAR(150) not null,
+	PRICE DOUBLE not null,
+	CONSTRAINT num_of_items_not_negative CHECK (NUMBER_OF_ITEMS >= 0),
+	CONSTRAINT price_not_negative CHECK (PRICE >= 0),
+	CONSTRAINT difficulty_constraint CHECK (DIFFICULTY in ('easy', 'normal', 'difficult'))
+)
+
+create table "SHOPPING_CARTS"
+(
+	USER_NAME VARCHAR(50) not null,
+	PLANT_ID BIGINT not null,
+	AMOUNT INTEGER default 1 not null,
+	primary key (USER_NAME, PLANT_ID),
+	CONSTRAINT shopping_cart_user_fk
+   	FOREIGN KEY (user_name)
+   	REFERENCES Users (user_name),
+	CONSTRAINT shopping_cart_plant_fk
+   	FOREIGN KEY (plant_id)
+   	REFERENCES Plants (id)
+)
+
+create table "REVIEWS"
+(
+	USER_NAME VARCHAR(50) not null,
+	PLANT_ID BIGINT not null,
+	TIME_POSTED TIMESTAMP not null,
+	RATING INTEGER not null,
+	COMMENT VARCHAR(200),
+	primary key (USER_NAME, PLANT_ID, TIME_POSTED),
+	CONSTRAINT rating_constaraint CHECK (RATING < 6 and RATING > 0),
+	CONSTRAINT reviews_user_fk
+   	FOREIGN KEY (user_name)
+   	REFERENCES Users (user_name),
+	CONSTRAINT reviews_plant_fk
+   	FOREIGN KEY (plant_id)
+   	REFERENCES Plants (id)
+)
+
+CREATE TABLE ORDERS (
+    ORDER_ID bigint NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    USER_NAME varchar(50) NOT NULL,
+    TIME_ORDERED timestamp NOT NULL,
+    STATUS varchar(50) NOT NULL,
+    CONSTRAINT FK_USER_NAME FOREIGN KEY (USER_NAME) REFERENCES USERS(USER_NAME)
+);
+
+CREATE TABLE PLANTS_IN_ORDERS (
+    ORDER_ID bigint NOT NULL,
+    PLANT_ID bigint NOT NULL,
+    AMOUNT int NOT NULL,
+    CONSTRAINT PK_PLANTS_IN_ORDERS PRIMARY KEY (ORDER_ID, PLANT_ID),
+    CONSTRAINT FK_ORDER_ID FOREIGN KEY (ORDER_ID) REFERENCES ORDERS(ORDER_ID),
+    CONSTRAINT POSITIVE_AMOUNT CHECK (AMOUNT > 0)
+)

@@ -1,18 +1,17 @@
 /*
- * Bean for plants catalog.
+ * Controller for plants catalog.
  */
-package PlantShop.models;
+package PlantShop.controller;
 
 
-import PlantShop.controllers.PlantsController;
-import PlantShop.controllers.ShoppingCartController;
-import PlantShop.controllers.UserBean;
+import PlantShop.model.PlantsModel;
+import PlantShop.model.ShoppingCartModel;
+import PlantShop.model.UserModel;
 import PlantShop.entities.Plant;
 import PlantShop.entities.Review;
 import PlantShop.daos.ReviewsDao;
 import PlantShop.exceptions.DaoException;
-import PlantShop.view.CatalogViewBean;
-import PlantShop.view.ReviewsEditViewBean;
+import PlantShop.view.MessagesView;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -22,35 +21,32 @@ import javax.inject.Named;
 import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
 /**
- * Bean for the index web page which displays all plants in store.
+ * Controller for the index web page which displays all plants in store.
  * 
  * @author leagi
  */
-@Named(value = "catalogBean")
+@Named(value = "catalogController")
 @ViewScoped
-public class CatalogBean implements Serializable{
+public class CatalogController implements Serializable{
 
     private Plant selectedPlant;        // The selected plant for viewing
     private Review selectedReview;      // The selected review for editing
     private boolean newReview;          // Should the review be added to DB
     
     @Inject
-    private PlantsController plantsController;
+    private PlantsModel plantsModel;
     
     @Inject
-    private ShoppingCartController shoppingCartController;
+    private ShoppingCartModel shoppingCartModel;
     
     @Inject
     private ReviewsDao reviewsDao;
     
     @Inject
-    private UserBean userBean;
+    private UserModel userModel;
     
     @Inject
-    ReviewsEditViewBean reviewViewBean;
-    
-    @Inject
-    private CatalogViewBean viewBean;
+    private MessagesView messagesView;
     
     /**
      * Returns plants in store from plants controller.
@@ -58,7 +54,7 @@ public class CatalogBean implements Serializable{
      * @return the plants in the store
      */
     public ArrayList<Plant> getPlants() {
-        return this.plantsController.getPlants();
+        return this.plantsModel.getPlants();
     }
     
     /**
@@ -125,11 +121,11 @@ public class CatalogBean implements Serializable{
      */
     public boolean canReviewBeEdited(Review review) {
         // If user is logged-in
-        if (userBean.getUser() == null)
+        if (userModel.getUser() == null)
             return false;
         
         // If the logged-in user wrote the review
-        return userBean.getUser().getUsername().equals(review.getUserName());
+        return userModel.getUser().getUsername().equals(review.getUserName());
     }
     
     /**
@@ -139,27 +135,29 @@ public class CatalogBean implements Serializable{
      */
     public void addSelectedPlantToCart() {
         // If the user is not logged-in - ask uer to log-in
-        if (!userBean.isLoggedIn()) {
+        if (!userModel.isLoggedIn()) {
             String message = "Please log-in if you want to add a plant to cart";
-            viewBean.displayFormSubmissionErrorMessage(message);
+            messagesView.displayErrorMessage(message);
             return;
         }
         
         // If user plant is already in user's count - notify user and don't remove plant
-        else if (shoppingCartController.getCart().isPlantInCart(selectedPlant)) {
+        else if (shoppingCartModel.getCart().isPlantInCart(selectedPlant)) {
             String message = this.selectedPlant.getName() + " is already in your cart";
-            viewBean.displayFormSubmissionErrorMessage(message);
+            messagesView.displayErrorMessage(message);
             return;
         }
         
         // Otherwise - add plant tp cart and notify user
         try {
-            shoppingCartController.addToCart(selectedPlant);
+            shoppingCartModel.addToCart(selectedPlant);
         } catch (DaoException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to add item to cart");
+            messagesView.displayErrorMessage("Failed to add item to cart");
+            return;
         }
-        viewBean.displayFormSubmissionInfoMessage("Plant was successfully added to cart");
+        messagesView.displayInfoMessage("Plant was successfully added to cart");
+        PrimeFaces.current().ajax().update("dt-products");
     }
     
     /**
@@ -169,7 +167,7 @@ public class CatalogBean implements Serializable{
         this.newReview = true;
         this.selectedReview = new Review();
         this.selectedReview.setPlant(this.selectedPlant);
-        this.selectedReview.setUserName(userBean.getUser().getUsername());
+        this.selectedReview.setUserName(userModel.getUser().getUsername());
     }
     
     /**
@@ -179,7 +177,7 @@ public class CatalogBean implements Serializable{
      * @return can be added or not
      */
     public boolean canReviewBeAdded() {
-        return this.userBean.isLoggedIn();
+        return this.userModel.isLoggedIn();
     }
     
     /**
@@ -193,11 +191,12 @@ public class CatalogBean implements Serializable{
                 reviewsDao.addReview(selectedReview);
             } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed to post review");
+                messagesView.displayErrorMessage("Failed to post review");
+                return;
             }
             this.selectedPlant.addReview(selectedReview);
             this.newReview = false;
-            reviewViewBean.displayFormSubmissionInfoMessage("Review successfully added");
+            messagesView.displayInfoMessage("Review successfully added");
         }
         // Otherwise - update the existing review.
         else {
@@ -205,9 +204,10 @@ public class CatalogBean implements Serializable{
                 reviewsDao.updateReview(selectedReview);
             } catch (DaoException e) {
                 e.printStackTrace();
-                viewBean.displayFormSubmissionErrorMessage("Failed to post review");
+                messagesView.displayErrorMessage("Failed to post review");
+                return;
             }
-            reviewViewBean.displayFormSubmissionInfoMessage("Review successfully updated");
+            messagesView.displayInfoMessage("Review successfully updated");
         }
         PrimeFaces.current().ajax().update("body", "edit-review-content", "plantDetails", "plants");
         PrimeFaces.current().executeScript("PF('editReviewDialog').hide()");
@@ -222,9 +222,10 @@ public class CatalogBean implements Serializable{
             reviewsDao.removeReview(this.selectedReview);
         } catch (DaoException e) {
             e.printStackTrace();
-            viewBean.displayFormSubmissionErrorMessage("Failed to remove review");
+            messagesView.displayErrorMessage("Failed to remove review");
+            return;
         }
         this.selectedReview = null;
-        reviewViewBean.displayFormSubmissionInfoMessage("Review was removed");
+        messagesView.displayInfoMessage("Review was removed");
     }
 }
