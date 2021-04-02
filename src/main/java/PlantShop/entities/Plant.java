@@ -3,15 +3,16 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Plant class
  * @author leagi
  */
-public class Plant implements Comparable<Plant>{
+public class Plant implements Comparable<Plant>, Serializable {
     
-    private int id;                         // ID of the plant
+    private long id;                         // ID of the plant
     private String name;                    // Name of the plant
     private int numberOfItems;              // Number of times in stock
     private String light;                   // Light conditions
@@ -20,7 +21,7 @@ public class Plant implements Comparable<Plant>{
     private String difficulty;              // Difficulty (easy/normal/difficult)
     private String description;             // Description of the plant
     private String picture;                 // Name of the image (in images dir)
-    private int price;                      // The price of the plant
+    private double price;                    // The price of the plant
     private ArrayList<Review> reviews;      // The reviews on the plant
     private int rating;                     // The avg. rating of the plant
     
@@ -37,7 +38,7 @@ public class Plant implements Comparable<Plant>{
      * 
      * @return plant ID
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -45,7 +46,7 @@ public class Plant implements Comparable<Plant>{
      * Setter for plant ID.
      * @param id 
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     
@@ -197,7 +198,7 @@ public class Plant implements Comparable<Plant>{
      * 
      * @return the price
      */
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
     
@@ -206,7 +207,7 @@ public class Plant implements Comparable<Plant>{
      * 
      * @param price 
      */
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
     
@@ -262,6 +263,11 @@ public class Plant implements Comparable<Plant>{
      * Updates a review on a plant and updates plant's rating.
      */
     public void updateRating() {
+        if (reviews.isEmpty()) {
+            this.rating = 0;
+            return;
+        } 
+        
         int total = 0;
         for (Review r: reviews) {
             total += r.getRating();
@@ -295,10 +301,10 @@ public class Plant implements Comparable<Plant>{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + this.id;
+        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
         return hash;
     }
-    
+
     /**
      * Compares to objects and returns it they are equal.
      * 
@@ -322,7 +328,7 @@ public class Plant implements Comparable<Plant>{
         }
         return true;
     }
-    
+
     @Override
     public int compareTo(Plant other) {
         if (this == other) {

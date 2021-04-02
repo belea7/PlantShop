@@ -57,9 +57,9 @@ public class ShoppingCartDao implements Serializable{
         try (Connection connection = dataSource.getConnection()) {
             // Create SELECT statement and execute it
             String sql = "SELECT * "
-                       + "FROM shoppingcarts, plants "
+                       + "FROM shopping_carts, plants "
                        + "WHERE user_name = '" + user.getUsername() + "'"
-                       + " AND shoppingcarts.plant_id = plants.id";
+                       + " AND shopping_carts.plant_id = plants.id";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             
@@ -67,7 +67,7 @@ public class ShoppingCartDao implements Serializable{
             while(result.next()) {
                 // Create Plant object and fill it's attributes
                 Plant plant = new Plant();
-                plant.setId(result.getObject(4, Integer.class));
+                plant.setId(result.getObject(4, Long.class));
                 plant.setName(result.getObject(5, String.class));
                 plant.setNumberOfItems(result.getObject(6, Integer.class));
                 plant.setLight(result.getObject(7, String.class));
@@ -76,7 +76,7 @@ public class ShoppingCartDao implements Serializable{
                 plant.setDifficulty(result.getObject(10, String.class));
                 plant.setDescription(result.getObject(11, String.class));
                 plant.setPicture(result.getObject(12, String.class));
-                plant.setPrice(result.getObject(13, Integer.class));
+                plant.setPrice(result.getObject(13, Double.class));
                 
                 // Create PlantInCart and fill it's attributes
                 int amount = result.getObject(3, Integer.class);
@@ -96,20 +96,21 @@ public class ShoppingCartDao implements Serializable{
      * Add plant to a user's cart in the DB.
      * 
      * @param plant 
+     * @param cart 
      * @throws DaoException
      */
     public void addPlantToCart(PlantInCart plant, ShoppingCart cart) throws DaoException{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create INSERT statement
-            String sql = "INSERT INTO ShoppingCarts "
+            String sql = "INSERT INTO shopping_carts "
                        + "(user_name, plant_id, amount) "
                        + "VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statemtn's variables
             statement.setString(1, cart.getUser().getUsername());
-            statement.setInt(2, plant.getPlant().getId());
+            statement.setLong(2, plant.getPlant().getId());
             statement.setInt(3, 1);
             
             // Execute query and close connection
@@ -133,10 +134,10 @@ public class ShoppingCartDao implements Serializable{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create DELETE statement
-            String sql = "DELETE FROM ShoppingCarts "
+            String sql = "DELETE FROM shopping_carts "
                        + "WHERE plant_id = ? AND user_name = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, plant.getPlant().getId());
+            statement.setLong(1, plant.getPlant().getId());
             statement.setString(2, cart.getUser().getUsername());
             
             // Execute query and close connection
@@ -174,14 +175,14 @@ public class ShoppingCartDao implements Serializable{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Create UPDATE statement
-            String sql = "UPDATE ShoppingCarts "
+            String sql = "UPDATE shopping_carts "
                        + "SET amount = ? "
                        + "WHERE plant_id = ? and user_name = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             
             // Set statement's variables
             statement.setInt(1, plant.getAmount());
-            statement.setInt(2, plant.getPlant().getId());
+            statement.setLong(2, plant.getPlant().getId());
             statement.setString(3, cart.getUser().getUsername());
             
             // Execute query and close connection

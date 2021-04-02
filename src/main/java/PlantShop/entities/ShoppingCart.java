@@ -3,6 +3,7 @@
  */
 package PlantShop.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,10 +11,10 @@ import java.util.ArrayList;
  * 
  * @author leagi
  */
-public class ShoppingCart {
-    private User user;                          // The user whose cart it is
-    private ArrayList<PlantInCart> plantsInCart;       // List of items in the cart
-    private int totalPrice;                     // The total price of items in the cart
+public class ShoppingCart implements Serializable {
+    private User user;                              // The user whose cart it is
+    private ArrayList<PlantInCart> plantsInCart;    // List of items in the cart
+    private double totalPrice;                      // The total price of items in the cart
     
     /**
      * Constructor for shopping cart entity.
@@ -44,7 +45,7 @@ public class ShoppingCart {
         this.user = user;
     }
 
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
     
@@ -66,7 +67,7 @@ public class ShoppingCart {
         this.plantsInCart = plantsInCart;
         
         // Update the total price of the cart
-        int total = 0;
+        double total = 0;
         for (PlantInCart p: plantsInCart) {
             total += p.getPlant().getPrice();
         }

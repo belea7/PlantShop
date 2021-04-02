@@ -22,13 +22,14 @@ and open the template in the editor.
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="All Orders" icon="pi pi-check" outcome="all_orders.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarController.logout}" ajax="false" rendered="#{menuBarController.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
@@ -37,58 +38,58 @@ and open the template in the editor.
                 <p:growl id="messages" showDetail="true"/>
                 <p:panelGrid columns="2">
                     <p:outputLabel value="User Name  " for="username"/>
-                    <p:inputText id="username" value="#{registrationBean.username}"
+                    <p:inputText id="username" value="#{registrationController.username}"
                                  required="true" requiredMessage="User Name is required"/>
 
                     <p:outputLabel value="Password  " for="password"/>
-                    <p:password id="password" value="#{registrationBean.password}"
+                    <p:password id="password" value="#{registrationController.password}"
                                 required="true" requiredMessage="Password is required"/>
 
                     <p:outputLabel value="First Name  " for="firstName"/>
-                    <p:inputText id="firstName" value="#{registrationBean.firstName}"
+                    <p:inputText id="firstName" value="#{registrationController.firstName}"
                                  required="true" requiredMessage="First Name is required"/>
 
                     <p:outputLabel value="Last Name  " for="lastName"/>
-                    <p:inputText id="lastName" value="#{registrationBean.lastName}"
+                    <p:inputText id="lastName" value="#{registrationController.lastName}"
                                  required="true" requiredMessage="Last Name is required"/>
 
                     <p:outputLabel value="Birth Date (yyyy-mm-dd)  " for="birthdayDate"/>
-                    <p:inputText id="birthdayDate" value="#{registrationBean.birthdayDate}"
+                    <p:inputText id="birthdayDate" value="#{registrationController.birthdayDate}"
                                  required="true" requiredMessage="Birth Date is required"/>
 
                     <p:outputLabel value="Email  " for="emailAddress"/>
-                    <p:inputText id="emailAddress" value="#{registrationBean.emailAddress}"
+                    <p:inputText id="emailAddress" value="#{registrationController.emailAddress}"
                                  required="true" requiredMessage="Email is required"/>
 
                     <p:outputLabel value="Phone Number  " for="phoneNumber"/>
-                    <p:inputText id="phoneNumber" value="#{registrationBean.phoneNumber}"
+                    <p:inputText id="phoneNumber" value="#{registrationController.phoneNumber}"
                                  required="true" requiredMessage="Phone Number is required"/>
 
                     <p:outputLabel value="City  " for="city"/>
-                    <p:inputText id="city" value="#{registrationBean.city}"
+                    <p:inputText id="city" value="#{registrationController.city}"
                                  required="true" requiredMessage="City is required"/>
 
                     <p:outputLabel value="Street  " for="street"/>
-                    <p:inputText id="street" value="#{registrationBean.street}"
+                    <p:inputText id="street" value="#{registrationController.street}"
                                  required="true" requiredMessage="Street is required"/>
 
                     <p:outputLabel value="House Number  " for="houseNumber"/>
-                    <p:inputText id="houseNumber" value="#{registrationBean.houseNumber}"
+                    <p:inputText id="houseNumber" value="#{registrationController.houseNumber}"
                                  required="true" requiredMessage="House Number is required"/>
 
                     <p:outputLabel value="Appartment  " for="appartment"/>
-                    <p:inputText id="appartment" value="#{registrationBean.appartment}"
+                    <p:inputText id="appartment" value="#{registrationController.appartment}"
                                  required="true" requiredMessage="Appartment is required"/>
 
                     <p:outputLabel value="Zipcode  " for="zipcode"/>
-                    <p:inputText id="zipcode" value="#{registrationBean.zipcode}"
+                    <p:inputText id="zipcode" value="#{registrationController.zipcode}"
                                  required="true" requiredMessage="Zipcode is required"/>
 
                     <p:outputLabel value="Admin (enter secret code to become admin)" for="admin"/>
-                    <p:inputText id="admin" value="#{registrationBean.admin}"
+                    <p:password id="admin" value="#{registrationController.admin}"
                                  required="false"/>
                 </p:panelGrid>
-                <p:commandButton value="register" action="#{registrationBean.register}" update="messages"/>
+                <p:commandButton value="register" action="#{registrationController.register}" update="messages"/>
             </h:form>
         </div>
     </h:body>

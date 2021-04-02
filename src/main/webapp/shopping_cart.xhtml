@@ -16,37 +16,38 @@
             <h:form>
                 <p:menubar>
                     <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
-                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarBean.admin}"/>
-                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarBean.loggedIn}"/>
-                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarBean.logout}" ajax="false" rendered="#{menuBarBean.loggedIn}"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="All Orders" icon="pi pi-check" outcome="all_orders.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarController.logout}" ajax="false" rendered="#{menuBarController.loggedIn}"/>
                 </p:menubar>
             </h:form>
         </div>
         <h:form id="form">
             <div>
                 <center>
-                    <p:outputLabel class="total-price-label" value="Total: #{shoppingCartBean.totalPrice} ILS  "/> 
+                    <p:outputLabel class="total-price-label" value="Total: #{shoppingCartController.totalPrice} ILS  "/> 
                     <p:commandButton id="check-out-button" update="@this dt-products" value="Buy items"/>
                 </center>
                 <p:growl id="messages" showDetail="true"/>
                 <p:toolbar>
                     <p:toolbarGroup align="left">
-                        <p:commandButton id="delete-products-button" value="#{shoppingCartBean.deleteButtonMessage}" update="@this dt-products"
-                                         icon="pi pi-trash" actionListener="#{shoppingCartBean.removeSelectedPlants()}"
-                                         class="remove-button" disabled="#{!shoppingCartBean.hasSelectedPlants()}">
+                        <p:commandButton id="delete-products-button" value="#{shoppingCartController.deleteButtonMessage}" update="@this dt-products"
+                                         icon="pi pi-trash" actionListener="#{shoppingCartController.removeSelectedPlants()}"
+                                         class="remove-button" disabled="#{!shoppingCartController.hasSelectedPlants()}">
                             <p:confirm header="Confirmation" message="Delete the selected plants?"
                                        icon="pi pi-exclamation-triangle"/>
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
 
-                <p:dataTable id="dt-products" widgetVar="dtProducts" var="plant" value="#{shoppingCartBean.plants}"
+                <p:dataTable id="dt-products" widgetVar="dtProducts" var="plant" value="#{shoppingCartController.plants}"
                              reflow="true" class="shopping-cart-table" paginator="true" rowKey="#{plant.plant.id}" 
-                             selection="#{shoppingCartBean.selectedPlants}" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                             selection="#{shoppingCartController.selectedPlants}" rows="10" rowSelectMode="add" paginatorPosition="bottom">
                     <f:facet name="header">
                         <div>
                             <span>
@@ -98,19 +99,19 @@
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
                                              oncomplete="PF('deleteProductDialog').show()" value="Remove from cart"
                                              style="margin-bottom: 10px; margin-top: 10px">
-                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
+                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartController.selectedPlant}"/>
                             </p:commandButton>
                         </div>
                         <div>
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-plus" process="@this"
-                                             action="#{shoppingCartBean.increaseAmount()}" update="dt-products"
+                                             action="#{shoppingCartController.increaseAmount()}" update="dt-products"
                                              style="margin-bottom: 10px; margin-top: 10px; margin-right: 10px">
-                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
+                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartController.selectedPlant}"/>
                             </p:commandButton>
                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-minus" process="@this"
-                                             action="#{shoppingCartBean.decreaseAmount()}" update="dt-products"
+                                             action="#{shoppingCartController.decreaseAmount()}" update="dt-products"
                                              disabled="#{plant.amount == 1}" style="margin-bottom: 10px; margin-top: 10px">
-                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartBean.selectedPlant}"/>
+                                <f:setPropertyActionListener value="#{plant}" target="#{shoppingCartController.selectedPlant}"/>
                             </p:commandButton>
                         </div>
                         <div>
@@ -120,7 +121,7 @@
                 </p:dataTable>
                 <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
                                  message="Delete the product?" header="Confirm" severity="warn">
-                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{shoppingCartBean.removeSelectedPlantFromCart()}"
+                    <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{shoppingCartController.removeSelectedPlantFromCart()}"
                                      process="@this" oncomplete="PF('deleteProductDialog').hide()" update="dt-products"/>
                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                      onclick="PF('deleteProductDialog').hide()" update="dt-products"/>

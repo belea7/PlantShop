@@ -97,7 +97,7 @@ public class ReviewsDao implements Serializable{
             
             // Set statement's variables
             statement.setString(1, review.getUserName());
-            statement.setInt(2, review.getPlant().getId());
+            statement.setLong(2, review.getPlant().getId());
             statement.setTimestamp(3, review.getTimePosted());
             statement.setInt(4, review.getRating());
             statement.setString(5, review.getComment());
@@ -131,7 +131,7 @@ public class ReviewsDao implements Serializable{
             statement.setInt(1, review.getRating());
             statement.setString(2, review.getComment());
             statement.setString(3, review.getUserName());
-            statement.setInt(4, review.getPlant().getId());
+            statement.setLong(4, review.getPlant().getId());
             statement.setTimestamp(5, review.getTimePosted());
             
             // Execute query and close connection
@@ -160,7 +160,7 @@ public class ReviewsDao implements Serializable{
             
             // Fill statement's variables
             statement.setString(1, review.getUserName());
-            statement.setInt(2, review.getPlant().getId());
+            statement.setLong(2, review.getPlant().getId());
             statement.setTimestamp(3, review.getTimePosted());
             
             // Execute query and close connection
