@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Log-in</title>
+        <div class="picture">
+            <img src="Logo.jpg" width="150" height="190"/>
+        </div>
+        <link rel="stylesheet" href="styles.css" media="all"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+       <div>
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="All Orders" icon="pi pi-check" outcome="all_orders.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarController.logout}" ajax="false" rendered="#{menuBarController.loggedIn}"/>
+                </p:menubar>
+            </h:form>
+        </div>
+        <div>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="User Name  " for="username"/>
+                    <p:inputText id="username" value="#{loginController.username}"
+                                 required="true" requiredMessage="User Name is required"/>
+
+                    <p:outputLabel value="Password  " for="password"/>
+                    <p:password id="password" value="#{loginController.password}"
+                                required="true" requiredMessage="Password is required"/>
+                </p:panelGrid>
+                <p:commandButton value="login" action="#{loginController.login}" update="messages"/>
+            </h:form>
+        </div>
+    </h:body>
+</html>

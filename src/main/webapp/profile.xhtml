@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Profile</title>
+        <div class="picture">
+            <img src="Logo.jpg" width="150" height="190"/>
+        </div>
+        <link rel="stylesheet" href="styles.css" media="all"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            h1 {text-align: center;}
+            h2 {text-align: center;}
+            h3 {text-align: center;}
+        </style>
+    </h:head>
+    <h:body>
+        <div>
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Catalog" icon="pi pi-home" outcome="index.xhtml"/>
+                    <p:menuitem value="Edit Plants" icon="pi pi-pencil" outcome="edit_plants.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Shopping cart" icon="pi pi-shopping-cart" outcome="shopping_cart.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Orders" icon="pi pi-check" outcome="orders.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="All Orders" icon="pi pi-check" outcome="all_orders.xhtml" rendered="#{menuBarController.admin}"/>
+                    <p:menuitem value="Profile" icon="pi pi-user" outcome="profile.xhtml" rendered="#{menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log in" icon="pi pi-user" outcome="login.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Register" icon="pi pi-user" outcome="registration.xhtml" rendered="#{not menuBarController.loggedIn}"/>
+                    <p:menuitem value="Log out" icon="pi pi-sign-out" action="#{menuBarController.logout}" ajax="false" rendered="#{menuBarController.loggedIn}"/>
+                </p:menubar>
+            </h:form>
+        </div>
+        
+        <div>
+            <h:panelGroup rendered="#{not menuBarController.loggedIn}">
+                <h2> You are not logged in. </h2>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{menuBarController.loggedIn}">
+                    <h3> your profile: </h3>
+                    <h1> #{profileViewBean.username} </h1>
+                    <h:panelGroup rendered="#{menuBarController.admin}">
+                        <h2 style="color: green"> admin </h2>
+                    </h:panelGroup>
+            </h:panelGroup>
+        </div>
+
+        <div>
+            <h:form id="form" rendered="#{menuBarController.loggedIn}">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="User Name  " for="username"/>
+                    <h:outputText id="username" value="#{profileViewBean.username}"/>
+
+                    <p:outputLabel value="First Name  " for="firstName"/>
+                    <h:outputText id="firstName" value="#{profileViewBean.firstName}"/>
+
+                    <p:outputLabel value="Last Name  " for="lastName"/>
+                    <h:outputText id="lastName" value="#{profileViewBean.lastName}"/>
+
+                    <p:outputLabel value="Birth Date (yyyy-mm-dd)  " for="birthdayDate"/>
+                    <h:outputText id="birthdayDate" value="#{profileViewBean.birthdayDate}"/>
+
+                    <p:outputLabel value="Email  " for="emailAddress"/>
+                    <h:outputText id="emailAddress" value="#{profileViewBean.emailAddress}"/>
+
+                    <p:outputLabel value="Phone Number  " for="phoneNumber"/>
+                    <h:outputText id="phoneNumber" value="#{profileViewBean.phoneNumber}"/>
+
+                    <p:outputLabel value="City  " for="city"/>
+                    <h:outputText id="city" value="#{profileViewBean.city}"/>
+
+                    <p:outputLabel value="Street  " for="street"/>
+                    <h:outputText id="street" value="#{profileViewBean.street}"/>
+
+                    <p:outputLabel value="House Number  " for="houseNumber"/>
+                    <h:outputText id="houseNumber" value="#{profileViewBean.houseNumber}"/>
+
+                    <p:outputLabel value="Appartment  " for="appartment"/>
+                    <h:outputText id="appartment" value="#{profileViewBean.appartment}"/>
+
+                    <p:outputLabel value="Zipcode  " for="zipcode"/>
+                    <h:outputText id="zipcode" value="#{profileViewBean.zipcode}"/>
+                </p:panelGrid>
+                <p:commandButton value="Edit Profile Details" action="profile.xhtml"/>
+            </h:form>
+        </div>
+    </h:body>
+</html>
