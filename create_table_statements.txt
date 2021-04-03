@@ -39,7 +39,7 @@ create table "SHOPPING_CARTS"
 	primary key (USER_NAME, PLANT_ID),
 	CONSTRAINT shopping_cart_user_fk
    	FOREIGN KEY (user_name)
-   	REFERENCES Users (user_name),
+   	REFERENCES Users (user_name) DEFERRABLE INITIALLY DEFERRED,
 	CONSTRAINT shopping_cart_plant_fk
    	FOREIGN KEY (plant_id)
    	REFERENCES Plants (id)
@@ -56,7 +56,7 @@ create table "REVIEWS"
 	CONSTRAINT rating_constaraint CHECK (RATING < 6 and RATING > 0),
 	CONSTRAINT reviews_user_fk
    	FOREIGN KEY (user_name)
-   	REFERENCES Users (user_name),
+   	REFERENCES Users (user_name) DEFERRABLE INITIALLY DEFERRED,
 	CONSTRAINT reviews_plant_fk
    	FOREIGN KEY (plant_id)
    	REFERENCES Plants (id)
@@ -67,7 +67,7 @@ CREATE TABLE ORDERS (
     USER_NAME varchar(50) NOT NULL,
     TIME_ORDERED timestamp NOT NULL,
     STATUS varchar(50) NOT NULL,
-    CONSTRAINT FK_USER_NAME FOREIGN KEY (USER_NAME) REFERENCES USERS(USER_NAME)
+    CONSTRAINT FK_USER_NAME FOREIGN KEY (USER_NAME) REFERENCES USERS(USER_NAME) DEFERRABLE INITIALLY DEFERRED
 );
 
 CREATE TABLE PLANTS_IN_ORDERS (
