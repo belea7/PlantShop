@@ -73,7 +73,7 @@ public class RegistrationController extends AbstractProfileDataInputController {
         }
         
         // return navigation result
-        return "registered";
+        return "index";
     }
     
     
