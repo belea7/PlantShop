@@ -65,16 +65,6 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>loginViewBean</managed-bean-name>
-        <managed-bean-class>PlantShop.view.LoginViewBean</managed-bean-class>
-        <managed-bean-scope>dependant</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>registrationViewBean</managed-bean-name>
-        <managed-bean-class>PlantShop.view.RegistrationViewBean</managed-bean-class>
-        <managed-bean-scope>dependant</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
         <managed-bean-name>messagesView</managed-bean-name>
         <managed-bean-class>PlantShop.view.MessagesView</managed-bean-class>
         <managed-bean-scope>dependant</managed-bean-scope>
@@ -93,5 +83,30 @@
         <managed-bean-name>editProfileController</managed-bean-name>
         <managed-bean-class>PlantShop.controller.EditProfileController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ordersDao</managed-bean-name>
+        <managed-bean-class>PlantShop.daos.OrdersDao</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>plantsDao</managed-bean-name>
+        <managed-bean-class>PlantShop.daos.PlantsDao</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>reviewsDao</managed-bean-name>
+        <managed-bean-class>PlantShop.daos.ReviewsDao</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>shoppingCartDao</managed-bean-name>
+        <managed-bean-class>PlantShop.daos.ShoppingCartDao</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>userDao</managed-bean-name>
+        <managed-bean-class>PlantShop.daos.UserDao</managed-bean-class>
+        <managed-bean-scope>dependant</managed-bean-scope>
     </managed-bean>
 </faces-config>
