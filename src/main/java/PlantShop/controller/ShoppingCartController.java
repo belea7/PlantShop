@@ -3,6 +3,8 @@
  */
 package PlantShop.controller;
 
+import PlantShop.daos.OrdersDao;
+import PlantShop.entities.Order;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
 import PlantShop.exceptions.DaoException;
@@ -10,6 +12,8 @@ import PlantShop.model.ShoppingCartModel;
 import PlantShop.view.MessagesView;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -33,6 +37,9 @@ public class ShoppingCartController implements Serializable{
     
     @Inject
     private MessagesView messagesView;
+    
+    @Inject
+    private OrdersDao ordersDao;
 
     /**
      * Returns plants in cart from shopping cart controller.
@@ -199,5 +206,38 @@ public class ShoppingCartController implements Serializable{
                 return;
         }
         messagesView.displayInfoMessage("Changed Amount to " + this.selectedPlant.getAmount());
+    }
+    
+    /**
+     * Order the items in the user's cart and then empty the cart.
+     */
+    public void checkOut() {
+        
+        // build list of PlantInOrder objects
+        ArrayList<Order.PlantInOrder> plantsInOrder = new ArrayList<>();
+        for (PlantInCart plant: model.getCart().getPlantsInCart()) {
+            plantsInOrder.add(new Order.PlantInOrder(plant.getPlant(), plant.getAmount()));
+        }
+        
+        // make order
+        try{
+            ordersDao.AddNewOrder(model.getCart().getUser().getUsername()
+                    , Timestamp.from(Instant.now()), "Not sent yet", plantsInOrder);
+        } catch(DaoException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to make order");
+        }
+        
+        // empty the cart
+        while( !model.getCart().getPlantsInCart().isEmpty() ) {
+            PlantInCart nextPlant = model.getCart().getPlantsInCart().get(0);
+            try {
+                model.removeFromCart(nextPlant);
+            } catch (DaoException e) {
+                e.printStackTrace();
+                messagesView.displayErrorMessage("Failed to remove plant from cart");
+                return;
+            }
+        }
     }
 }

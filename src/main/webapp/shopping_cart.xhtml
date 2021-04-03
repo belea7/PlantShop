@@ -31,7 +31,8 @@
             <div>
                 <center>
                     <p:outputLabel class="total-price-label" value="Total: #{shoppingCartController.totalPrice} ILS  "/> 
-                    <p:commandButton id="check-out-button" update="@this dt-products" value="Buy items"/>
+                    <p:commandButton id="check-out-button" update="@this dt-products" value="Buy items"
+                                     actionListener="#{shoppingCartController.checkOut()}"/>
                 </center>
                 <p:growl id="messages" showDetail="true"/>
                 <p:toolbar>
