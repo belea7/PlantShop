@@ -6,6 +6,7 @@ import PlantShop.daos.OrdersDao;
 import PlantShop.entities.Order;
 import PlantShop.exceptions.DaoException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.inject.Named;
@@ -168,14 +169,17 @@ public class OrdersViewBean implements Serializable {
      */
     private void makeOrderSubtree(Order order, TreeNode parent) {
         
+        DecimalFormat df = new DecimalFormat(); // price display format
+        df.setMaximumFractionDigits(2);
+        
         TreeNode orderNode = new DefaultTreeNode(new EditableOrderTreeNode(order
                 , "Order ordered on " + order.getTimeOrdered().toLocalDateTime().toString()
-                , order.getPrice().toString(), order.getStatus(), ordersDao, messagesView), parent);
+                , df.format(order.getPrice())+" ILS", order.getStatus(), ordersDao, messagesView), parent);
         
         
         for(Order.PlantInOrder plant : order.getPlants()) {
             new DefaultTreeNode(DefaultTreeNodeInfo.createPlantInfo(
-                    plant.getPlant().getName(), ""+plant.getAmount(), plant.getTotalPrice().toString()), orderNode);
+                    plant.getPlant().getName(), ""+plant.getAmount(), df.format(plant.getTotalPrice())+" ILS"), orderNode);
         }
         
     }
@@ -231,7 +235,8 @@ public class OrdersViewBean implements Serializable {
     
     
     /**
-     * Information stored in a node of the treeTable displaying the orders page.
+     * Information stored in a node of the treeTable displaying the orders
+     * in the orders and all_orders pages.
      * @author Ron Mosenzon
      */
     public static class DefaultTreeNodeInfo implements TreeNodeInfo {
@@ -245,7 +250,7 @@ public class OrdersViewBean implements Serializable {
         /**
          * @param name The name of the order, or the name of item purchased
          * @param amount The amount of the item that was purchased (example: "2 packages")
-         * @param price Price of the purchase (example: the price of packages of this item)
+         * @param price Price of the purchase (example: price of item multiplied by amount of this item bought)
          * @param total The total price of the order
          * @param status The status of the order. Either 'Not sent yet', 'On the way' or 'Arrived'
          */
