@@ -132,31 +132,92 @@ public class UserDao implements Serializable {
     public void editUser(String oldUserName, String newUserName, User.ProfileDetails details)
             throws DaoException {
         
-         try (Connection connection = dataSource.getConnection()) {
-            String sql = "UPDATE users"
+        try (Connection connection = dataSource.getConnection()) {
+            
+            // sql query to update users table
+            String usersSql = "UPDATE users"
                     + " SET user_name = ?, first_name = ?, last_name = ?"
                     + ", phone_number = ?, email_address = ?, city = ?, street = ?"
                     + ", house_number = ?, apartment = ?, zip_code = ?, birth_date = ?"
-                    + "WHERE user_name = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, newUserName);
-            statement.setString(2, details.getFirstName());
-            statement.setString(3, details.getLastName());
-            statement.setString(4, details.getPhoneNumber());
-            statement.setString(5, details.getEmailAddress());
-            statement.setString(6, details.getCity());
-            statement.setString(7, details.getStreet());
-            statement.setInt(8, details.getHouseNumber());
-            statement.setInt(9, details.getAppartment());
-            statement.setLong(10, details.getZipcode());
-            statement.setDate(11, details.getBirthdayDate());
-            statement.setString(12, oldUserName);
-            statement.execute();
+                    + ", password = ?"
+                    + " WHERE user_name = ?";
+            
+            // sql query to update username in orders table
+            String ordersSql = "UPDATE orders"
+                    + " SET user_name = ?"
+                    + " WHERE user_name = ?";
+            
+            // sql query to update username in shopping_carts table
+            String shoppingCartsSql = "UPDATE shopping_carts"
+                    + " SET user_name = ?"
+                    + " WHERE user_name = ?";
+            
+            // sql query to update username in reviews table
+            String reviewsSql = "UPDATE reviews"
+                    + " SET user_name = ?"
+                    + " WHERE user_name = ?";
+            
+            /**
+             * The second try statement is for performing a rollback if an
+             * exception occurs during the transaction,
+             * which is not possible in the catch clause of the outer try statement
+             * since the connection gets auto-closed before that clause is executed.
+             */
+            try (PreparedStatement usersStatement = connection.prepareStatement(usersSql);
+                 PreparedStatement ordersStatement = connection.prepareStatement(ordersSql);
+                 PreparedStatement shoppingCartsStatement = connection.prepareStatement(shoppingCartsSql);
+                 PreparedStatement reviewsStatement = connection.prepareStatement(reviewsSql)){
+                
+                connection.setAutoCommit(false); // begin transaction
+                
+                // set up and execute users statement
+                usersStatement.setString(1, newUserName);
+                usersStatement.setString(2, details.getFirstName());
+                usersStatement.setString(3, details.getLastName());
+                usersStatement.setString(4, details.getPhoneNumber());
+                usersStatement.setString(5, details.getEmailAddress());
+                usersStatement.setString(6, details.getCity());
+                usersStatement.setString(7, details.getStreet());
+                usersStatement.setInt(8, details.getHouseNumber());
+                usersStatement.setInt(9, details.getAppartment());
+                usersStatement.setLong(10, details.getZipcode());
+                usersStatement.setDate(11, details.getBirthdayDate());
+                usersStatement.setString(12, details.getPassword());
+                usersStatement.setString(13, oldUserName);
+                usersStatement.execute();
+                
+                // set up and execute orders statement
+                ordersStatement.setString(1, newUserName);
+                ordersStatement.setString(2, oldUserName);
+                ordersStatement.execute();
+                
+                // set up and execute shopping carts statement
+                shoppingCartsStatement.setString(1, newUserName);
+                shoppingCartsStatement.setString(2, oldUserName);
+                shoppingCartsStatement.execute();
+                
+                // set up and execute reviews statement
+                reviewsStatement.setString(1, newUserName);
+                reviewsStatement.setString(2, oldUserName);
+                reviewsStatement.execute();
+
+                connection.commit(); // commit transaction
+                
+            } catch(SQLException e) { // catch exception during preparation or execution of statements
+                e.printStackTrace();
+                try{
+                    connection.rollback(); // rollback the failed transaction before closing connection
+                    connection.close();
+                } catch(SQLException exception) {
+                    exception.printStackTrace();
+                }
+                throw new DaoException("error during editUser transaction");
+            }
             
             connection.close();
-        } catch (SQLException e) {
+        } catch (SQLException e) { // catch exception during opening or closing of connection
             e.printStackTrace();
-            throw new DaoException();
+            throw new DaoException("error when opening or closing the connection at editUser");
         }
         
     }
