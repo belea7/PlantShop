@@ -41,9 +41,13 @@ and open the template in the editor.
                     <p:inputText id="username" value="#{registrationController.username}"
                                  required="true" requiredMessage="User Name is required"/>
 
-                    <p:outputLabel value="Password  " for="password"/>
-                    <p:password id="password" value="#{registrationController.password}"
-                                required="true" requiredMessage="Password is required"/>
+                    <p:outputLabel value="Password  " for="password1"/>
+                    <p:password id="password1" value="#{registrationController.password}"
+                                match="password2" required="true" requiredMessage="Password is required"/>
+
+                    <p:outputLabel value="Repeat Password  " for="password2"/>
+                    <p:password id="password2" value="#{registrationController.password}"
+                                required="true" requiredMessage="Repeat Password is required"/>
 
                     <p:outputLabel value="First Name  " for="firstName"/>
                     <p:inputText id="firstName" value="#{registrationController.firstName}"
