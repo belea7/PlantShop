@@ -7,7 +7,6 @@ package PlantShop.entities;
 
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.UninitiatedOrderContentsException;
-import PlantShop.util.Price;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -89,14 +88,14 @@ public class Order implements Serializable {
      * the constructor that does not specify the plants in the order,
      * and setPlants was not called yet.
      */
-    public Price getPrice() throws UninitiatedOrderContentsException {
+    public double getPrice() throws UninitiatedOrderContentsException {
         if(plants == null)
             throw new UninitiatedOrderContentsException("getPrice called before initiating plants list");
         
-        Price sum = Price.getZeroPrice();
+        double sum = 0;
         
         for(PlantInOrder plant : plants)
-            sum = Price.sum(sum, plant.getTotalPrice());
+           sum += plant.getTotalPrice();
         
         return sum;
     }
@@ -157,8 +156,8 @@ public class Order implements Serializable {
         /**
          * @return The total price of all plants of this type in the order
          */
-        public Price getTotalPrice() {
-            return Price.multiplyPrice(Price.fromDBFormat(plant.getPrice()), amount); // need to change this after changing price field in plant
+        public double getTotalPrice() {
+            return plant.getPrice() * amount;
         }
         
     }
