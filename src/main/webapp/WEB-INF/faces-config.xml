@@ -91,7 +91,7 @@
     </managed-bean>
     <managed-bean>
         <managed-bean-name>editProfileController</managed-bean-name>
-        <managed-bean-class>PlantShop.controller.EditProfileBean</managed-bean-class>
+        <managed-bean-class>PlantShop.controller.EditProfileController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 </faces-config>
