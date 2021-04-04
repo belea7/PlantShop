@@ -12,6 +12,7 @@ import java.util.Objects;
  * @author leagi
  */
 public class User implements Serializable {
+    
     private String username;
     private ProfileDetails profileDetails = new ProfileDetails();
     private boolean admin;
