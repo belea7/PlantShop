@@ -121,7 +121,7 @@ public class ShoppingCartController implements Serializable{
             model.removeFromCart(selectedPlant);
         } catch (DaoException e) {
             e.printStackTrace();
-            messagesView.displayErrorMessage("Failed to remove plant");
+            messagesView.displayErrorMessage("Failed to remove plant from cart");
             return;
         }
         String name = this.selectedPlant.getPlant().getName();
