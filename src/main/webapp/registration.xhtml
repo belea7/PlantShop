@@ -39,59 +39,72 @@ and open the template in the editor.
                 <p:panelGrid columns="2">
                     <p:outputLabel value="User Name  " for="username"/>
                     <p:inputText id="username" value="#{registrationController.username}"
-                                 required="true" requiredMessage="User Name is required"/>
+                                 required="true" requiredMessage="User Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Password  " for="password1"/>
                     <p:password id="password1" value="#{registrationController.password}"
-                                match="password2" required="true" requiredMessage="Password is required"/>
+                                match="password2" required="true" requiredMessage="Password is required"
+                                maxlength="50"/>
 
                     <p:outputLabel value="Repeat Password  " for="password2"/>
                     <p:password id="password2" value="#{registrationController.password}"
-                                required="true" requiredMessage="Repeat Password is required"/>
+                                required="true" requiredMessage="Repeat Password is required"
+                                maxlength="50"/>
 
                     <p:outputLabel value="First Name  " for="firstName"/>
                     <p:inputText id="firstName" value="#{registrationController.firstName}"
-                                 required="true" requiredMessage="First Name is required"/>
+                                 required="true" requiredMessage="First Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Last Name  " for="lastName"/>
                     <p:inputText id="lastName" value="#{registrationController.lastName}"
-                                 required="true" requiredMessage="Last Name is required"/>
+                                 required="true" requiredMessage="Last Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Birth Date (yyyy-mm-dd)  " for="birthDate"/>
                     <p:inputText id="birthDate" value="#{registrationController.birthDate}"
-                                 required="true" requiredMessage="Birth Date is required"/>
+                                 required="true" requiredMessage="Birth Date is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Email  " for="emailAddress"/>
                     <p:inputText id="emailAddress" value="#{registrationController.emailAddress}"
-                                 required="true" requiredMessage="Email is required"/>
+                                 required="true" requiredMessage="Email is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Phone Number  " for="phoneNumber"/>
                     <p:inputText id="phoneNumber" value="#{registrationController.phoneNumber}"
-                                 required="true" requiredMessage="Phone Number is required"/>
+                                 required="true" requiredMessage="Phone Number is required"
+                                 maxlength="20"/>
 
                     <p:outputLabel value="City  " for="city"/>
                     <p:inputText id="city" value="#{registrationController.city}"
-                                 required="true" requiredMessage="City is required"/>
+                                 required="true" requiredMessage="City is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Street  " for="street"/>
                     <p:inputText id="street" value="#{registrationController.street}"
-                                 required="true" requiredMessage="Street is required"/>
+                                 required="true" requiredMessage="Street is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="House Number  " for="houseNumber"/>
                     <p:inputText id="houseNumber" value="#{registrationController.houseNumber}"
-                                 required="true" requiredMessage="House Number is required"/>
+                                 required="true" requiredMessage="House Number is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Appartment  " for="appartment"/>
                     <p:inputText id="appartment" value="#{registrationController.appartment}"
-                                 required="true" requiredMessage="Appartment is required"/>
+                                 required="true" requiredMessage="Appartment is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Zipcode  " for="zipcode"/>
                     <p:inputText id="zipcode" value="#{registrationController.zipcode}"
-                                 required="true" requiredMessage="Zipcode is required"/>
+                                 required="true" requiredMessage="Zipcode is required"
+                                 maxlength="19"/>
 
                     <p:outputLabel value="Admin (enter secret code to become admin)" for="admin"/>
                     <p:password id="admin" value="#{registrationController.admin}"
-                                 required="false"/>
+                                 required="false" maxlength="50"/>
                 </p:panelGrid>
                 <p:commandButton value="register" action="#{registrationController.register}" update="messages"/>
             </h:form>
