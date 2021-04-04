@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author leagi
  */
 public class ShoppingCart implements Serializable {
+    
     private User user;                              // The user whose cart it is
     private ArrayList<PlantInCart> plantsInCart;    // List of items in the cart
     private double totalPrice;                      // The total price of items in the cart
