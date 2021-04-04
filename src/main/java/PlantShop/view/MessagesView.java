@@ -24,7 +24,7 @@ public class MessagesView implements ErrorDisplay, Serializable {
     /**
      * Display info message to the user.
      * 
-     * @param msg
+     * @param msg the message to be displayed
      */
     public void displayInfoMessage(String msg) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, "");
@@ -34,7 +34,8 @@ public class MessagesView implements ErrorDisplay, Serializable {
 
     /**
      * Displays error message to user.
-     * @param msg 
+     * 
+     * @param msg the message to be displayed
      */
     @Override
     public void displayErrorMessage(String msg) {

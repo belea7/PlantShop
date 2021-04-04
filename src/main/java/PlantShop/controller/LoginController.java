@@ -63,19 +63,35 @@ public class LoginController implements Serializable {
 
         return "index";
     }
-
+    
+    /**
+     * Getter for the username property, used by the inputText component in the login page.
+     * @return 
+     */
     public String getUsername() {
         return username;
     }
-
+    
+    /**
+     * Setter for the username property, used by the inputText component in the login page.
+     * @param username the username that the user entered in the inputComponent.
+     */
     public void setUsername(String username) {
         this.username = username;
     }
-
+    
+    /**
+     * Getter for the password property, used by the inputText component in the login page.
+     * @return 
+     */
     public String getPassword() {
         return password;
     }
-
+    
+    /**
+     * Setter for the password property, used by the inputText component in the login page.
+     * @param password the password that the user entered in the inputComponent.
+     */
     public void setPassword(String password) {
         this.password = password;
     }

@@ -71,7 +71,7 @@ public class UserDao implements Serializable {
                 user.setHouseNumber(result.getObject("house_number", Integer.class));
                 user.setAppartment(result.getObject("apartment", Integer.class));
                 user.setZipcode(result.getObject("zip_code", Long.class));
-                user.setBirthdayDate(result.getObject("birth_date", java.sql.Date.class));
+                user.setBirthDate(result.getObject("birth_date", java.sql.Date.class));
                 user.setAdmin(result.getObject("admin", Boolean.class));
                 user.setShoppingCart(shoppingCartDao.getCart(user));
             }
@@ -108,7 +108,7 @@ public class UserDao implements Serializable {
             statement.setInt(8, user.getHouseNumber());
             statement.setInt(9, user.getAppartment());
             statement.setLong(10, user.getZipcode());
-            statement.setDate(11, user.getBirthdayDate());
+            statement.setDate(11, user.getBirthDate());
             statement.setBoolean(12, user.isAdmin());
             statement.setString(13, user.getPassword());
             statement.execute();
@@ -181,7 +181,7 @@ public class UserDao implements Serializable {
                 usersStatement.setInt(8, details.getHouseNumber());
                 usersStatement.setInt(9, details.getAppartment());
                 usersStatement.setLong(10, details.getZipcode());
-                usersStatement.setDate(11, details.getBirthdayDate());
+                usersStatement.setDate(11, details.getBirthDate());
                 usersStatement.setString(12, details.getPassword());
                 usersStatement.setString(13, oldUserName);
                 usersStatement.execute();

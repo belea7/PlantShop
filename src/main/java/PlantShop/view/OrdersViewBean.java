@@ -53,16 +53,7 @@ public class OrdersViewBean implements Serializable {
         
         root = new DefaultTreeNode(DefaultTreeNodeInfo.createRootInfo(), null);
         
-        String msg = "initCurrentOrders set root."; // testing
-        if(root == null) // testing
-            msg = "initCurrentOrders set root, but root is still null!"; // testing
-        System.out.println(msg); // testing
-        
         try {
-            if(ordersDao == null)
-                System.out.println("ordersDao is null at initCurrentOrders");
-            if(userModel == null)
-                System.out.println("userModel is null at initCurrentOrders");
             orders = ordersDao.getUserOrders(userModel.getUser().getUsername());
         } catch(DaoException e) {
             messagesView.displayErrorMessage("Sorry, there was a problem with connecting to the database.");
@@ -80,9 +71,6 @@ public class OrdersViewBean implements Serializable {
         });
         addOrdersAsSubtree(orderList, root);
         
-        System.out.println("initCurrentOrders end"); // testing
-        if(root == null) // testing
-            System.out.println("root is null!"); // testing
     }
     
     /**
@@ -99,11 +87,6 @@ public class OrdersViewBean implements Serializable {
         ArrayList<OrdersDao.UserOrders> userList;
         
         root = new DefaultTreeNode(DefaultTreeNodeInfo.createRootInfo(), null);
-        
-        String msg = "initAllOrders set root."; // testing
-        if(root == null) // testing
-            msg = "initAllOrders set root, but root is still null!"; // testing
-        System.out.println(msg); // testing
         
         try {
             userList = ordersDao.getAllUserOrders();
@@ -128,9 +111,6 @@ public class OrdersViewBean implements Serializable {
             });
             addOrdersAsSubtree(orderList, userNode);
         }
-        System.out.println("initAllOrders end"); // testing
-        if(root == null) // testing
-            System.out.println("root is null!"); // testing
         
     }
     
@@ -138,10 +118,6 @@ public class OrdersViewBean implements Serializable {
      * Called by the treeTable component to get the root of the tree.
      */
     public TreeNode getRoot() {
-        System.out.println("getRoot start"); // testing
-        if(root == null)
-            System.err.println("getRoot called while root is null!"
-                    + "(probably forgot to initiate root for this page)");
         return root;
         /* Debug note: because of how treeTable works, this MUST always return
         the same node object. */
@@ -295,8 +271,8 @@ public class OrdersViewBean implements Serializable {
         }
 
         /**
-         * Creates and returns a DefaultTreeNodeInfo object representing a user in the
- all_orders page.
+         * Creates and returns a DefaultTreeNodeInfo object representing a user in
+         * the all_orders page.
          * @param name the name of the user
          * @return a DefaultTreeNodeInfo object representing a user in the all_orders page
          */
@@ -325,11 +301,10 @@ public class OrdersViewBean implements Serializable {
         }
         
         @Override
-        public void setStatus(String status){System.out.println("At setStatus(" + status + ") of DefaultTreeNodeInfo, status is '" + this.status + "'.");} // print is testing
+        public void setStatus(String status){}
         
         @Override
         public String getStatus(){
-        System.out.println("At getStatus of DefaultTreeNodeInfo, status is '" + this.status + "'."); // testing
             return status;
         }
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PlantShop.entities;
 
 import PlantShop.exceptions.DaoException;
@@ -55,6 +50,10 @@ public class Order implements Serializable {
     }
     
     
+    /**
+     * Getter method for the timeOrdered property.
+     * @return the time at which this order was ordered.
+     */
     public Timestamp getTimeOrdered() {
         return this.timeOrdered;
     }

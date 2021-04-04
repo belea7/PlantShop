@@ -132,12 +132,12 @@ public class User implements Serializable {
         this.profileDetails.zipcode = zipcode;
     }
 
-    public Date getBirthdayDate() {
-        return profileDetails.birthdayDate;
+    public Date getBirthDate() {
+        return profileDetails.birthDate;
     }
 
-    public void setBirthdayDate(Date birthdayDate) {
-        this.profileDetails.birthdayDate = birthdayDate;
+    public void setBirthDate(Date birthDate) {
+        this.profileDetails.birthDate = birthDate;
     }
 
     public boolean isAdmin() {
@@ -193,7 +193,7 @@ public class User implements Serializable {
         private int houseNumber;
         private int appartment;
         private long zipcode;
-        private Date birthdayDate;
+        private Date birthDate;
         private String password;
         
         /**
@@ -273,12 +273,12 @@ public class User implements Serializable {
             this.zipcode = zipcode;
         }
 
-        public Date getBirthdayDate() {
-            return birthdayDate;
+        public Date getBirthDate() {
+            return birthDate;
         }
 
-        public void setBirthdayDate(Date birthdayDate) {
-            this.birthdayDate = birthdayDate;
+        public void setBirthDate(Date birthDate) {
+            this.birthDate = birthDate;
         }
 
         public String getPassword() {

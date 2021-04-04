@@ -117,7 +117,6 @@ public class EditPlantsController implements Serializable{
      */
     public void createPlant() {
         this.selectedPlant = plantsModel.createPlant();
-        System.out.println(this.selectedPlant);
     }
     
     /**

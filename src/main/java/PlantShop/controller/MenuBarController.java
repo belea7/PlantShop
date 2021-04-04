@@ -1,5 +1,5 @@
 /*
- * Menubar bean
+ * Menubar controller
  */
 package PlantShop.controller;
 
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- *
+ * Controller bean providing the methods used by the on-screen menu bar.
  * @author leagi
  */
 @Named(value = "menuBarController")
