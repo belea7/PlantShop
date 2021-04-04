@@ -157,7 +157,6 @@ public class CatalogController implements Serializable{
             return;
         }
         messagesView.displayInfoMessage("Plant was successfully added to cart");
-        PrimeFaces.current().ajax().update("dt-products");
     }
     
     /**
@@ -209,7 +208,7 @@ public class CatalogController implements Serializable{
             }
             messagesView.displayInfoMessage("Review successfully updated");
         }
-        PrimeFaces.current().ajax().update("body", "edit-review-content", "plantDetails", "plants");
+        PrimeFaces.current().ajax().update("form:edit-review-content", "form:plantDetails", "form:plants");
         PrimeFaces.current().executeScript("PF('editReviewDialog').hide()");
     }
     
@@ -227,5 +226,6 @@ public class CatalogController implements Serializable{
         }
         this.selectedReview = null;
         messagesView.displayInfoMessage("Review was removed");
+        PrimeFaces.current().ajax().update("form:plantDetails", "form:plants");
     }
 }
