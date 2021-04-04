@@ -76,7 +76,7 @@ public class CatalogController implements Serializable{
     }
     
     /**
-     * Is the review being edited is a new review.
+     * Is the review being edited a new review.
      * 
      * @return is the review a new one
      */
