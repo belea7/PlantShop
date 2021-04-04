@@ -47,7 +47,7 @@ public class EditProfileController extends AbstractProfileDataInputController {
         this.setUsername(userModel.getUser().getUsername());
         this.setFirstName(userModel.getUser().getFirstName());
         this.setLastName(userModel.getUser().getLastName());
-        this.setBirthdayDate(String.valueOf(userModel.getUser().getBirthdayDate()));
+        this.setBirthDate(String.valueOf(userModel.getUser().getBirthDate()));
         this.setEmailAddress(userModel.getUser().getEmailAddress());
         this.setPhoneNumber(userModel.getUser().getPhoneNumber());
         this.setCity(userModel.getUser().getCity());
