@@ -12,6 +12,7 @@ import java.sql.Timestamp;
  * @author leagi
  */
 public class Review implements Serializable {
+    
     private String userName;            // User who wrote the review
     private Plant plant;                // The ID of the plant reviewd
     private Timestamp timePosted;       // When the review was posted
@@ -83,6 +84,7 @@ public class Review implements Serializable {
     
     /**
      * Setter for the rating of the plant.
+     * 
      * @param rating 
      */
     public void setRating(int rating) {
@@ -100,6 +102,7 @@ public class Review implements Serializable {
     
     /**
      * Setter for the comment of the review.
+     * 
      * @param comment 
      */
     public void setComment(String comment) {
