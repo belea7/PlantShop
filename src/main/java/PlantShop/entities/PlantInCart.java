@@ -14,6 +14,7 @@ import java.io.Serializable;
  * @author leagi
  */
 public class PlantInCart implements Serializable {
+    
     private Plant plant;    // Plant entity
     private int amount;     // number of plants from this type in cart
 
