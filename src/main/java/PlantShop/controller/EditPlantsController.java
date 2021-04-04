@@ -32,7 +32,7 @@ public class EditPlantsController implements Serializable{
     
     private ArrayList<Plant> selectedPlants;    // Group of selected plants for deleting
     private Plant selectedPlant;                // Selected plant for editing
-    private boolean newPlant;                   // Is the edited plant is a new plant
+    private boolean newPlant;                   // Is the edited plant a new plant
     
     @Inject
     private PlantsModel plantsModel;
@@ -132,7 +132,7 @@ public class EditPlantsController implements Serializable{
         }
         this.selectedPlant = null;
         PrimeFaces.current().ajax().update("form:dt-plants");
-        messagesView.displayInfoMessage("Plant removed");
+        messagesView.displayInfoMessage("Plant was removed");
     }
     
     /**
@@ -178,7 +178,7 @@ public class EditPlantsController implements Serializable{
                 plantsModel.addPlant(selectedPlant);
             } catch (DaoException e) {
                 e.printStackTrace();
-                messagesView.displayErrorMessage("Failed save plant");
+                messagesView.displayErrorMessage("Failed to save plant");
                 return;
             }
             this.newPlant = false;
@@ -189,7 +189,7 @@ public class EditPlantsController implements Serializable{
                 plantsModel.updatePlant(selectedPlant);
             } catch (DaoException e) {
                 e.printStackTrace();
-                messagesView.displayErrorMessage("Failed save plant");
+                messagesView.displayErrorMessage("Failed to save plant");
                 return;
             }
         }
@@ -201,7 +201,7 @@ public class EditPlantsController implements Serializable{
     /**
      * Uploads image to the application.
      * After user uploads the picture, it is saved in an "images" directory
-     * on the web server (the directory is created if needed.
+     * on the web server (the directory is created if needed).
      * If a file with the same name exists in directory already - the operation is aborted.
      * 
      * @param event
@@ -218,7 +218,7 @@ public class EditPlantsController implements Serializable{
                 dir.mkdir();
             }
             
-            // If a file with this name exists in the directory - ask for other image
+            // If a file with this name exists in the directory - ask for an other image
             if (file.exists()) {
                 String msg = " already exists. Please upload a different file";
                 messagesView.displayErrorMessage(fileName + msg);
