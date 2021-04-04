@@ -33,12 +33,14 @@ public class EditableOrderTreeNode extends OrdersViewBean.DefaultTreeNodeInfo {
         this.status = status;
         this.ordersDao = dao;
         this.errorDisplay = errorDisplay;
-        System.out.println("At end of EditableOrderTreeNode(" + status + ") constructor, this.status is '" + this.status + "', orderToUpdate.getStatus() is '" + orderToUpdate.getStatus() + "'."); // testing
     }
     
+    /**
+     * Sets the status of this node and of the corresponding order, including updating the database.
+     * @param status the new status.
+     */
     @Override
     public void setStatus(String status) {
-        System.out.println("At start of setStatus(" + status + ") of EditableOrderTreeNode, this.status is '" + this.status + "', orderToUpdate.getStatus() is '" + orderToUpdate.getStatus() + "'."); // testing
         if(status.compareTo(this.status) != 0) {
             String originalStatus = this.status;
             this.status = status;
@@ -47,7 +49,6 @@ public class EditableOrderTreeNode extends OrdersViewBean.DefaultTreeNodeInfo {
                 orderToUpdate.setStatus(status);
             } catch(DaoException e) {
                 this.status = originalStatus;
-                System.out.println("At setStatus(" + status + ") of EditableOrderTreeNode, caught DaoException."); // testing
                 errorDisplay.displayErrorMessage(
                         "Sorry, there was a problem when saving the status to the database!");
             } catch(NullPointerException e) {
@@ -58,7 +59,6 @@ public class EditableOrderTreeNode extends OrdersViewBean.DefaultTreeNodeInfo {
                         "Sorry, we enountered a problem! Try to refresh the page.");
             }
         }
-        System.out.println("At end of setStatus(" + status + ") of EditableOrderTreeNode, this.status is '" + this.status + "', orderToUpdate.getStatus() is '" + orderToUpdate.getStatus() + "'."); // testing
     }
     
     /**
@@ -66,7 +66,6 @@ public class EditableOrderTreeNode extends OrdersViewBean.DefaultTreeNodeInfo {
      */
     @Override
     public String getStatus() {
-        System.out.println("At getStatus of EditableOrderTreeNode, status is '" + this.status + "'."); // testing
         return status;
     }
     
