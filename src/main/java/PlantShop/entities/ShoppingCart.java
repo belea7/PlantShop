@@ -74,7 +74,7 @@ public class ShoppingCart implements Serializable {
         // Update the total price of the cart
         double total = 0;
         for (PlantInCart p: plantsInCart) {
-            total += p.getPlant().getPrice();
+            total += p.getPlant().getPrice() * p.getAmount();
         }
         this.totalPrice = total;
     }
@@ -102,7 +102,8 @@ public class ShoppingCart implements Serializable {
      */
     public void addToCart(PlantInCart plant) {
         this.plantsInCart.add(plant);
-        this.totalPrice += plant.getPlant().getPrice();
+        double price = plant.getPlant().getPrice() * plant.getAmount();
+        this.totalPrice += price;
     }
     
     /**
@@ -113,6 +114,33 @@ public class ShoppingCart implements Serializable {
      */
     public void removeFromCart(PlantInCart plant) {
         this.plantsInCart.remove(plant);
-        this.totalPrice -= plant.getPlant().getPrice();
+        double price = plant.getPlant().getPrice() * plant.getAmount();
+        this.totalPrice -= price;
+    }
+    
+    /**
+     * Increases amount of a plant in cart (if plant is in the cart).
+     * @param plant 
+     */
+    public void increaseAmount(PlantInCart plant) {
+        if (plantsInCart.isEmpty())
+            return;
+        if (plantsInCart.contains(plant)) {
+            plant.increaseAmount();
+            totalPrice += plant.getPlant().getPrice();
+        }
+    }
+    
+    /**
+     * Decreases amount of a plant in cart (if plant is in the cart).
+     * @param plant 
+     */
+    public void decreaseAmount(PlantInCart plant) {
+        if (plantsInCart.isEmpty())
+            return;
+        if (plantsInCart.contains(plant)) {
+            plant.decreaseAmount();
+            totalPrice -= plant.getPlant().getPrice();
+        }
     }
 }
