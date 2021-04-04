@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PlantShop.view;
 
 import PlantShop.model.UserModel;
@@ -126,10 +121,10 @@ public class ProfileViewBean implements Serializable {
      * @return The birth date of the user that is currently logged in,
      * or an empty string if no user is currently logged in.
      */
-    public String getBirthdayDate() {
+    public String getBirthDate() {
         if( !userBean.isLoggedIn() )
             return "";
-        return String.valueOf(userBean.getUser().getBirthdayDate());
+        return String.valueOf(userBean.getUser().getBirthDate());
     }
     
 }
