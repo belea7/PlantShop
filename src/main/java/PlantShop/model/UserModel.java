@@ -118,6 +118,9 @@ public class UserModel implements Serializable {
     }
 
     
+    /**
+     * @return the currently logged-in user, or null if no user is currently logged in.
+     */
     public User getUser() {
         return user;
     }
@@ -127,12 +130,6 @@ public class UserModel implements Serializable {
      * @return true if the user is currently logged in, false otherwise.
      */
     public boolean isLoggedIn() {
-        if (user != null) {
-            System.out.println("is logged in");
-        }
-        else {
-            System.out.println("not logged in");
-        }
         return (user != null);
     }
     
