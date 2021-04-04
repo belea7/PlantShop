@@ -76,7 +76,7 @@ public class ShoppingCartModel implements Serializable{
      * @throws DaoException
      */
     public void increaseAmount(PlantInCart plant) throws DaoException {
-        plant.increaseAmount();
+        cart.increaseAmount(plant);
         dao.saveAmount(plant, cart);
     }
     
@@ -87,7 +87,7 @@ public class ShoppingCartModel implements Serializable{
      * @throws DaoException
      */
     public void decreaseAmount(PlantInCart plant) throws DaoException {
-        plant.decreaseAmount();
+        cart.decreaseAmount(plant);
         dao.saveAmount(plant, cart);
     }
 }
