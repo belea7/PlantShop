@@ -1,6 +1,5 @@
 package PlantShop.entities;
 
-import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.UninitiatedOrderContentsException;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -29,7 +28,7 @@ public class Order implements Serializable {
         this.ID = ID;
         this.timeOrdered = timeOrdered;
         this.status = status;
-        this.plants = new ArrayList<PlantInOrder>(plants);
+        this.plants = new ArrayList(plants);
     }
     
     
@@ -64,7 +63,7 @@ public class Order implements Serializable {
      * @param plants the new contents of this order.
      */
     public void setPlants(ArrayList<PlantInOrder> plants) {
-        this.plants = new ArrayList<PlantInOrder>(plants);
+        this.plants = new ArrayList(plants);
     }
     
     
