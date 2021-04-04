@@ -5,6 +5,7 @@ import PlantShop.entities.Order.PlantInOrder;
 import PlantShop.entities.Plant;
 import PlantShop.exceptions.DaoException;
 import PlantShop.exceptions.DatabaseInconsistencyException;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
