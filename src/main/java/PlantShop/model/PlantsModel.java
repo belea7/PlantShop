@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.PrimeFaces;
 
 /**
  * Model bean for managing plants in the store.
@@ -96,7 +95,6 @@ public class PlantsModel implements Serializable{
      * @return the created instance
      */
     public Plant createPlant() {
-        System.out.println("creating");
         Plant plant = new Plant();
         plant.setId(getAvailablePlantId());
         return plant;
