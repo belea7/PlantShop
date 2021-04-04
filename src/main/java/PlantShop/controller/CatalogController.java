@@ -134,14 +134,14 @@ public class CatalogController implements Serializable{
      * is not already in it's cart.
      */
     public void addSelectedPlantToCart() {
-        // If the user is not logged-in - ask uer to log-in
+        // If the user is not logged-in - ask user to log-in
         if (!userModel.isLoggedIn()) {
             String message = "Please log-in if you want to add a plant to cart";
             messagesView.displayErrorMessage(message);
             return;
         }
         
-        // If user plant is already in user's count - notify user and don't remove plant
+        // If plant is already in user's cart - notify user and don't add plant
         else if (shoppingCartModel.getCart().isPlantInCart(selectedPlant)) {
             String message = this.selectedPlant.getName() + " is already in your cart";
             messagesView.displayErrorMessage(message);
@@ -214,7 +214,7 @@ public class CatalogController implements Serializable{
     }
     
     /**
-     * Removes the selected review for application.
+     * Removes the selected review from application.
      */
     public void removeSelectedReview() {
         selectedPlant.removeReview(selectedReview);
