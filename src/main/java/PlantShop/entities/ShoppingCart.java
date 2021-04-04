@@ -44,7 +44,11 @@ public class ShoppingCart implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
+    /**
+     * Getter for total price attribute.
+     * @return the total price of everything in this cart
+     */
     public double getTotalPrice() {
         return totalPrice;
     }
