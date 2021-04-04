@@ -186,6 +186,7 @@ public class ShoppingCartController implements Serializable{
         // Otherwise - increase amount of items in cart
         try {
             model.increaseAmount(this.selectedPlant);
+            
         } catch (DaoException e) {
                 e.printStackTrace();
                 messagesView.displayErrorMessage("Failed to Increase amount");
