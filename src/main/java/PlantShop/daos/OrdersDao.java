@@ -136,25 +136,6 @@ public class OrdersDao implements Serializable {
     
     
     /**
-     * method for debugging purposes only.
-     * prints out all the order IDs in the database.
-     * @param connection a connection to use to the database.
-     */
-    private void printOrders(Connection connection) {
-        try{
-            String sql = "SELECT * FROM orders";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            while(result.next()) {
-                System.out.println("Order " + result.getLong("order_id"));
-            }
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
-    /**
      * Updates the status of an order in the database.
      * @param orderID the ID of the order.
      * @param newStatus the new status that the order will have after the update.
