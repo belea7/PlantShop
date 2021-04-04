@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PlantShop.controller;
 
 import PlantShop.entities.User;
@@ -12,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * Abstract class representing a controller bean that can receive data about
- * a user's profile from input components, and parse it into a User entity.
+ * a user's profile from input components, and parse it into a ProfileDetails object.
  * @author Ron Mosenzon
  */
 public abstract class AbstractProfileDataInputController implements Serializable {
@@ -28,11 +23,10 @@ public abstract class AbstractProfileDataInputController implements Serializable
     private String houseNumber = "";
     private String appartment = "";
     private String zipcode = "";
-    private String birthdayDate = "";
+    private String birthDate = "";
     
     
     /**
-     * 
      * @return the user name received through this class's setter method.
      */
     protected String getInputUserName() {
@@ -60,7 +54,7 @@ public abstract class AbstractProfileDataInputController implements Serializable
         profile.setCity(city);
         profile.setStreet(street);
         try{
-            profile.setBirthdayDate(java.sql.Date.valueOf(birthdayDate));
+            profile.setBirthDate(java.sql.Date.valueOf(birthDate));
         } catch(IllegalArgumentException e) {
             errorDisplay.displayErrorMessage(
                     "Birth Date must be of the form 'yyyy-mm-dd'");
@@ -189,12 +183,12 @@ public abstract class AbstractProfileDataInputController implements Serializable
         this.zipcode = zipcode;
     }
 
-    public String getBirthdayDate() {
-        return birthdayDate;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdayDate(String birthdayDate) {
-        this.birthdayDate = birthdayDate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
     
 }
