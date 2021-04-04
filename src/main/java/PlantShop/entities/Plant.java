@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Plant implements Comparable<Plant>, Serializable {
     
-    private long id;                         // ID of the plant
+    private long id;                        // ID of the plant
     private String name;                    // Name of the plant
     private int numberOfItems;              // Number of times in stock
     private String light;                   // Light conditions
@@ -306,7 +306,7 @@ public class Plant implements Comparable<Plant>, Serializable {
     }
 
     /**
-     * Compares to objects and returns it they are equal.
+     * Compares two objects and returns it they are equal.
      * 
      * @param obj
      * @return equal or not
