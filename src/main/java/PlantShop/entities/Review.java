@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 /**
  *  Class representing a review for a plant in the store.
  
- * @author leagi
+ * @author Lea Ben Zvi
  */
 public class Review implements Serializable {
     

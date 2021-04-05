@@ -23,7 +23,7 @@ import org.primefaces.PrimeFaces;
 /**
  * Controller for the index web page which displays all plants in store.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "catalogController")
 @ViewScoped

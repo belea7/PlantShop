@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Plant class
- * @author leagi
+ * @author Lea Ben Zvi
  */
 public class Plant implements Comparable<Plant>, Serializable {
     

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Represents a shopping cart of a user in the store.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 public class ShoppingCart implements Serializable {
     

@@ -22,7 +22,7 @@ import javax.inject.Inject;
 /**
  * Controller for managing shopping cart page.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "shoppingCartController")
 @ViewScoped
@@ -42,16 +42,22 @@ public class ShoppingCartController implements Serializable{
     private OrdersDao ordersDao;
 
     /**
-     * Returns plants in cart from shopping cart controller.
+     * Updated and returns plants in cart from shopping cart model.
      * 
      * @return list of plants
      */
     public ArrayList<PlantInCart> getPlants() {
+        try {
+            model.updateCart();
+        } catch (DaoException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to update shopping cart");
+        }
         return model.getCart().getPlantsInCart();
     }
     
     /**
-     * Returns total cart's price from shopping cart controller.
+     * Returns total cart's price from shopping cart model.
      * 
      * @return total price
      */

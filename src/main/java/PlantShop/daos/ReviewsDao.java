@@ -33,7 +33,7 @@ import javax.sql.DataSource;
  * DAO for reviews on plants.
  * Contains interactions with DB concerning the reviews on plants in the store.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named("reviewsDao")
 @Dependent
