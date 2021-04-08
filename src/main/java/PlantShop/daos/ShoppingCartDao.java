@@ -204,20 +204,21 @@ public class ShoppingCartDao implements Serializable{
         // Connect to DB
         try (Connection connection = dataSource.getConnection()) {
             // Remove plants that are not in stock from all carts
-            String sql = "DELETE shopping_carts "
-                       + "FROM shopping_carts "
-                       + "INNER JOIN plants ON plants.id = shopping_carts.plant_id "
-                       + "WHERE plants.number_of_items = 0";
+            String sql = "DELETE FROM shopping_carts "
+                       + "WHERE plant_id IN (SELECT id FROM plants WHERE number_of_items = 0)";
             Statement statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
             
             // Update all plants in carts whose amount is larger than the number of items in stock
             sql = "UPDATE shopping_carts "
-                + "INNER JOIN plants ON plants.id = shopping_carts.plant_id "
-                + "SET shopping_carts.amount = plants.number_of_items "
-                + "WHERE plants.number_of_items < shopping_carts.amount";
+                + "SET shopping_carts.amount = (SELECT number_of_items "
+                +                              "FROM plants "
+                +                              "WHERE id = shopping_carts.plant_id) "
+                + "WHERE shopping_carts.amount > (SELECT number_of_items "
+                +                                "FROM plants "
+                +                                "WHERE id = shopping_carts.plant_id)";
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) { 
             e.printStackTrace();
             throw new DaoException();
