@@ -11,7 +11,7 @@ import java.io.Serializable;
  * The class contains a pointer to the Plant entity and the amount of plants
  * from this type in the user's shopping cart.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 public class PlantInCart implements Serializable {
     

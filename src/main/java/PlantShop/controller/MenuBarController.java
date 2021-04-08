@@ -12,7 +12,7 @@ import javax.inject.Named;
 
 /**
  * Controller bean providing the methods used by the on-screen menu bar.
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "menuBarController")
 @ViewScoped

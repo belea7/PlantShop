@@ -4,6 +4,8 @@
 package PlantShop.controller;
 
 import PlantShop.daos.OrdersDao;
+import PlantShop.daos.PlantsDao;
+import PlantShop.daos.ShoppingCartDao;
 import PlantShop.entities.Order;
 import PlantShop.entities.Plant;
 import PlantShop.entities.PlantInCart;
@@ -22,7 +24,7 @@ import javax.inject.Inject;
 /**
  * Controller for managing shopping cart page.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "shoppingCartController")
 @ViewScoped
@@ -39,19 +41,31 @@ public class ShoppingCartController implements Serializable{
     private MessagesView messagesView;
     
     @Inject
+    private ShoppingCartDao shoppingCartDao;
+    
+    @Inject
     private OrdersDao ordersDao;
+    
+    @Inject
+    private PlantsDao plantsDao;
 
     /**
-     * Returns plants in cart from shopping cart controller.
+     * Updated and returns plants in cart from shopping cart model.
      * 
      * @return list of plants
      */
     public ArrayList<PlantInCart> getPlants() {
+        try {
+            model.updateCart();
+        } catch (DaoException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to update shopping cart");
+        }
         return model.getCart().getPlantsInCart();
     }
     
     /**
-     * Returns total cart's price from shopping cart controller.
+     * Returns total cart's price from shopping cart model.
      * 
      * @return total price
      */
@@ -239,6 +253,28 @@ public class ShoppingCartController implements Serializable{
                 messagesView.displayErrorMessage("Failed to remove plant from cart");
                 return;
             }
+        }
+        
+        // update plant counts in stock
+        int newCount;
+        for(Order.PlantInOrder plant : plantsInOrder) {
+            newCount = Math.max(0, plant.getPlant().getNumberOfItems() - plant.getAmount());
+            plant.getPlant().setNumberOfItems(newCount);
+            try{
+                plantsDao.updatePlant(plant.getPlant());
+            } catch(DaoException e) {
+                e.printStackTrace();
+                messagesView.displayErrorMessage("Failed to update plant count in stock");
+                return;
+            }
+        }
+        
+        // update other carts that no longer have items available in stock
+        try{
+            shoppingCartDao.updateAllCarts();
+        } catch(DaoException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to update all carts for new plant count in stock");
         }
     }
 }

@@ -6,6 +6,7 @@ package PlantShop.controller;
 import PlantShop.model.PlantsModel;
 import PlantShop.entities.Plant;
 import PlantShop.exceptions.DaoException;
+import PlantShop.exceptions.ImageDeletionException;
 import PlantShop.view.MessagesView;
 
 import java.io.File;
@@ -24,7 +25,7 @@ import org.primefaces.event.FileUploadEvent;
 /**
  * Controller for plants in the edit plants web page.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "editPlantsController")
 @ViewScoped
@@ -46,6 +47,12 @@ public class EditPlantsController implements Serializable{
      * @return list of plants
      */
     public ArrayList<Plant> getPlants() {
+        try {
+            plantsModel.updatePlants();
+        } catch (DaoException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to update plants");
+        }
         return plantsModel.getPlants();
     }
     
@@ -129,6 +136,9 @@ public class EditPlantsController implements Serializable{
             e.printStackTrace();
             messagesView.displayErrorMessage("Failed to remove plant");
             return;
+        } catch (ImageDeletionException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to remove picture, please remove it manually");
         }
         this.selectedPlant = null;
         PrimeFaces.current().ajax().update("form:dt-plants");
@@ -146,6 +156,9 @@ public class EditPlantsController implements Serializable{
             e.printStackTrace();
             messagesView.displayErrorMessage("Failed to remove plants");
             return;
+        } catch (ImageDeletionException e) {
+            e.printStackTrace();
+            messagesView.displayErrorMessage("Failed to remove a picture, please remove it manually");
         }
         PrimeFaces.current().ajax().update("form:dt-plants");
         messagesView.displayInfoMessage(selectedPlants.size() + " items were removed");

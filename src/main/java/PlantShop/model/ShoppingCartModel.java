@@ -17,7 +17,7 @@ import javax.inject.Named;
 /**
  * Model bean for managing the shopping cart of a user.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "shoppingCartModel")
 @SessionScoped
@@ -27,6 +27,9 @@ public class ShoppingCartModel implements Serializable{
     
     @Inject
     private ShoppingCartDao dao;        // Shopping Cart DAO
+    
+    @Inject
+    private UserModel userModel;
     
     /**
      * Setter for shopping cart attribute.
@@ -44,6 +47,15 @@ public class ShoppingCartModel implements Serializable{
      */
     public ShoppingCart getCart() {
         return this.cart;
+    }
+    
+    /**
+     * Updates cart of user from DB.
+     * 
+     * @throws DaoException 
+     */
+    public void updateCart() throws DaoException {
+        this.cart = dao.getCart(userModel.getUser());
     }
     
     /**

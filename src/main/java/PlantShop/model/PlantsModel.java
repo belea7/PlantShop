@@ -6,7 +6,9 @@ package PlantShop.model;
 import PlantShop.daos.PlantsDao;
 import PlantShop.entities.Plant;
 import PlantShop.exceptions.DaoException;
+import PlantShop.exceptions.ImageDeletionException;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,7 @@ import javax.inject.Named;
 /**
  * Model bean for managing plants in the store.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named(value = "plantsModel")
 @ViewScoped
@@ -36,10 +38,19 @@ public class PlantsModel implements Serializable{
     @PostConstruct
     public void init(){
         try {
-            plants = dao.getPlants();
+            updatePlants();
         } catch (DaoException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Updates the plants from DB.
+     * 
+     * @throws DaoException
+     */
+    public void updatePlants() throws DaoException{
+        plants = dao.getPlants();
     }
     
     /**
@@ -47,7 +58,7 @@ public class PlantsModel implements Serializable{
      * 
      * @return list of plants
      */
-    public ArrayList<Plant> getPlants() {
+    public ArrayList<Plant> getPlants(){
         return this.plants;
     }
     
@@ -105,8 +116,10 @@ public class PlantsModel implements Serializable{
      * 
      * @param plant
      * @throws DaoException
+     * @throws ImageDeletionException
      */
-    public void removePlant(Plant plant) throws DaoException{
+    public void removePlant(Plant plant) throws DaoException, ImageDeletionException{
+        removePlantImage(plant);
         this.plants.remove(plant);
         dao.removePlant(plant);
     }
@@ -130,5 +143,17 @@ public class PlantsModel implements Serializable{
      */
     public void updatePlant(Plant plant) throws DaoException{
         dao.updatePlant(plant);
+    }
+    
+    /**
+     * Removes an image of a plant.
+     * 
+     * @param plant
+     * @throws ImageDeletionException 
+     */
+    public void removePlantImage(Plant plant) throws ImageDeletionException{
+        File file = new File(plant.getPicture());
+        if (!file.delete())
+            throw new ImageDeletionException();
     }
 }

@@ -34,7 +34,7 @@ import javax.sql.DataSource;
  * DAO for shopping carts of users.
  * Contains all interactions with DB concerning the carts of the users.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named("shoppingCartDao")
 @Dependent
@@ -189,6 +189,36 @@ public class ShoppingCartDao implements Serializable{
             statement.executeUpdate();
             connection.close();
             
+        } catch (SQLException e) { 
+            e.printStackTrace();
+            throw new DaoException();
+        }
+    }
+    
+    /**
+     * Updates carts after performing an order.
+     * 
+     * @throws DaoException 
+     */
+    public void updateAllCarts() throws DaoException {
+        // Connect to DB
+        try (Connection connection = dataSource.getConnection()) {
+            // Remove plants that are not in stock from all carts
+            String sql = "DELETE FROM shopping_carts "
+                       + "WHERE plant_id IN (SELECT id FROM plants WHERE number_of_items = 0)";
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            
+            // Update all plants in carts whose amount is larger than the number of items in stock
+            sql = "UPDATE shopping_carts "
+                + "SET shopping_carts.amount = (SELECT number_of_items "
+                +                              "FROM plants "
+                +                              "WHERE id = shopping_carts.plant_id) "
+                + "WHERE shopping_carts.amount > (SELECT number_of_items "
+                +                                "FROM plants "
+                +                                "WHERE id = shopping_carts.plant_id)";
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
         } catch (SQLException e) { 
             e.printStackTrace();
             throw new DaoException();

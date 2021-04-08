@@ -5,6 +5,7 @@ package PlantShop.daos;
 
 import PlantShop.entities.User;
 import PlantShop.exceptions.DaoException;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

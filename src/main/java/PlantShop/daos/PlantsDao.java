@@ -32,7 +32,7 @@ import javax.sql.DataSource;
  * DAO for plants in the store.
  * Contains interactions with DB concerning the plants in the store.
  * 
- * @author leagi
+ * @author Lea Ben Zvi
  */
 @Named("plantsDao")
 @Dependent
