@@ -43,10 +43,10 @@ and open the template in the editor.
                 <h2> You are not logged in. </h2>
             </h:panelGroup>
             <h:panelGroup rendered="#{menuBarController.loggedIn}">
-                    <h3> your profile: </h3>
+                    <h3> Your profile: </h3>
                     <h1> #{profileViewBean.username} </h1>
                     <h:panelGroup rendered="#{menuBarController.admin}">
-                        <h2 style="color: green"> admin </h2>
+                        <h2 style="color: green"> You have admin permissions </h2>
                     </h:panelGroup>
             </h:panelGroup>
         </div>
