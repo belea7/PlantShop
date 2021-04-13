@@ -98,3 +98,12 @@ and open the template in the editor.
     height: available;
     width: 700px;
 }
+
+.profile-form {
+    text-align: center
+}
+
+.profile-grid {
+    margin-left: auto; 
+    margin-right: auto;
+}
