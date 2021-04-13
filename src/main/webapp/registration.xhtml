@@ -33,9 +33,9 @@ and open the template in the editor.
             </h:form>
         </div>
         <div>
-            <h:form id="form">
+            <h:form id="form" class="profile-form">
                 <p:growl id="messages" showDetail="true"/>
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" class="profile-grid">
                     <p:outputLabel value="User Name  " for="username"/>
                     <p:inputText id="username" value="#{registrationController.username}"
                                  required="true" requiredMessage="User Name is required"
@@ -105,7 +105,7 @@ and open the template in the editor.
                     <p:password id="admin" value="#{registrationController.admin}"
                                  required="false" maxlength="50"/>
                 </p:panelGrid>
-                <p:commandButton value="register" action="#{registrationController.register}" update="messages"/>
+                <p:commandButton value="Register" action="#{registrationController.register}" update="messages"/>
             </h:form>
         </div>
     </h:body>
