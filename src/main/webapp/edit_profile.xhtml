@@ -34,9 +34,9 @@ and open the template in the editor.
         </div>
 
         <div>
-            <h:form id="form">
+            <h:form id="form" class="profile-form">
                 <p:growl id="messages" showDetail="true"/>
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" class="profile-grid">
                     <p:outputLabel value="User Name  " for="username"/>
                     <p:inputText id="username" value="#{editProfileController.username}"
                                  required="true" requiredMessage="User Name is required"
@@ -102,8 +102,8 @@ and open the template in the editor.
                                  required="true" requiredMessage="Repeat Password is required"
                                  maxlength="50"/>
                 </p:panelGrid>
-                <p:commandButton value="confirm profile changes" action="#{editProfileController.editProfile}" update="messages"/>
-                <p:commandButton value="cancel" action="profile.xhtml" immediate="true"/>
+                <p:commandButton value="Confirm profile changes" action="#{editProfileController.editProfile}" update="messages"/>
+                <p:commandButton value="Cancel" action="profile.xhtml" immediate="true"/>
             </h:form>
         </div>
     </h:body>
