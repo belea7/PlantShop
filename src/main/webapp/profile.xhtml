@@ -15,11 +15,6 @@ and open the template in the editor.
         </div>
         <link rel="stylesheet" href="styles.css" media="all"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <style>
-            h1 {text-align: center;}
-            h2 {text-align: center;}
-            h3 {text-align: center;}
-        </style>
     </h:head>
     <h:body>
         <div>
@@ -37,58 +32,78 @@ and open the template in the editor.
                 </p:menubar>
             </h:form>
         </div>
-        
-        <div>
-            <h:panelGroup rendered="#{not menuBarController.loggedIn}">
-                <h2> You are not logged in. </h2>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{menuBarController.loggedIn}">
-                    <h3> Your profile: </h3>
-                    <h1> #{profileViewBean.username} </h1>
-                    <h:panelGroup rendered="#{menuBarController.admin}">
-                        <h2 style="color: green"> You have admin permissions </h2>
-                    </h:panelGroup>
-            </h:panelGroup>
-        </div>
 
         <div>
-            <h:form id="form" rendered="#{menuBarController.loggedIn}">
+            <h:form id="form" class="profile-form">
                 <p:growl id="messages" showDetail="true"/>
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" class="profile-grid">
                     <p:outputLabel value="User Name  " for="username"/>
-                    <h:outputText id="username" value="#{profileViewBean.username}"/>
+                    <p:inputText id="username" value="#{editProfileController.username}"
+                                 required="true" requiredMessage="User Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="First Name  " for="firstName"/>
-                    <h:outputText id="firstName" value="#{profileViewBean.firstName}"/>
+                    <p:inputText id="firstName" value="#{editProfileController.firstName}"
+                                 required="true" requiredMessage="First Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Last Name  " for="lastName"/>
-                    <h:outputText id="lastName" value="#{profileViewBean.lastName}"/>
+                    <p:inputText id="lastName" value="#{editProfileController.lastName}"
+                                 required="true" requiredMessage="Last Name is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Birth Date (yyyy-mm-dd)  " for="birthDate"/>
-                    <h:outputText id="birthDate" value="#{profileViewBean.birthDate}"/>
+                    <p:inputText id="birthDate" value="#{editProfileController.birthDate}"
+                                 required="true" requiredMessage="Birth Date is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Email  " for="emailAddress"/>
-                    <h:outputText id="emailAddress" value="#{profileViewBean.emailAddress}"/>
+                    <p:inputText id="emailAddress" value="#{editProfileController.emailAddress}"
+                                 required="true" requiredMessage="Email is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Phone Number  " for="phoneNumber"/>
-                    <h:outputText id="phoneNumber" value="#{profileViewBean.phoneNumber}"/>
+                    <p:inputText id="phoneNumber" value="#{editProfileController.phoneNumber}"
+                                 required="true" requiredMessage="Phone Number is required"
+                                 maxlength="20"/>
 
                     <p:outputLabel value="City  " for="city"/>
-                    <h:outputText id="city" value="#{profileViewBean.city}"/>
+                    <p:inputText id="city" value="#{editProfileController.city}"
+                                 required="true" requiredMessage="City is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="Street  " for="street"/>
-                    <h:outputText id="street" value="#{profileViewBean.street}"/>
+                    <p:inputText id="street" value="#{editProfileController.street}"
+                                 required="true" requiredMessage="Street is required"
+                                 maxlength="50"/>
 
                     <p:outputLabel value="House Number  " for="houseNumber"/>
-                    <h:outputText id="houseNumber" value="#{profileViewBean.houseNumber}"/>
+                    <p:inputText id="houseNumber" value="#{editProfileController.houseNumber}"
+                                 required="true" requiredMessage="House Number is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Appartment  " for="appartment"/>
-                    <h:outputText id="appartment" value="#{profileViewBean.appartment}"/>
+                    <p:inputText id="appartment" value="#{editProfileController.appartment}"
+                                 required="true" requiredMessage="Appartment is required"
+                                 maxlength="10"/>
 
                     <p:outputLabel value="Zipcode  " for="zipcode"/>
-                    <h:outputText id="zipcode" value="#{profileViewBean.zipcode}"/>
+                    <p:inputText id="zipcode" value="#{editProfileController.zipcode}"
+                                 required="true" requiredMessage="Zipcode is required"
+                                maxlength="19"/>
+
+                    <p:outputLabel value="Password  " for="password1"/>
+                    <p:password id="password1" value="#{editProfileController.password}"
+                                 match="password2" required="true" requiredMessage="Password is required"
+                                 maxlength="50"/>
+
+                    <p:outputLabel value="Repeat Password" for="password2"/>
+                    <p:password id="password2" value="#{editProfileController.password}"
+                                 required="true" requiredMessage="Repeat Password is required"
+                                 maxlength="50"/>
                 </p:panelGrid>
-                <p:commandButton value="Edit Profile Details" action="edit_profile.xhtml"/>
+                <p:commandButton value="Confirm profile changes" action="#{editProfileController.editProfile}" update="messages"/>
+                <p:commandButton value="Cancel" action="profile.xhtml" immediate="true"/>
             </h:form>
         </div>
     </h:body>
