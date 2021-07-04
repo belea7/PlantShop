@@ -1,6 +1,6 @@
-# Pl@ntShop is an E-commerce site for selling plants.
+# Pl@ntShop
 
-
+Pl@ntShop is an E-commerce site for selling plants.
 The application allows the customers to browse plants, add them to a shopping personal bag, make and track their orders, and review different plant (by rating and adding comments).
 Users can create a user, containing their information and a password.
 Admin users can log-in with a privilaged user, manage the plant's catalog, change order's status etc.
