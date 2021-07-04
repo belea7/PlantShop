@@ -8,6 +8,7 @@ The application uses JavaDB to store it's data and interracts with the DB using 
 
 The System has the following web pages:
 - A homepage containing the catalog.
+- ![alt text](https://https://github.com/belea7/PlantShop/blob/main/Screenshots/Homepage.PNG?raw=true)
 - From the catalog the users can view details of a specific plant.
 - Registration screen for creating and account.
 - Login screen for connecting to the website.
