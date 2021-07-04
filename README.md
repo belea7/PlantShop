@@ -27,7 +27,7 @@ The System has the following web pages:
 ![alt text](https://github.com/belea7/PlantShop/blob/main/Screenshots/Shopping%20cart.PNG?raw=true)
 
 - Registered users can leave reviews on plants, including a rating and a comment. After adding the review, it can be modified or removed from the site.
-- 
+
 ![alt text](https://github.com/belea7/PlantShop/blob/main/Screenshots/Reviews.PNG?raw=true)
 
 - Registered users can track their orders.
