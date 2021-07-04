@@ -1,12 +1,18 @@
-Pl@ntShop is an E-commerce site for selling plants.
+#Pl@ntShop is an E-commerce site for selling plants.
 
-To run the application please follow these steps:
 
-1. Import the project to NetBeans.
-2. Create a JavaDB server with the name "PlantShop" that listens on port 1527, with user "admin" and password "admin".
-3. Create the required tables on the DB server (the exact queries can be found in the sepcification document).
-4. Create a GlassFish web server or any other web server to run the application.
-5. Build and run the project.
-6. A web browser (by default Internet Explorer) will be opened with the Pl@ntShop application running.
+The application allows the customers to browse plants, add them to a shopping personal bag, make and track their orders, and review different plant (by rating and adding comments).
+Users can create a user, containing their information and a password.
+Admin users can log-in with a privilaged user, manage the plant's catalog, change order's status etc.
+The application uses JavaDB to store it's data and interracts with the DB using JDBC. The web pages are written in HTML,CSS,Primefaces. The program uses JSF to manage the web pages and their content. 
 
-Thank you!
+The System has the following web pages:
+- A homepage containing the catalog.
+- From the catalog the users can view details of a specific plant.
+- Registration screen for creating and account.
+- Login screen for connecting to the website.
+- Registered users can add items to a shopping cart, and modify the items in it.
+- Registered users can leave reviews on plants, including a rating and a comment. After adding the review, it can be modified or removed from the site.
+- Registered users can track their orders.
+- Admin users can manage the plants in their catalog (adding, removing and modifying plants).
+- Admin users can change the status of an order.
