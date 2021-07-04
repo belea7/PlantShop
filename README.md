@@ -1,8 +1,8 @@
 # Pl@ntShop
 
 Pl@ntShop is an E-commerce site for selling plants.
-The application allows the customers to browse plants, add them to a shopping personal bag, make and track their orders, and review different plant (by rating and adding comments).
-Users can create a user, containing their information and a password.
+The application allows the customers to browse plants, add them to a shopping personal bag, make and track their orders, and review different plants (by rating and adding comments).
+Users can create a user in the website, containing their information and a password.
 Admin users can log-in with a privilaged user, manage the plant's catalog, change order's status etc.
 The application uses JavaDB to store it's data and interracts with the DB using JDBC. The web pages are written in HTML,CSS,Primefaces. The program uses JSF to manage the web pages and their content. 
 
